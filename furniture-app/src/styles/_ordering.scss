@@ -1,0 +1,337 @@
+.slice {
+  display: flex;
+  .title {
+    font-size: 40px;
+    font-weight: 500;
+    margin: 1.5rem 0;
+  }
+}
+.shipping_info {
+  width: 55%;
+  padding-right: 3%;
+  margin-right: 2%;
+  border-right: 1px solid $greyColor;
+}
+.shopping_cart {
+  width: 43%;
+  height: 100%;
+  .shopping_cart_list {
+    height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+.shipping_info {
+  .btns {
+    margin-top: 2rem;
+  }
+  .CTA {
+    width: 49%;
+    padding: 1rem 0% !important;
+  }
+}
+.info_form {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 2%;
+  .input {
+    color: $primaryColor;
+    width: 100%;
+    &.half {
+      width: 49%;
+    }
+  }
+
+  input {
+    width: 100%;
+    height: 3rem;
+    font-size: 1rem;
+    border: $border;
+    border-radius: 0px;
+    padding: 0 0.5rem;
+    margin-bottom: 15px;
+    &:focus {
+      outline: 1px solid $thirdColor;
+    }
+  }
+}
+
+.unique_card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 1rem;
+  justify-content: space-between;
+  min-height: 120px;
+  height: 150px;
+  width: 100%;
+  font-weight: 300;
+  background-color: $whiteColor;
+  border: $borderThirdColor;
+  padding: 0.5rem 1rem;
+  margin: 0%;
+  margin-bottom: 1rem;
+  .img_name {
+    display: flex;
+    align-items: center;
+    column-gap: 1rem;
+    width: 280px;
+  }
+  img {
+    height: 100%;
+    max-height: 100px;
+    width: 100px;
+    object-fit: cover;
+  }
+  .product_title {
+    // min-width: 150px;
+    h4 {
+      text-align: left;
+      color: $greyColor !important;
+    }
+  }
+  h5 {
+    font-weight: 300;
+  }
+  h4 {
+    min-width: 100px;
+    text-align: right;
+    font-weight: 300;
+    color: $primaryColor !important;
+  }
+  .remove-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+}
+
+.shopping_cart_total {
+  flex-direction: column;
+  height: auto;
+  background-color: $secondColor;
+  // margin-top: 1rem;
+  padding: 1rem;
+  .facture_price {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .total {
+    margin-top: 10px;
+    margin-bottom: 0%;
+    h5 {
+      font-weight: 500;
+      &:last-child {
+        color: $thirdColor;
+      }
+    }
+  }
+}
+
+.expand-icon {
+  position: relative;
+  font-size: 28px;
+  color: $whiteColor;
+  margin-bottom: 1.5rem;
+  z-index: 99;
+  .icon {
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: $thirdColor;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+}
+
+.shopping_bag {
+  position: fixed;
+  right: -100%;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 98%;
+  max-width: 600px;
+  height: 80vh;
+  max-height: 100vh;
+  padding: 25px 1.5rem 15px;
+  background-color: $whiteColor;
+  border: 1px solid $thirdColor;
+  // box-shadow: 0 0px 3px rgb(0 0 0 / 20%);
+  box-shadow: -5px 0px 10px 100vw fade-out($color: $primaryColor, $amount: 1);
+  overflow-y: hidden;
+  transition: right 0.3s ease-out, box-shadow 0.1s 0s ease-out;
+  z-index: 999;
+  h3 {
+    text-align: center;
+  }
+  .shopping_cart_total {
+    min-height: auto;
+    padding: 0% 1rem;
+    border: none;
+    border-top: $border;
+    // margin: 1rem 0%;
+  }
+  .shopping_cart_list {
+    height: 100% !important;
+  }
+  .btns {
+    margin-top: 0%;
+    .CTA {
+      width: 100%;
+    }
+  }
+  .total {
+    margin-bottom: 10px;
+  }
+  .icon {
+    &.exit-icon {
+      position: absolute;
+      top: 0%;
+      left: 0%;
+      font-size: 2.5rem;
+    }
+    &:hover {
+      color: $thirdColor;
+      cursor: pointer;
+    }
+  }
+  .img_name {
+    cursor: default !important;
+    img {
+      cursor: pointer;
+    }
+    h5:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+}
+.product_quantity {
+  button {
+    width: 30px;
+    height: 35px;
+    border: 1px solid $primaryColor;
+    font-size: 1rem;
+    // background-color: ;
+    border-radius: 0%;
+    cursor: pointer;
+  }
+
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+    width: 35px;
+    text-align: center;
+  }
+}
+.favorite,
+.bag {
+  position: relative;
+  .product-number {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    font-size: 14px;
+    color: $whiteColor;
+    padding: 1px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: $thirdColor;
+    cursor: default;
+  }
+}
+.icon .icon-set:hover {
+  background-color: $secondColor;
+}
+.favorite_products {
+  .unique_card {
+    height: 170px;
+    .CTA {
+      padding: 1rem 2rem;
+    }
+  }
+}
+.favorite_products.active,
+.card_products.active {
+  right: 1%;
+  box-shadow: -5px 0px 10px 150vw fade-out($color: $primaryColor, $amount: 0.7);
+  transition: right 0.3s ease-out, box-shadow 0.3s 0.1s ease-out;
+}
+.shopping_cart_list {
+  max-height: 100%;
+  margin-top: 1rem;
+  overflow: hidden;
+}
+.product_list_swiper {
+  height: 100%;
+}
+
+//* ------------------------------- Media Query ------------------------------ */
+
+@media only screen and (max-width: 967px) {
+  .slice {
+    .title {
+      font-size: 32px;
+    }
+    .btns {
+      margin-top: 1rem;
+    }
+    .CTA.btn {
+      width: 100%;
+      padding: 1rem 0% !important;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .slice {
+    flex-direction: column-reverse;
+    .shopping_cart,
+    .shipping_info {
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+    .shipping_info {
+      border: none;
+      padding-right: 0%;
+    }
+  }
+}
+
+@media only screen and (max-width: 567px) {
+  .shopping_bag {
+    top: 5%;
+    height: 90vh;
+  }
+  .unique_card.product-info {
+    height: 200px;
+  }
+  .svg-interactions {
+    height: 65%;
+    // max-height: 200px;
+    img {
+      height: 100%;
+      margin-bottom: 1rem;
+      margin-top: 1rem;
+    }
+  }
+}
+
+// Animations
+@keyframes Box-Shadow {
+  0% {
+    box-shadow: -5px 0px 10px 150vw fade-out($color: $primaryColor, $amount: 0);
+  }
+  100% {
+    box-shadow: -5px 0px 10px 150vw fade-out($color: $primaryColor, $amount: 0);
+  }
+}
