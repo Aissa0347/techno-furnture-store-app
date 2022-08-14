@@ -9,6 +9,7 @@ import { Footer } from "./Components/Home";
 import Home from "./Components/Home";
 import Catalog from "./Components/Catalog";
 import ProductPage from "./Components/Product_Page";
+import Dashboard from "./Components/Dashboard";
 
 // import Styles
 import "./styles/index.scss";
@@ -137,6 +138,7 @@ function App() {
           <Route path="/productpage" element={<ProductPage />}></Route>
           <Route path="catalog/:productId" element={<ProductPage />}></Route>
           <Route path="/ordering" element={<Ordering />}></Route>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
         </Routes>
         <Footer />
       </div>
