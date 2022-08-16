@@ -2,11 +2,7 @@
 @import "./catalog";
 @import "./product_page";
 @import "./ordering";
-@import "./dashboard";
-
-html {
-  scroll-behavior: smooth;
-}
+@import "../dashboard/dashboard";
 * {
   margin: 0%;
   padding: 0%;

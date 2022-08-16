@@ -5,11 +5,10 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 // import Component
 import Navbar from "./Components/Navbar";
-import { Footer } from "./Components/Home";
 import Home from "./Components/Home";
 import Catalog from "./Components/Catalog";
 import ProductPage from "./Components/Product_Page";
-import Dashboard from "./Components/Dashboard";
+import Dashboard from "./dashboard/Dashboard";
 
 // import Styles
 import "./styles/index.scss";
@@ -118,29 +117,34 @@ function App() {
       }}
     >
       <div className="main">
-        <Navbar
-          favoriteProducts={favoriteProducts}
-          cardProducts={cardProducts}
-        />
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route
-            path="/catalog"
+            path="/"
             element={
-              <Catalog
-                searchFilter={searchFilter}
-                setSearchFilter={setSearchFilter}
-                filters={filters}
-                setFilters={setFilters}
+              <Navbar
+                favoriteProducts={favoriteProducts}
+                cardProducts={cardProducts}
               />
             }
-          ></Route>
-          <Route path="/productpage" element={<ProductPage />}></Route>
-          <Route path="catalog/:productId" element={<ProductPage />}></Route>
-          <Route path="/ordering" element={<Ordering />}></Route>
-          <Route path="/dashboard" element={<Dashboard />}></Route>
+          >
+            <Route path="home" element={<Home />}></Route>
+            <Route
+              path="/catalog"
+              element={
+                <Catalog
+                  searchFilter={searchFilter}
+                  setSearchFilter={setSearchFilter}
+                  filters={filters}
+                  setFilters={setFilters}
+                />
+              }
+            ></Route>
+            <Route path="/productpage" element={<ProductPage />}></Route>
+            <Route path="catalog/:productId" element={<ProductPage />}></Route>
+            <Route path="/ordering" element={<Ordering />}></Route>
+          </Route>
         </Routes>
-        <Footer />
       </div>
     </GlobalContext.Provider>
   );

@@ -1,0 +1,66 @@
+@import "./components/navbar/navbar.scss";
+@import "./components/sidebar/sidebar.scss";
+@import "./components/statics/statics.scss";
+@import "./pages/main/main.scss";
+
+//* -------------------------------------------------------------------------- */
+//*                                  Global Variables                                 */
+//* -------------------------------------------------------------------------- */
+
+h1.dash-title {
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  font-size: 36px;
+}
+
+.dashboard h2 {
+  font-size: 24px;
+}
+
+.in-dash-container h3 {
+  font-size: 16px;
+  font-weight: normal;
+  color: $greyColor;
+}
+
+.in-dash-container {
+  width: 90%;
+  padding: 2rem 0;
+  margin: 0% auto;
+  border: 1px solid red;
+}
+
+.dash-duration {
+  text-align: right;
+  select {
+    background-color: transparent;
+    border: none;
+    color: $greyColor;
+    outline: none;
+    option {
+      background-color: transparent;
+      border: none;
+    }
+  }
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+//* -------------------------------------------------------------------------- */
+//*                               General Styles                               */
+//* -------------------------------------------------------------------------- */
+
+.dashboard {
+  display: flex;
+  flex-direction: row-reverse;
+  .dash-container {
+    flex: 5;
+  }
+  .sidebar {
+    flex: 1;
+  }
+}

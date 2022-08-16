@@ -17,11 +17,13 @@ import "../styles/index.scss";
 //  import Components
 import App, { GlobalContext, scrollToTop } from "../App";
 import { UniqueCard } from "./Card";
+import { ShoppingCartList } from "./Products";
+import { Products_Catalog } from "../Website-Assets";
+import { Footer } from "./Home";
 
 //  import libraries
 import { BrowserRouter as Router, Link } from "react-router-dom";
-import { ShoppingCartList } from "./Products";
-import { Products_Catalog } from "../Website-Assets";
+import { Outlet } from "react-router-dom";
 
 //  import SVG's
 import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
@@ -216,47 +218,94 @@ function Navbar({ favoriteProducts, cardProducts }) {
     );
   }, []);
   return (
-    <div className="navbar  " id="navbar">
-      <div className="logo">
-        <Link to={"/"}>
-          <img src={logo} alt="Logo" />
-        </Link>
-      </div>
-      <nav className="nav-links">
-        <ul>
-          <li className="link N-1" onClick={scrollToTop}>
-            {" "}
-            <Link to="/">Home </Link>
-          </li>
-          <li className="link N-2">
-            <Link to="/catalog">All Products </Link>
-          </li>
-          <li className="link N-3" onClick={scrollToTop}>
-            {" "}
-            <Link to="/ordering">Basket</Link>
-          </li>
-        </ul>
-      </nav>
-      <nav className="nav-links nav-icons">
-        <ul>
-          <li className="link N-1" onClick={scrollToTop}>
-            {" "}
-            <Link to="/">
-              <BiHome />{" "}
-            </Link>
-          </li>
-          <li className="link N-2">
-            <Link to="/catalog">
-              <BiStore />{" "}
-            </Link>
-          </li>
-          <li className="link N-3" onClick={scrollToTop}>
-            {" "}
-            <Link to="/ordering">
-              <BiCreditCard />{" "}
-            </Link>
-          </li>
-          <li
+    <>
+      <div className="navbar  " id="navbar">
+        <div className="logo">
+          <Link to={"/"}>
+            <img src={logo} alt="Logo" />
+          </Link>
+        </div>
+        <nav className="nav-links">
+          <ul>
+            <li className="link N-1" onClick={scrollToTop}>
+              {" "}
+              <Link to="/home">Home </Link>
+            </li>
+            <li className="link N-2">
+              <Link to="/catalog">All Products </Link>
+            </li>
+            <li className="link N-3" onClick={scrollToTop}>
+              {" "}
+              <Link to="/ordering">Basket</Link>
+            </li>
+          </ul>
+        </nav>
+        <nav className="nav-links nav-icons">
+          <ul>
+            <li className="link N-1" onClick={scrollToTop}>
+              {" "}
+              <Link to="/">
+                <BiHome />{" "}
+              </Link>
+            </li>
+            <li className="link N-2">
+              <Link to="/catalog">
+                <BiStore />{" "}
+              </Link>
+            </li>
+            <li className="link N-3" onClick={scrollToTop}>
+              {" "}
+              <Link to="/ordering">
+                <BiCreditCard />{" "}
+              </Link>
+            </li>
+            <li
+              className="icon-set bag"
+              onClick={() => {
+                setShowCardProducts(!showCardProducts);
+                var cartProducts = document.getElementById("card_products");
+                if (!showCardProducts) {
+                  cartProducts.classList.add("active");
+                } else cartProducts.classList.remove("active");
+              }}
+            >
+              <a>
+                <BiShoppingBag />
+                {cardProductsNumber === 0 ? (
+                  ""
+                ) : (
+                  <span className="product-number">{cardProductsNumber}</span>
+                )}
+              </a>
+            </li>
+            <li>
+              <div
+                className="icon-set favorite"
+                onClick={() => {
+                  setShowFavoriteProducts(!showFavoriteProducts);
+                  var favProducts =
+                    document.getElementById("favorite_products");
+                  if (!showFavoriteProducts) {
+                    favProducts.classList.add("active");
+                  } else favProducts.classList.remove("active");
+                }}
+              >
+                <a>
+                  <RiHeartLine />
+                </a>
+                {favoriteProductsNumber === 0 ? (
+                  ""
+                ) : (
+                  <span className="product-number">
+                    {favoriteProductsNumber}
+                  </span>
+                )}
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <div className="icon">
+          <div
             className="icon-set bag"
             onClick={() => {
               setShowCardProducts(!showCardProducts);
@@ -266,99 +315,59 @@ function Navbar({ favoriteProducts, cardProducts }) {
               } else cartProducts.classList.remove("active");
             }}
           >
-            <a>
-              <BiShoppingBag />
-              {cardProductsNumber === 0 ? (
-                ""
-              ) : (
-                <span className="product-number">{cardProductsNumber}</span>
-              )}
-            </a>
-          </li>
-          <li>
-            <div
-              className="icon-set favorite"
-              onClick={() => {
-                setShowFavoriteProducts(!showFavoriteProducts);
-                var favProducts = document.getElementById("favorite_products");
-                if (!showFavoriteProducts) {
-                  favProducts.classList.add("active");
-                } else favProducts.classList.remove("active");
-              }}
-            >
-              <a>
-                <RiHeartLine />
-              </a>
-              {favoriteProductsNumber === 0 ? (
-                ""
-              ) : (
-                <span className="product-number">{favoriteProductsNumber}</span>
-              )}
-            </div>
-          </li>
-        </ul>
-      </nav>
-      <div className="icon">
-        <div
-          className="icon-set bag"
-          onClick={() => {
-            setShowCardProducts(!showCardProducts);
-            var cartProducts = document.getElementById("card_products");
-            if (!showCardProducts) {
-              cartProducts.classList.add("active");
-            } else cartProducts.classList.remove("active");
-          }}
-        >
-          <BiShoppingBag />
-          {cardProductsNumber === 0 ? (
-            ""
-          ) : (
-            <span className="product-number">{cardProductsNumber}</span>
-          )}
-        </div>
-        <ShoppingBag
-          cardProducts={cardProducts}
-          showCardProducts={showCardProducts}
-          setShowCardProducts={setShowCardProducts}
-        />
-        <div
-          className="icon-set favorite"
-          onClick={() => {
-            setShowFavoriteProducts(!showFavoriteProducts);
-            var favProducts = document.getElementById("favorite_products");
-            if (!showFavoriteProducts) {
-              favProducts.classList.add("active");
-            } else favProducts.classList.remove("active");
-          }}
-        >
-          <RiHeartLine />
-          {favoriteProductsNumber === 0 ? (
-            ""
-          ) : (
-            <span className="product-number">{favoriteProductsNumber}</span>
-          )}
-        </div>
-        <FavoriteProducts
-          favoriteProducts={favoriteProducts}
-          showFavoriteProducts={showFavoriteProducts}
-          setShowFavoriteProducts={setShowFavoriteProducts}
-        />
-        <div className="icon-set login">
-          <BiUser />
-        </div>
-        <div
-          className="icon-set burger-menu"
-          onClick={() => {
-            let navLinksStyle = document.querySelector(".nav-links").style;
-            navLinksStyle.height === "50px"
-              ? (navLinksStyle.height = "0px")
-              : (navLinksStyle.height = "50px");
-          }}
-        >
-          <RiMenuFill />
+            <BiShoppingBag />
+            {cardProductsNumber === 0 ? (
+              ""
+            ) : (
+              <span className="product-number">{cardProductsNumber}</span>
+            )}
+          </div>
+          <ShoppingBag
+            cardProducts={cardProducts}
+            showCardProducts={showCardProducts}
+            setShowCardProducts={setShowCardProducts}
+          />
+          <div
+            className="icon-set favorite"
+            onClick={() => {
+              setShowFavoriteProducts(!showFavoriteProducts);
+              var favProducts = document.getElementById("favorite_products");
+              if (!showFavoriteProducts) {
+                favProducts.classList.add("active");
+              } else favProducts.classList.remove("active");
+            }}
+          >
+            <RiHeartLine />
+            {favoriteProductsNumber === 0 ? (
+              ""
+            ) : (
+              <span className="product-number">{favoriteProductsNumber}</span>
+            )}
+          </div>
+          <FavoriteProducts
+            favoriteProducts={favoriteProducts}
+            showFavoriteProducts={showFavoriteProducts}
+            setShowFavoriteProducts={setShowFavoriteProducts}
+          />
+          <div className="icon-set login">
+            <BiUser />
+          </div>
+          <div
+            className="icon-set burger-menu"
+            onClick={() => {
+              let navLinksStyle = document.querySelector(".nav-links").style;
+              navLinksStyle.height === "50px"
+                ? (navLinksStyle.height = "0px")
+                : (navLinksStyle.height = "50px");
+            }}
+          >
+            <RiMenuFill />
+          </div>
         </div>
       </div>
-    </div>
+      <Outlet />
+      <Footer />
+    </>
   );
 }
 

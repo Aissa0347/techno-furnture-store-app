@@ -348,3 +348,6 @@ export const semiCategory = [
 ];
 
 //* ------------------------------ Export SVG's ------------------------------ */
+
+//? Import Logo
+export const LOGO = require("./logo.png");
