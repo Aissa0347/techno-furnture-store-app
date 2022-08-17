@@ -1,13 +1,21 @@
 .sidebar {
   position: sticky;
   top: 0%;
+  left: 0%;
   height: 100vh;
   background-color: $primaryColor;
   z-index: 0;
   color: $whiteColor;
   .menu-icon {
     height: 60px;
-    background: $thirdColor;
+    .icon {
+      padding: 0.5rem;
+      cursor: pointer;
+      // background-color: $greyColor;
+      svg {
+        width: 24px;
+      }
+    }
   }
   .navLinks ul {
     display: flex;
@@ -37,5 +45,16 @@
         width: 24px;
       }
     }
+  }
+}
+
+//* ------------------------------ Media Querys ------------------------------ */
+@media only screen and (max-width: 967px) {
+  .sidebar {
+    width: 100px;
+    .link-text {
+      display: none;
+    }
+    // position: absolute;
   }
 }

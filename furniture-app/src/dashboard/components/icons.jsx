@@ -277,3 +277,184 @@ export const Invoices = (
     </g>
   </svg>
 );
+
+export const visit = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <polygon
+      fill="none"
+      points="8.5 13.5 13.5 0.5 0.5 5.5 6.5 7.5 8.5 13.5"
+      stroke="#000000"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const sale = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <path
+        d="M12,7.5v-2a1,1,0,0,0-1-1H1.5a1,1,0,0,0-1,1v7a1,1,0,0,0,1,1H11a1,1,0,0,0,1-1V10"
+        fill="none"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.84,2,9.51.52a.49.49,0,0,1,.61.36L10.4,2"
+        fill="none"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <rect
+        height="2.5"
+        width="3.5"
+        fill="none"
+        rx="0.5"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x="10"
+        y="7.5"
+      />
+    </g>
+  </svg>
+);
+
+export const order = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <line
+        fill="none"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="3.75"
+        x2="4"
+        y1="4.5"
+        y2="5.5"
+      />
+      <line
+        fill="none"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="7.25"
+        x2="7"
+        y1="4.5"
+        y2="5.5"
+      />
+      <path
+        d="M1.82,7.5H10l1-5H1a.5.5,0,0,0-.49.59l.82,4A.49.49,0,0,0,1.82,7.5Z"
+        fill="none"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11,2.5,11.42.9a.5.5,0,0,1,.49-.4H13.5"
+        fill="none"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M10,7.5,9.58,9.6a.5.5,0,0,1-.49.4H3"
+        fill="none"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle
+        cx="3.5"
+        cy="13"
+        fill="none"
+        r="0.5"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle
+        cx="8.5"
+        cy="13"
+        fill="none"
+        r="0.5"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+export const user = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <polyline
+        fill="none"
+        points="13.5 8 9.38 13.5 6.63 11.44"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle
+        cx="5"
+        cy="2.75"
+        fill="none"
+        r="2.25"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3,12.5H.5V11A4.5,4.5,0,0,1,8.18,7.82"
+        fill="none"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+export const menu = (
+  <svg
+    strokeWidth="2"
+    viewBox="-0.5 -0.5 15 15"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g>
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="13.5"
+        x2="0.5"
+        y1="2"
+        y2="2"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="13.5"
+        x2="0.5"
+        y1="7"
+        y2="7"
+      />
+      <line
+        fill="none"
+        stroke="#ffffff"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="13.5"
+        x2="0.5"
+        y1="12"
+        y2="12"
+      />
+    </g>
+  </svg>
+);

@@ -15,25 +15,24 @@
   }
   .visits-chart {
     flex: 3;
-    height: 400px;
+    height: 500px;
     .chart-wrapper {
       height: 95%;
     }
   }
   .sales-chart {
     flex: 1;
-    height: 400px;
+    height: 500px;
     .chart-wrapper {
       height: 95%;
     }
   }
   .order-chart {
-    height: 350px;
+    height: 400px;
     width: 300px;
     .chart-wrapper {
       margin: 0 auto;
-      height: 90%;
-      width: 250px;
+      height: 95%;
     }
     // flex: 1;
   }

@@ -13,13 +13,49 @@
     padding: 0.5rem 1rem;
     background-color: $whiteColor;
     border: $borderThirdColor;
+    .icon {
+      position: absolute;
+      left: 0%;
+      top: 50%;
+      transform: translateY(-50%);
+      svg {
+        height: 24px;
+      }
+    }
   }
+
   h4 {
+    position: relative;
+    width: 100%;
     font-size: 32px;
     font-weight: normal;
     text-align: center;
+    vertical-align: middle;
   }
   .widget-rank {
     text-align: center;
+  }
+}
+
+//* ------------------------------ Media Querys ------------------------------ */
+
+@media only screen and (max-width: 1240px) {
+  .widgets {
+    h4 {
+      font-size: 24px;
+    }
+    .widget .icon svg {
+      height: 18px;
+    }
+  }
+}
+@media only screen and (max-width: 976px) {
+  .widgets {
+    h3 {
+      font-size: 14px !important;
+    }
+    .widget .icon svg {
+      height: 18px;
+    }
   }
 }
