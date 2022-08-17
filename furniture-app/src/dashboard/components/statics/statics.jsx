@@ -8,8 +8,10 @@ import Orders from "./orders";
 function Statics() {
   return (
     <div className="statics-wrapper">
-      <Visits />
-      <Sales />
+      <section className="analyse">
+        <Visits />
+        <Sales />
+      </section>
       <Orders />
     </div>
   );
