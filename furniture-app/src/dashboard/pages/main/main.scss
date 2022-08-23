@@ -1,7 +1,8 @@
 .widgets {
   .widget-wrapper {
     display: flex;
-    column-gap: 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
   .widget {
     display: flex;
@@ -10,14 +11,17 @@
     text-transform: uppercase;
     flex: 1;
     height: 130px;
+    min-width: 200px;
     padding: 0.5rem 1rem;
     background-color: $whiteColor;
     border: $borderThirdColor;
     .icon {
       position: absolute;
+      display: flex;
       left: 0%;
       top: 50%;
       transform: translateY(-50%);
+      align-items: center;
       svg {
         height: 24px;
       }
@@ -29,8 +33,9 @@
     width: 100%;
     font-size: 32px;
     font-weight: normal;
-    text-align: center;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .widget-rank {
     text-align: center;
@@ -49,13 +54,27 @@
     }
   }
 }
-@media only screen and (max-width: 976px) {
+
+@media only screen and (max-width: 967px) {
   .widgets {
     h3 {
       font-size: 14px !important;
     }
     .widget .icon svg {
       height: 18px;
+    }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .widgets .widget-wrapper {
+  }
+}
+
+@media only screen and (max-width: 567px) {
+  .widget-wrapper {
+    h4 span {
+      font-size: 24px;
     }
   }
 }

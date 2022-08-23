@@ -2,66 +2,99 @@
   margin: 0%;
 }
 
-.dashboard {
-  .dash-navbar {
-    position: relative;
-    top: 0%;
-    left: 0%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.dash-navbar {
+  position: relative;
+  top: 0%;
+  left: 0%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  padding: 0 5vh;
+  background-color: $whiteColor;
+  border-bottom: 1px solid $thirdColor;
+}
+
+.dash-navbar .menu-icon .icon {
+  display: none;
+  cursor: pointer;
+  // background-color: $greyColor;
+  svg {
+    width: 24px;
+  }
+}
+
+.back-btn .btn {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  font-size: 14px;
+  padding: 0 1rem !important;
+  cursor: pointer;
+  gap: 0.5rem;
+  background-color: $secondColor;
+  border: none;
+  svg {
+    width: 24px;
+  }
+}
+
+.dash-logo {
+  width: 100px;
+  img {
+    height: 50px;
     width: 100%;
-    height: 60px;
-    padding: 0 5vh;
-    background-color: $whiteColor;
-    border-bottom: 1px solid $thirdColor;
+    object-fit: contain;
   }
+}
 
+.dash-right-nav,
+.dash-left-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.dash-icon {
+  cursor: pointer;
+  svg {
+    width: 20px;
+    vertical-align: middle;
+    margin: 0% !important;
+  }
+}
+
+.dash-avatar {
+  height: 35px;
+  cursor: pointer;
+  img {
+    height: 100%;
+  }
+}
+
+//* -------------------------------------------------------------------------- */
+//*                                Media Query's                               */
+//* -------------------------------------------------------------------------- */
+
+@media only screen and (max-width: 967px) {
+  .dash-navbar {
+    padding: 0 1rem;
+  }
+}
+
+@media only screen and (max-width: 567px) {
+  .dash-navbar {
+    padding: 0 1rem;
+  }
+  .dash-navbar .menu-icon .icon {
+    display: block;
+  }
   .back-btn .btn {
-    display: flex;
-    height: 40px;
-    align-items: center;
-    font-size: 14px;
-    padding: 0 0.5rem;
-    cursor: pointer;
-    gap: 0.5rem;
-    background-color: $secondColor;
-    border: none;
-    svg {
-      width: 24px;
-    }
-  }
-
-  .dash-logo {
-    width: 100px;
-    img {
-      height: 50px;
-      width: 100%;
-      object-fit: contain;
-    }
-  }
-
-  .dash-right-nav {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    justify-content: space-between;
-  }
-
-  .dash-icon {
-    cursor: pointer;
-    svg {
-      width: 20px;
-      vertical-align: middle;
-      margin: 0% !important;
-    }
-  }
-
-  .dash-avatar {
-    height: 35px;
-    cursor: pointer;
-    img {
-      height: 100%;
+    padding: 0rem 0.5rem !important;
+    .button-text {
+      display: none;
     }
   }
 }

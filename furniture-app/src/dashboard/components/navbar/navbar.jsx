@@ -1,7 +1,7 @@
 // import Styles
 // import "./navbar.scss";
 
-import { Bell, Store } from "../icons";
+import { Bell, Dashboard, menu, Store } from "../icons";
 
 const logo = require("../../../Website-Assets/logo.png");
 const adminImg = require("../../../Website-Assets/Admin.png");
@@ -9,8 +9,15 @@ const adminImg = require("../../../Website-Assets/Admin.png");
 function Navbar() {
   return (
     <div className="dash-navbar">
-      <div className="back-btn">
-        <button className="btn">{Store} Back to Store</button>
+      <div className="dash-left-nav">
+        <div className="menu-icon icon ">
+          <span className="icon center"> {Dashboard}</span>
+        </div>
+        <div className="back-btn">
+          <button className="btn">
+            {Store} <span className="button-text">Back to Store</span>{" "}
+          </button>
+        </div>
       </div>
       <div className="dash-logo">
         <img src={logo} alt="Logo" />

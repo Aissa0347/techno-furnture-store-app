@@ -13,25 +13,25 @@ function Sidebar() {
       <nav className="navLinks">
         <ul>
           <li className="link">
-            <Link to={"/main"}>
+            <Link to={"/dashboard"}>
               <span className="dash-icon "> {Dashboard}</span>{" "}
               <span className="link-text">Dashboard</span>
             </Link>
           </li>
           <li className="link">
-            <Link to={"/customers"}>
+            <Link to={"customers"}>
               <span className="dash-icon "> {Users}</span>{" "}
               <span className="link-text">Customers</span>
             </Link>
           </li>
           <li className="link">
-            <Link to={"/products"}>
+            <Link to={"products"}>
               <span className="dash-icon "> {Products}</span>{" "}
               <span className="link-text">Products</span>
             </Link>
           </li>
           <li className="link">
-            <Link to={"/invoices"}>
+            <Link to={"invoices"}>
               <span className="dash-icon "> {Invoices}</span>{" "}
               <span className="link-text">Invoices</span>
             </Link>

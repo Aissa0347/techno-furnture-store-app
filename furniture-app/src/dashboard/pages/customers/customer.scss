@@ -1,0 +1,41 @@
+.dash-search-filter {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  height: 50px;
+  margin: 1rem 0;
+  border: $border;
+  background-color: $whiteColor;
+
+  input {
+    font-size: 18px;
+    height: 48px;
+    width: 350px;
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    background-color: transparent;
+  }
+}
+.icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 50px;
+  height: 100%;
+  padding: 14px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.customers-table .customer-avatar {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  img {
+    border-radius: 50%;
+    max-height: 45px;
+    margin-right: 10px;
+  }
+}

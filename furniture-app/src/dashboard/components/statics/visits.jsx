@@ -17,7 +17,7 @@ let data = [
 
 function Visits() {
   return (
-    <div className="visits-chart">
+    <div className="visits-chart chart-height">
       <h2>Visits</h2>
       <div className="chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">

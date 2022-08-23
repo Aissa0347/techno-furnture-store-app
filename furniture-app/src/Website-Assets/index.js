@@ -49,6 +49,8 @@ export const defaultProduct = {
   markName: "",
   demonsion: { widht: "", height: "", depth: "" },
   numberOfProduct: 1,
+  productStatus: "In stock",
+  productQuantity: 64,
   totalProductPrice: 1,
   description: "",
   details: "",
@@ -65,6 +67,8 @@ export const Products_Catalog = [
     markName: "hp",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 35,
     totalProductPrice: 45000,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -81,6 +85,8 @@ export const Products_Catalog = [
     markName: "hp",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 78,
     totalProductPrice: 19000,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -97,6 +103,8 @@ export const Products_Catalog = [
     markName: "dell",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "Pending",
+    productQuantity: 68,
     totalProductPrice: 3500,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -113,6 +121,8 @@ export const Products_Catalog = [
     markName: "benq",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 42,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -129,6 +139,8 @@ export const Products_Catalog = [
     markName: "Acer",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 34,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -145,6 +157,8 @@ export const Products_Catalog = [
     markName: "Asus",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 53,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -161,6 +175,8 @@ export const Products_Catalog = [
     markName: "SAMSUNG",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 91,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -177,6 +193,8 @@ export const Products_Catalog = [
     markName: "IRIS",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "Pending",
+    productQuantity: 71,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -193,6 +211,8 @@ export const Products_Catalog = [
     markName: "Apple",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 25,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -209,6 +229,8 @@ export const Products_Catalog = [
     markName: "Msi",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "Pending",
+    productQuantity: 78,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -225,6 +247,8 @@ export const Products_Catalog = [
     markName: "hp",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 14,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -241,6 +265,8 @@ export const Products_Catalog = [
     markName: "Acer",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 23,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -257,6 +283,8 @@ export const Products_Catalog = [
     markName: "dell",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "Pending",
+    productQuantity: 156,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -273,6 +301,8 @@ export const Products_Catalog = [
     markName: "Apple",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 39,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -289,6 +319,8 @@ export const Products_Catalog = [
     markName: "Msi",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "In stock",
+    productQuantity: 59,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
@@ -305,12 +337,100 @@ export const Products_Catalog = [
     markName: "benq",
     demonsion: { height: 1.5, width: 5.4, depth: 2.2 },
     numberOfProduct: 1,
+    productStatus: "Pending",
+    productQuantity: 41,
     totalProductPrice: 24.99,
     description:
       "This product is somethig great that i would suggest to each client put it on his desk",
     details:
       "the sofa is really impressive because of his cotton material so i would suggest to to use it in your home better tha n desk",
     id: "DPEgiTgQZL",
+  },
+];
+
+//* ----------------------------- Customers Data ----------------------------- */
+
+export const customersList = [
+  {
+    id: "fsdk55647",
+    avatarImg: require("../Website-Assets/avatar (1).png"),
+    firstName: "Semaoui",
+    lastName: "Aissa",
+    mobileNumber: "0795914857",
+    joinDate: "21/08/2022",
+    numOfOrders: 24,
+    amountSpent: "18000",
+  },
+  {
+    id: "fos8566",
+    avatarImg: require("../Website-Assets/avatar (2).png"),
+    firstName: "Semaoui",
+    lastName: "Bakir",
+    mobileNumber: "0689574281",
+    joinDate: "18/05/2022",
+    numOfOrders: 89,
+    amountSpent: "36500",
+  },
+  {
+    id: "gjsk55647",
+    avatarImg: require("../Website-Assets/avatar (3).png"),
+    firstName: "Latrech",
+    lastName: "Mohamed",
+    mobileNumber: "0550951515",
+    joinDate: "01/09/2022",
+    numOfOrders: 16,
+    amountSpent: "24000",
+  },
+];
+
+//* -------------------------------------------------------------------------- */
+//*                                  Invoices                                  */
+//* -------------------------------------------------------------------------- */
+
+export const InvoicesList = [
+  {
+    id: "user-4865",
+    avatarImg: require("../Website-Assets/avatar (3).png"),
+    name: "Aissa Semaoui",
+    orderId: "fs-58932",
+    orderAddress: "Bordj el Kiffan",
+    inDate: "07/08/2022",
+    orderQuantity: 35,
+    orderCost: 15900,
+    orderStatus: "pending",
+  },
+  {
+    id: "user-4565",
+    avatarImg: require("../Website-Assets/avatar (2).png"),
+    name: "Bakir Semaoui",
+    orderId: "fs-56932",
+    orderAddress: "Bordj el Kiffan, Hamiz",
+    inDate: "26/09/2022",
+    orderQuantity: 53,
+    orderCost: 19500,
+    orderStatus: "completed",
+  },
+  {
+    id: "user-4865",
+    avatarImg: require("../Website-Assets/avatar (1).png"),
+    name: "Latrech Mohamed",
+    orderId: "fs-58662",
+    orderAddress: "Blida,Chebli",
+    inDate: "11/12/2022",
+    orderQuantity: 12,
+    orderCost: 89000,
+    orderStatus: "returned",
+  },
+  {
+    id: "user-1562",
+    avatarImg: require("../Website-Assets/avatar (4).png"),
+    name: "Doudou Yasser",
+    orderId: "fs-58992",
+    orderAddress: "Bordj el Kiffan",
+    inDate: "07/08/2022",
+    orderQuantity: 80,
+    orderCost: 23500,
+    orderStatus: "canceled",
   },
 ];
 

@@ -1,19 +1,19 @@
 //! Import Icons
 
 export const Bell = (
-  <svg className="icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg ">
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <g>
       <path
         d="M7,.5a4.29,4.29,0,0,1,4.29,4.29c0,4.77,1.74,5.71,2.21,5.71H.5c.48,0,2.21-.95,2.21-5.71A4.29,4.29,0,0,1,7,.5Z"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M5.5,12.33a1.55,1.55,0,0,0,3,0"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -22,39 +22,39 @@ export const Bell = (
 );
 
 export const Store = (
-  <svg className="icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg ">
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <g>
       <path
         d="M1.5,8.5V13a.5.5,0,0,0,.5.5H12a.5.5,0,0,0,.5-.5V8.5"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M4.75,4V5a2,2,0,0,1-2,2H2.47a2,2,0,0,1-2-2V4"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M9.25,4V5a2,2,0,0,1-2,2h-.5a2,2,0,0,1-2-2V4"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M13.5,4V5a2,2,0,0,1-2,2h-.25a2,2,0,0,1-2-2V4"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <line
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="8"
@@ -64,7 +64,7 @@ export const Store = (
       />
       <line
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="1.5"
@@ -75,7 +75,7 @@ export const Store = (
       <polygon
         fill="none"
         points="0.5 4 2 0.5 12 0.5 13.5 4 0.5 4"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -84,14 +84,14 @@ export const Store = (
 );
 
 export const Dashboard = (
-  <svg className="icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg ">
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <g>
       <rect
         height="7"
         width="5"
         fill="none"
         rx="0.5"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x="8.5"
@@ -102,7 +102,7 @@ export const Dashboard = (
         width="5"
         fill="none"
         rx="0.5"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x="8.5"
@@ -113,7 +113,7 @@ export const Dashboard = (
         width="5"
         fill="none"
         rx="0.5"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x="0.5"
@@ -124,7 +124,7 @@ export const Dashboard = (
         width="5"
         fill="none"
         rx="0.5"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x="0.5"
@@ -135,35 +135,35 @@ export const Dashboard = (
 );
 
 export const Users = (
-  <svg className="icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg ">
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <g>
       <circle
         cx="5"
         cy="3.75"
         fill="none"
         r="2.25"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M9.5,13.5H.5v-1a4.5,4.5,0,0,1,9,0Z"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M9,1.5A2.25,2.25,0,0,1,9,6"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M10.6,8.19a4.5,4.5,0,0,1,2.9,4.2V13.5H12"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -172,14 +172,14 @@ export const Users = (
 );
 
 export const Products = (
-  <svg className="icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg ">
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <g>
       <rect
         height="6.5"
         width="6.5"
         fill="none"
         rx="1"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x="5.5"
@@ -188,27 +188,27 @@ export const Products = (
       <path
         d="M4,12h7.61a1,1,0,0,1,.7.29L13.5,13.5"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M.5.5h1a1,1,0,0,1,1,1V10"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M4,11.75A2.11,2.11,0,0,1,4,12a1.74,1.74,0,1,1,0-.25Z"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <line
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="8.5"
@@ -221,32 +221,32 @@ export const Products = (
 );
 
 export const Invoices = (
-  <svg className="icon" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg ">
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <g>
       <path
         d="M8.5.5h-7a1,1,0,0,0-1,1v11a1,1,0,0,0,1,1h11a1,1,0,0,0,1-1v-7Z"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M8.5,5V.5l5,5H9A.5.5,0,0,1,8.5,5Z"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M3,8.5c0,.75.67,1,1.5,1S6,9.5,6,8.5C6,7,3,7,3,5.5c0-1,.67-1,1.5-1S6,4.88,6,5.5"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <line
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="4.5"
@@ -256,7 +256,7 @@ export const Invoices = (
       />
       <line
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="4.5"
@@ -266,7 +266,7 @@ export const Invoices = (
       />
       <line
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="8.5"
@@ -279,11 +279,11 @@ export const Invoices = (
 );
 
 export const visit = (
-  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+  <svg strokeWidth="1" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <polygon
       fill="none"
       points="8.5 13.5 13.5 0.5 0.5 5.5 6.5 7.5 8.5 13.5"
-      stroke="#000000"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -296,14 +296,14 @@ export const sale = (
       <path
         d="M12,7.5v-2a1,1,0,0,0-1-1H1.5a1,1,0,0,0-1,1v7a1,1,0,0,0,1,1H11a1,1,0,0,0,1-1V10"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M3.84,2,9.51.52a.49.49,0,0,1,.61.36L10.4,2"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -312,7 +312,7 @@ export const sale = (
         width="3.5"
         fill="none"
         rx="0.5"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x="10"
@@ -327,7 +327,7 @@ export const order = (
     <g>
       <line
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="3.75"
@@ -337,7 +337,7 @@ export const order = (
       />
       <line
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="7.25"
@@ -348,21 +348,21 @@ export const order = (
       <path
         d="M1.82,7.5H10l1-5H1a.5.5,0,0,0-.49.59l.82,4A.49.49,0,0,0,1.82,7.5Z"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M11,2.5,11.42.9a.5.5,0,0,1,.49-.4H13.5"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M10,7.5,9.58,9.6a.5.5,0,0,1-.49.4H3"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -371,7 +371,7 @@ export const order = (
         cy="13"
         fill="none"
         r="0.5"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -380,7 +380,7 @@ export const order = (
         cy="13"
         fill="none"
         r="0.5"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -394,7 +394,7 @@ export const user = (
       <polyline
         fill="none"
         points="13.5 8 9.38 13.5 6.63 11.44"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -403,14 +403,14 @@ export const user = (
         cy="2.75"
         fill="none"
         r="2.25"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M3,12.5H.5V11A4.5,4.5,0,0,1,8.18,7.82"
         fill="none"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -427,7 +427,7 @@ export const menu = (
     <g>
       <line
         fill="none"
-        stroke="#ffffff"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="13.5"
@@ -437,7 +437,7 @@ export const menu = (
       />
       <line
         fill="none"
-        stroke="#ffffff"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="13.5"
@@ -447,13 +447,306 @@ export const menu = (
       />
       <line
         fill="none"
-        stroke="#ffffff"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x1="13.5"
         x2="0.5"
         y1="12"
         y2="12"
+      />
+    </g>
+  </svg>
+);
+//* --------------------------------- Actions -------------------------------- */
+
+export const remove = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="1"
+        x2="13"
+        y1="3.5"
+        y2="3.5"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="5.5"
+        x2="5.5"
+        y1="5.5"
+        y2="11"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="8.5"
+        x2="8.5"
+        y1="5.5"
+        y2="11"
+      />
+      <path
+        d="M2.5,3.5h9a0,0,0,0,1,0,0v9a1,1,0,0,1-1,1h-7a1,1,0,0,1-1-1v-9A0,0,0,0,1,2.5,3.5Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4.5,3.5V3a2.5,2.5,0,0,1,5,0v.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+export const pause = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <rect
+        height="13"
+        width="4.5"
+        fill="none"
+        rx="1"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x="0.5"
+        y="0.5"
+      />
+      <rect
+        height="13"
+        width="4.5"
+        fill="none"
+        rx="1"
+        stroke="#000000"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x="9"
+        y="0.5"
+      />
+    </g>
+  </svg>
+);
+
+export const run = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M1.5,12.35a1.14,1.14,0,0,0,.63,1,1.24,1.24,0,0,0,1.22,0L12,8A1.11,1.11,0,0,0,12,6L3.35.69a1.24,1.24,0,0,0-1.22,0,1.14,1.14,0,0,0-.63,1Z"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const show = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <path
+        d="M13.23,6.33a1,1,0,0,1,0,1.34C12.18,8.8,9.79,11,7,11S1.82,8.8.77,7.67a1,1,0,0,1,0-1.34C1.82,5.2,4.21,3,7,3S12.18,5.2,13.23,6.33Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle
+        cx="7"
+        cy="7"
+        fill="none"
+        r="2"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+export const hide = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <path
+        d="M12.29,5.4c.38.34.7.67.94.93a1,1,0,0,1,0,1.34C12.18,8.8,9.79,11,7,11H6.6"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M3.87,10.13A12.4,12.4,0,0,1,.77,7.67a1,1,0,0,1,0-1.34C1.82,5.2,4.21,3,7,3a6.56,6.56,0,0,1,3.13.87"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M5.59,8.41A2,2,0,0,1,5,7,2,2,0,0,1,7,5a2,2,0,0,1,1.41.59"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M8.74,8A2,2,0,0,1,8,8.73"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="12.5"
+        x2="1.5"
+        y1="1.5"
+        y2="12.5"
+      />
+    </g>
+  </svg>
+);
+
+export const edit = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <path
+        d="M7.5,9l-3,.54L5,6.5,10.73.79a1,1,0,0,1,1.42,0l1.06,1.06a1,1,0,0,1,0,1.42Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12,9.5v3a1,1,0,0,1-1,1H1.5a1,1,0,0,1-1-1V3a1,1,0,0,1,1-1h3"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+export const download = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <path
+        d="M.5,10.5v1a2,2,0,0,0,2,2h9a2,2,0,0,0,2-2v-1"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <polyline
+        fill="none"
+        points="4 6 7 9.5 10 6"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="7"
+        x2="7"
+        y1="9.5"
+        y2="0.5"
+      />
+    </g>
+  </svg>
+);
+
+export const search = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <circle
+        cx="5.92"
+        cy="5.92"
+        fill="none"
+        r="5.42"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="13.5"
+        x2="9.75"
+        y1="13.5"
+        y2="9.75"
+      />
+    </g>
+  </svg>
+);
+
+export const filter = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M13.5.5H.5a6.51,6.51,0,0,0,5,6.33V13.5l3-2V6.83A6.51,6.51,0,0,0,13.5.5Z"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const up = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <polyline
+        fill="none"
+        points="9.5 3.5 13.5 3.5 13.5 7.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M13.5,3.5,7.85,9.15a.5.5,0,0,1-.7,0l-2.3-2.3a.5.5,0,0,0-.7,0L.5,10.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+export const down = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <polyline
+        fill="none"
+        points="9.5 10.5 13.5 10.5 13.5 6.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M13.5,10.5,7.85,4.85a.5.5,0,0,0-.7,0l-2.3,2.3a.5.5,0,0,1-.7,0L.5,3.5"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </g>
   </svg>

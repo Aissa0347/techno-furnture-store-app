@@ -13,11 +13,13 @@ let data = [
   { name: "day 2", value: "410", value2: "265" },
   { name: "day 3", value: "821", value2: "695" },
   { name: "day 4", value: "452", value2: "760" },
+  { name: "day 5", value: "269", value2: "760" },
+  { name: "day 6", value: "752", value2: "760" },
 ];
 
 function Sales() {
   return (
-    <div className="sales-chart">
+    <div className="sales-chart chart-height">
       <h2>Sales</h2>
       <div className="chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">

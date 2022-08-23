@@ -1,6 +1,5 @@
 //* ---------------------------- Import Components --------------------------- */
 import Statics from "../../components/statics/statics";
-
 // Import Icons
 import { visit, sale, order, user } from "../../components/icons";
 

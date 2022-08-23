@@ -2,6 +2,9 @@
 @import "./components/sidebar/sidebar.scss";
 @import "./components/statics/statics.scss";
 @import "./pages/main/main.scss";
+@import "./pages/customers/customer.scss";
+@import "./pages/products/products.scss";
+@import "./pages/invoices/invoices.scss";
 
 //* -------------------------------------------------------------------------- */
 //*                                  Global Variables                                 */
@@ -56,10 +59,37 @@ h1.dash-title {
 .dashboard {
   display: flex;
   flex-direction: row-reverse;
+  width: 100vw;
+}
+.dash-container {
+  min-width: 80%;
+  width: 100%;
+}
+.sidebar {
+  width: 250px;
+  z-index: 999;
+}
+
+//* -------------------------------------------------------------------------- */
+//*                                Media Query's                               */
+//* -------------------------------------------------------------------------- */
+
+@media only screen and (max-width: 967px) {
   .dash-container {
-    flex: 5;
+    margin-left: 66px;
+    width: calc(100% - 66px);
   }
-  .sidebar {
-    flex: 1;
+  .in-dash-container {
+    width: 95%;
+  }
+}
+
+@media only screen and (max-width: 567px) {
+  .dash-container {
+    margin-left: 0;
+    width: 100%;
+  }
+  .in-dash-container {
+    width: 95%;
   }
 }
