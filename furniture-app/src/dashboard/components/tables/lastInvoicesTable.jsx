@@ -18,9 +18,55 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { Dashboard } from "../icons";
+import { Dashboard, download, show } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
+
+const headCells = [
+  {
+    id: "name",
+    numeric: false,
+    disablePadding: false,
+    label: "Name",
+  },
+  {
+    id: "orderId",
+    numeric: true,
+    disablePadding: false,
+    label: "Order Id",
+  },
+  {
+    id: "address",
+    numeric: true,
+    disablePadding: false,
+    label: "Address",
+  },
+  {
+    id: "inDate",
+    numeric: true,
+    disablePadding: false,
+    label: "In Date",
+  },
+  {
+    id: "orderQuantity",
+    numeric: true,
+    disablePadding: false,
+    label: "Order Quantity",
+  },
+  {
+    id: "orderCost",
+    numeric: true,
+    disablePadding: false,
+    label: "Cost",
+  },
+  {
+    id: "orderStatus",
+    numeric: true,
+    disablePadding: false,
+    label: "Status",
+  },
+  { label: "Actions" },
+];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -52,7 +98,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function EnhancedTable({ rows, headCells }) {
+export default function EnhancedTable({ rows }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [selected, setSelected] = React.useState([]);
@@ -77,38 +123,15 @@ export default function EnhancedTable({ rows, headCells }) {
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={rowCount > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-              inputProps={{
-                "aria-label": "select all desserts",
-              }}
-            />
-          </TableCell>
           {headCells.map((headCell) => (
             <TableCell
               key={headCell.id}
               align="left"
+              style={{ minWidth: "max-content" }}
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
+              <span className="not-sorted-head">{headCell.label}</span>
             </TableCell>
           ))}
         </TableRow>
@@ -262,23 +285,10 @@ export default function EnhancedTable({ rows, headCells }) {
                 return (
                   <TableRow
                     hover
-                    onClick={(event) => handleClick(event, row.orderId)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
                     tabIndex={-1}
                     key={row.orderId}
-                    selected={isItemSelected}
                     className="customers-table invoices-table"
                   >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
                     <TableCell>
                       <span className="customer-avatar">
                         <img src={row.avatarImg} alt="" />
@@ -292,6 +302,12 @@ export default function EnhancedTable({ rows, headCells }) {
                     <TableCell align="left">{row.orderCost}</TableCell>
                     <TableCell align="left">
                       <span className={row.orderStatus}>{row.orderStatus}</span>
+                    </TableCell>
+                    <TableCell align="left">
+                      <div className="invoices-actions dash-actions">
+                        <span className="action">{show}</span>
+                        <span className="action">{download}</span>
+                      </div>
                     </TableCell>
                   </TableRow>
                 );

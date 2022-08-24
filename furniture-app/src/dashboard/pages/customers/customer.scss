@@ -39,3 +39,23 @@
     margin-right: 10px;
   }
 }
+
+.customer-actions.dash-actions {
+  width: 70px;
+  max-width: 80px;
+}
+.customers-table .edit-menu .action {
+  padding: 4px;
+  width: 22px;
+  height: 22px;
+}
+
+//* -------------------------------------------------------------------------- */
+//*                                Media Query's                               */
+//* -------------------------------------------------------------------------- */
+
+@media only screen and (max-width: 567px) {
+  .dash-search-filter {
+    width: 100%;
+  }
+}

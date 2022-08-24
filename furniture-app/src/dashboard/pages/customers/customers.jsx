@@ -1,7 +1,7 @@
 import CustomersTable from "../../components/tables/customerTable";
 import { customersList } from "../../../Website-Assets";
 
-import { visit } from "../../components/icons";
+import { search, visit } from "../../components/icons";
 
 //* ------------------------------ Table Cell's and Rows ------------------------------ */
 
@@ -36,6 +36,11 @@ const headCells = [
     disablePadding: false,
     label: "SPENT",
   },
+  {
+    label: "Actions",
+    isNotSorted: true,
+  },
+  { label: "", isNotSorted: true },
 ];
 
 function createData(
@@ -83,7 +88,7 @@ function Customer() {
     <section className="in-dash-container">
       <h1 className="dash-title">Customers</h1>
       <div className="dash-search-filter customer-filter">
-        <button className="icon-btn">{visit}</button>
+        <button className="icon-btn">{search}</button>
         <input
           type="text"
           id="customer-search"

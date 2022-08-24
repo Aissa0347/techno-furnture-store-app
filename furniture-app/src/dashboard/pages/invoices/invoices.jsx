@@ -1,4 +1,4 @@
-import { visit } from "../../components/icons";
+import { add, filter, search, visit } from "../../components/icons";
 import InovoicesTable from "../../components/tables/invoicesTable";
 import { customersList, InvoicesList } from "../../../Website-Assets";
 import { Products_Catalog } from "../../../Website-Assets";
@@ -81,6 +81,8 @@ export const headCells = [
     disablePadding: false,
     label: "Status",
   },
+  { label: "Actions", isNotSorted: true },
+  { label: "", isNotSorted: true },
 ];
 
 function createData(
@@ -131,7 +133,7 @@ function Invoices() {
       <Widgets />
       <div className="filters newProducts">
         <div className="dash-search-filter customer-filter">
-          <button className="icon-btn">{visit}</button>
+          <button className="icon-btn">{search}</button>
           <input
             type="text"
             id="customer-search"
@@ -139,12 +141,12 @@ function Invoices() {
           />
         </div>
         <div className="filter-btn">
-          <button className="icon-btn">{sale}</button>
+          <button className="icon-btn">{filter}</button>
         </div>
         <div className="new-product">
           <button className="icon-btn">
-            <span className="icon ">+</span>&nbsp;
-            <span className="text">Add Product</span>
+            <span className="icon ">{add}</span>&nbsp;
+            <span className="text">Add Invoice</span>
           </button>
         </div>
       </div>

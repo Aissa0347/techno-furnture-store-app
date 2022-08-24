@@ -35,6 +35,7 @@
     }
     .icon {
       font-size: 24px;
+      width: 18px;
       margin-right: 0.5rem;
     }
   }
@@ -42,6 +43,8 @@
 
 .product-table {
   .stock {
+    display: inline-block;
+    width: max-content;
     padding: 0.5rem;
     text-transform: uppercase;
     font-size: 12px;
@@ -58,6 +61,27 @@
     color: red;
   }
 }
+
+.dash-actions {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  max-width: 100px;
+  justify-content: space-between;
+  align-items: center;
+  .action {
+    color: $primaryColor;
+    padding: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50px;
+    cursor: pointer;
+    &:hover {
+      background-color: $whiteColor;
+    }
+  }
+}
+
 //* -------------------------------------------------------------------------- */
 //*                                Media Query's                               */
 //* -------------------------------------------------------------------------- */

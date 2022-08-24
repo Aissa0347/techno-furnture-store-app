@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import logo from "../Website-Assets/logo.png";
 import {
+  BiCategory,
   BiChevronDown,
   BiCreditCard,
   BiCurrentLocation,
@@ -192,15 +193,15 @@ function UniqueCardFav({ Product }) {
 }
 //* ---------------------------- Helper Functions ---------------------------- */
 
-function stickyBar(element) {
-  // console.log(window.pageYOffset);
+// function stickyBar(element) {
+//   // console.log(window.pageYOffset);
 
-  if (window.pageYOffset >= 500) {
-    element.classList.add("onTop");
-  } else if (window.pageXOffset < 550) {
-    element.classList.remove("onTop");
-  }
-}
+//   if (window.pageYOffset >= 500) {
+//     element.classList.add("onTop");
+//   } else if (window.pageXOffset < 550) {
+//     element.classList.remove("onTop");
+//   }
+// }
 
 //* ---------------------------- Navbar Component ---------------------------- */
 
@@ -211,12 +212,12 @@ function Navbar({ favoriteProducts, cardProducts }) {
   let cardProductsNumber = cardProducts.length;
   var favProducts = document.getElementById("favorite_products");
 
-  useEffect(() => {
-    const barOffset = document.getElementById("navbar").offsetTop;
-    window.addEventListener("scroll", () =>
-      stickyBar(document.getElementById("navbar"))
-    );
-  }, []);
+  // useEffect(() => {
+  //   const barOffset = document.getElementById("navbar").offsetTop;
+  //   window.addEventListener("scroll", () =>
+  //     stickyBar(document.getElementById("navbar"))
+  //   );
+  // }, []);
   return (
     <>
       <div className="navbar  " id="navbar">
@@ -229,14 +230,18 @@ function Navbar({ favoriteProducts, cardProducts }) {
           <ul>
             <li className="link N-1" onClick={scrollToTop}>
               {" "}
-              <Link to="/home">Home </Link>
+              <Link to="/">Home </Link>
             </li>
             <li className="link N-2">
-              <Link to="/catalog">All Products </Link>
+              <Link to="/catalog">All&nbsp;Products </Link>
             </li>
             <li className="link N-3" onClick={scrollToTop}>
               {" "}
               <Link to="/ordering">Basket</Link>
+            </li>
+            <li className="link N-3" onClick={scrollToTop}>
+              {" "}
+              <Link to="/dashboard">Dashboard</Link>
             </li>
           </ul>
         </nav>
@@ -257,6 +262,12 @@ function Navbar({ favoriteProducts, cardProducts }) {
               {" "}
               <Link to="/ordering">
                 <BiCreditCard />{" "}
+              </Link>
+            </li>
+            <li className="link N-4" onClick={scrollToTop}>
+              {" "}
+              <Link to="/dashboard">
+                <BiCategory />{" "}
               </Link>
             </li>
             <li

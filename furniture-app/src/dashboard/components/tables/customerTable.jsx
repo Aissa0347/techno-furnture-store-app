@@ -18,7 +18,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { Dashboard } from "../icons";
+import { chevronDown, Dashboard, edit, editMenu, off } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
 
@@ -95,20 +95,24 @@ export default function EnhancedTable({ rows, headCells }) {
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-              >
-                {headCell.label}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
+              {headCell.isNotSorted ? (
+                <span className="not-sorted-head">{headCell.label}</span>
+              ) : (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : "asc"}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  {headCell.label}
+                  {orderBy === headCell.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              )}
             </TableCell>
           ))}
         </TableRow>
@@ -263,7 +267,6 @@ export default function EnhancedTable({ rows, headCells }) {
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -274,6 +277,7 @@ export default function EnhancedTable({ rows, headCells }) {
                       <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
+                          onClick={(event) => handleClick(event, row.id)}
                           checked={isItemSelected}
                           inputProps={{
                             "aria-labelledby": labelId,
@@ -290,6 +294,17 @@ export default function EnhancedTable({ rows, headCells }) {
                       <TableCell align="left">{row.joinDate}</TableCell>
                       <TableCell align="left">{row.numOfOrders}</TableCell>
                       <TableCell align="left">{row.amountSpent}</TableCell>
+                      <TableCell align="left">
+                        <div className="customer-actions dash-actions">
+                          <span className="action">{off}</span>
+                          <span className="action">{edit}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="edit-menu dash-actions">
+                          <span className="action">{chevronDown}</span>
+                        </div>
+                      </TableCell>
                     </TableRow>
                   );
                 })}

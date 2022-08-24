@@ -3,7 +3,7 @@ import Visits from "./visits";
 import Sales from "./sales";
 import Orders from "./orders";
 import LastInvoicesTable from "../tables/lastInvoicesTable";
-import { headCells, rows } from "../../pages/invoices/invoices";
+import { rows } from "../../pages/invoices/invoices";
 //* ---------------------------- Statics Component --------------------------- */
 
 function Statics() {
@@ -16,7 +16,7 @@ function Statics() {
       <section className="statics-order-invoices">
         <Orders />
         <div className="last-invoices">
-          <LastInvoicesTable headCells={headCells} rows={rows} />
+          <LastInvoicesTable rows={rows} />
         </div>
       </section>
     </div>

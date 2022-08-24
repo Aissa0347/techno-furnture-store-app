@@ -2,21 +2,32 @@
 // import "./navbar.scss";
 
 import { Bell, Dashboard, menu, Store } from "../icons";
+import { Link } from "react-router-dom";
 
 const logo = require("../../../Website-Assets/logo.png");
 const adminImg = require("../../../Website-Assets/Admin.png");
+
+export function toggleSideBar() {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.classList.toggle("active");
+}
 
 function Navbar() {
   return (
     <div className="dash-navbar">
       <div className="dash-left-nav">
         <div className="menu-icon icon ">
-          <span className="icon center"> {Dashboard}</span>
+          <span className="icon center" onClick={toggleSideBar}>
+            {" "}
+            {menu}
+          </span>
         </div>
         <div className="back-btn">
-          <button className="btn">
-            {Store} <span className="button-text">Back to Store</span>{" "}
-          </button>
+          <Link to="/">
+            <button className="btn">
+              {Store} <span className="button-text">Back to Store</span>{" "}
+            </button>
+          </Link>
         </div>
       </div>
       <div className="dash-logo">

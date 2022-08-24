@@ -511,7 +511,7 @@ export const remove = (
   </svg>
 );
 
-export const pause = (
+export const stop = (
   <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <g>
       <rect
@@ -519,7 +519,7 @@ export const pause = (
         width="4.5"
         fill="none"
         rx="1"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x="0.5"
@@ -530,7 +530,7 @@ export const pause = (
         width="4.5"
         fill="none"
         rx="1"
-        stroke="#000000"
+        stroke="currentColor"
         strokeLinecap="round"
         strokeLinejoin="round"
         x="9"
@@ -539,7 +539,6 @@ export const pause = (
     </g>
   </svg>
 );
-
 export const run = (
   <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <path
@@ -574,7 +573,6 @@ export const show = (
     </g>
   </svg>
 );
-
 export const hide = (
   <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
     <g>
@@ -749,5 +747,187 @@ export const down = (
         strokeLinejoin="round"
       />
     </g>
+  </svg>
+);
+
+export const off = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="7"
+        x2="7"
+        y1="0.5"
+        y2="6"
+      />
+      <path
+        d="M11,1.88a6.5,6.5,0,1,1-8,0"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+export const on = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <circle
+        cx="7"
+        cy="7"
+        fill="none"
+        r="6.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="7"
+        x2="7"
+        y1="4.5"
+        y2="9.5"
+      />
+    </g>
+  </svg>
+);
+
+export const add = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <circle
+        cx="7"
+        cy="7"
+        fill="none"
+        r="6.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <g>
+        <line
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          x1="7"
+          x2="7"
+          y1="4"
+          y2="10"
+        />
+        <line
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          x1="4"
+          x2="10"
+          y1="7"
+          y2="7"
+        />
+      </g>
+    </g>
+  </svg>
+);
+
+export const archive = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <path
+        d="M1.5,5.54h11a0,0,0,0,1,0,0v7a1,1,0,0,1-1,1h-9a1,1,0,0,1-1-1v-7A0,0,0,0,1,1.5,5.54Z"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <rect
+        height="13"
+        width="4"
+        fill="none"
+        rx="1"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        transform="translate(10.54 -3.46) rotate(90)"
+        x="5"
+        y="-2.96"
+      />
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="5.5"
+        x2="8.5"
+        y1="8.54"
+        y2="8.54"
+      />
+    </g>
+  </svg>
+);
+
+export const editMenu = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <circle
+        cx="7"
+        cy="2"
+        fill="none"
+        r="1.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle
+        cx="7"
+        cy="7"
+        fill="none"
+        r="1.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle
+        cx="7"
+        cy="12"
+        fill="none"
+        r="1.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);
+
+export const chevronDown = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M.5,3.85,6.65,10a.48.48,0,0,0,.7,0L13.5,3.85"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+export const chevronUp = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M.5,10.15,6.65,4a.48.48,0,0,1,.7,0l6.15,6.15"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );

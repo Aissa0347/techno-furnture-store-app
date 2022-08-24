@@ -7,7 +7,7 @@
   section > div {
     border: $borderThirdColor;
     background-color: $whiteColor;
-    padding: 1rem;
+    padding: 1rem 0.5rem;
   }
   .analyse {
     display: flex;
@@ -50,6 +50,9 @@
 }
 .chart-height {
   height: 500px;
+  h2 {
+    margin-left: 0.5rem;
+  }
 }
 
 .order-chart {
@@ -116,6 +119,7 @@
   .chart-height {
     height: 300px;
   }
+
   .statics-wrapper .order-chart {
     height: 300px;
     width: 100%;
@@ -126,4 +130,7 @@
 }
 
 @media only screen and (max-width: 567px) {
+  .statics-wrapper .visits-chart {
+    min-width: 100% !important;
+  }
 }

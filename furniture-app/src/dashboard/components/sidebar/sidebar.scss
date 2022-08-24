@@ -4,10 +4,11 @@
   left: 0%;
   height: 100vh;
   background-color: $primaryColor;
-  z-index: 0;
   color: $whiteColor;
   box-shadow: 3px 0px 10px -10px $primaryColor;
   overflow-x: hidden;
+  z-index: 999;
+
   .menu-icon {
     height: 60px;
 
@@ -61,6 +62,7 @@
   .dashboard .sidebar {
     position: fixed;
     width: fit-content;
+    min-width: 66px;
     transition: 1s ease;
     .link-text {
       width: 0px;

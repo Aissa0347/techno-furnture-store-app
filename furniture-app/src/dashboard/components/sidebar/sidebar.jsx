@@ -1,3 +1,4 @@
+import { toggleSideBar } from "../navbar/navbar";
 //  import Libraries
 import { Link } from "react-router-dom";
 
@@ -6,9 +7,12 @@ import { Dashboard, Users, Products, Invoices, menu } from "../icons";
 
 function Sidebar() {
   return (
-    <aside className="sidebar">
+    <aside className="sidebar" id="sidebar">
       <div className="menu-icon icon center">
-        <span className="icon center"> {menu}</span>
+        <span className="icon center" onClick={toggleSideBar}>
+          {" "}
+          {menu}
+        </span>
       </div>
       <nav className="navLinks">
         <ul>
