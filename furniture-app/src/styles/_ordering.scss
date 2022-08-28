@@ -36,10 +36,10 @@
   column-gap: 2%;
   .input {
     color: $primaryColor;
-    width: 100%;
-    &.half {
-      width: 49%;
-    }
+    // width: 100%;
+  }
+  .half {
+    width: 49%;
   }
 
   input {

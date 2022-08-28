@@ -22,7 +22,7 @@ import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 
 //* --------------------------- Product Media Show -------------------------- */
 
-function ProductDetailShow(props) {
+export function ProductDetailShow(props) {
   const [isLoading, setIsLoading] = useState(true);
   window.onloadeddata = () => {
     setIsLoading(false);
@@ -92,14 +92,14 @@ function ProductInfo({
               <tr>
                 <th>
                   {" "}
-                  <small>Width-</small>&nbsp;{demonsion.width}m
+                  <small>Width-</small>&nbsp;{demonsion?.width}m
                 </th>
                 <th>
-                  <small>Height-</small>&nbsp;{demonsion.height}m
+                  <small>Height-</small>&nbsp;{demonsion?.height}m
                 </th>
                 <th>
                   {" "}
-                  <small>Depth-</small>&nbsp;{demonsion.depth}m
+                  <small>Depth-</small>&nbsp;{demonsion?.depth}m
                 </th>
               </tr>
             </thead>
@@ -150,7 +150,7 @@ function ProductInfo({
           </button>
         </div>
       </ul>
-      <div className="filter-box filter-bar product_details">
+      <div className="filter-box  product_details">
         <details className="filter-checkbox" open>
           <summary>
             Details <BiChevronLeft className="chevron" />

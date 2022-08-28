@@ -37,7 +37,7 @@
       padding: 1rem;
       background-color: $secondColor;
       cursor: pointer;
-      transition: 0.2s ease;
+      transition: all 0.2s ease;
       &:hover {
         background-color: darken($color: $whiteColor, $amount: 10);
         // background-color: $secondColor;
@@ -63,12 +63,12 @@
     position: fixed;
     width: fit-content;
     min-width: 66px;
-    transition: 1s ease;
+    transition: all 1s ease, height 0s;
     .link-text {
       width: 0px;
       padding-left: 0%;
       opacity: 0;
-      transition: all 0.1s ease, width 0.2s ease;
+      transition: all 0.1s ease, width 0.2s ease, height 0s;
     }
     &:hover .link-text {
       width: 100px;

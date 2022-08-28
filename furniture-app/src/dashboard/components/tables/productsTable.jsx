@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -18,7 +18,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { archive, Dashboard, editMenu, pause, stop } from "../icons";
+import { archive, Dashboard, editMenu, pause, show, stop } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
 
@@ -55,7 +55,12 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function EnhancedTable({ rows, headCells }) {
+export default function EnhancedTable({
+  rows,
+  headCells,
+  setProductView,
+  setEditProductPopup,
+}) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("name");
   const [selected, setSelected] = React.useState([]);
@@ -303,9 +308,29 @@ export default function EnhancedTable({ rows, headCells }) {
                       </TableCell>
                       <TableCell align="left">
                         <div className="product-actions dash-actions">
+                          <span
+                            className="action"
+                            onClick={() => {
+                              setProductView({
+                                state: true,
+                                currentProduct: row.currentProduct,
+                              });
+                            }}
+                          >
+                            {show}
+                          </span>
+                          <span
+                            className="action"
+                            onClick={() => {
+                              setEditProductPopup({
+                                state: true,
+                                defaultValues: row.currentProduct,
+                              });
+                            }}
+                          >
+                            {edit}
+                          </span>
                           <span className="action">{stop}</span>
-                          <span className="action">{edit}</span>
-                          <span className="action">{archive}</span>
                         </div>
                       </TableCell>
                       <TableCell>

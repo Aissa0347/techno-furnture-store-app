@@ -1,9 +1,15 @@
-import { add, filter, search, visit } from "../../components/icons";
+// Import Component
 import ProductsTable from "../../components/tables/productsTable";
+import NewProductPopup from "../../components/popups/newProduct/newProductPopup";
+import { ProductDetailShow } from "../../../Components/Product_Page";
+import { MantineProvider, CloseButton, Group } from "@mantine/core";
+
+// Import Data
 import { customersList } from "../../../Website-Assets";
 import { Products_Catalog } from "../../../Website-Assets";
 
-import { sale, order, user } from "../../components/icons";
+import { add, filter, search, visit, sale } from "../../components/icons";
+import { useState } from "react";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -86,7 +92,8 @@ function createData(
   category,
   productQuantity,
   price,
-  productStatus
+  productStatus,
+  currentProduct
 ) {
   return {
     id,
@@ -96,6 +103,7 @@ function createData(
     productQuantity,
     price,
     productStatus,
+    currentProduct,
   };
 }
 
@@ -109,38 +117,93 @@ Products_Catalog.map((product) => {
       product.category,
       product.productQuantity,
       product.price,
-      product.productStatus
+      product.productStatus,
+      product
     )
   );
 });
 
 function Products() {
+  const [newProductPopup, setNewProductPopup] = useState(false);
+  const [editProductPopup, setEditProductPopup] = useState({
+    state: false,
+    defaultValues: "",
+  });
+  const [productView, setProductView] = useState({
+    state: false,
+    currentProduct: Products_Catalog[0],
+  });
   return (
-    <section className="dash-products in-dash-container">
-      <h1 className="dash-title">Products</h1>
-      <Widgets />
-      <div className="filters newProducts">
-        <div className="dash-search-filter customer-filter">
-          <button className="icon-btn">{search}</button>
-          <input
-            type="text"
-            id="customer-search"
-            placeholder="Search Products..."
-          />
+    <>
+      <section className="dash-products in-dash-container">
+        <h1 className="dash-title">Products</h1>
+        <Widgets />
+        <div className="filters newProducts">
+          <div className="dash-search-filter customer-filter">
+            <button className="icon-btn">{search}</button>
+            <input
+              type="text"
+              id="customer-search"
+              placeholder="Search Products..."
+            />
+          </div>
+          <div className="filter-btn">
+            <button className="icon-btn"> {filter}</button>
+          </div>
+          <div className="new-product">
+            <button
+              className="icon-btn"
+              onClick={() => setNewProductPopup(true)}
+            >
+              <span className="icon ">{add}</span>&nbsp;
+              <span className="text">Add Product</span>
+            </button>
+          </div>
         </div>
-        <div className="filter-btn">
-          <button className="icon-btn">{filter}</button>
-        </div>
-        <div className="new-product">
-          <button className="icon-btn">
-            <span className="icon ">{add}</span>&nbsp;
-            <span className="text">Add Product</span>
-          </button>
-        </div>
-      </div>
 
-      <ProductsTable headCells={headCells} rows={rows} />
-    </section>
+        <ProductsTable
+          headCells={headCells}
+          rows={rows}
+          setProductView={setProductView}
+          setEditProductPopup={setEditProductPopup}
+        />
+      </section>
+      {newProductPopup && (
+        <section className="popup-bg">
+          <NewProductPopup setClose={setNewProductPopup} />
+        </section>
+      )}
+      {editProductPopup.state && (
+        <section className="popup-bg">
+          <NewProductPopup
+            setClose={setEditProductPopup}
+            defaultValues={editProductPopup.defaultValues}
+          />
+        </section>
+      )}
+      {productView.state && (
+        <section className="popup-bg ">
+          <MantineProvider>
+            <div className="product-view popup ">
+              <Group position="left">
+                <CloseButton
+                  title="Close popover"
+                  size="xl"
+                  iconSize={20}
+                  onClick={() =>
+                    setProductView({ ...productView, state: false })
+                  }
+                />
+              </Group>
+              <ProductDetailShow
+                className="dash-product-dash"
+                currentProduct={productView.currentProduct}
+              />
+            </div>
+          </MantineProvider>
+        </section>
+      )}
+    </>
   );
 }
 

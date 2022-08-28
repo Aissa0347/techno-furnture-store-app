@@ -34,10 +34,31 @@
       color: $whiteColor;
     }
     .icon {
-      font-size: 24px;
       width: 18px;
       margin-right: 0.5rem;
     }
+  }
+}
+
+.product-view {
+  max-width: 950px;
+  padding: 0rem;
+  .destination {
+    display: none;
+  }
+  .product-show {
+    gap: 2rem;
+    padding: 1rem 2rem 2rem;
+  }
+  .product-info {
+    max-width: 450px;
+  }
+  .product-show-media {
+    max-width: 500px;
+    max-height: 600px;
+  }
+  .product-info .product_btns.btns {
+    max-width: 100%;
   }
 }
 
@@ -86,6 +107,25 @@
 //*                                Media Query's                               */
 //* -------------------------------------------------------------------------- */
 
+@media only screen and (max-width: 967px) {
+  .product-view {
+    max-width: 500px;
+    .product-show {
+      height: 800px;
+      overflow-y: scroll;
+      flex-direction: column;
+    }
+    .product-info {
+      width: 100%;
+      max-width: 100%;
+    }
+    .product-show-media {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
 @media only screen and (max-width: 767px) {
   .dash-products .widgets .widget {
     max-width: 100%;
@@ -107,6 +147,26 @@
       .text {
         display: none;
       }
+    }
+  }
+}
+
+@media only screen and (max-width: 567px) {
+  .product-view {
+    max-width: 90%;
+    .product-show {
+      height: 80vh;
+      overflow-y: scroll;
+      flex-direction: column;
+      padding: 0rem 0.5rem 1rem;
+    }
+    .product-info {
+      width: 100%;
+      max-width: 100%;
+    }
+    .product-show-media {
+      width: 100%;
+      max-width: 100%;
     }
   }
 }
