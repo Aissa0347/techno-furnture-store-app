@@ -164,7 +164,7 @@
   box-shadow: -5px 0px 10px 100vw fade-out($color: $primaryColor, $amount: 1);
   overflow-y: hidden;
   transition: right 0.3s ease-out, box-shadow 0.1s 0s ease-out;
-  z-index: 999;
+  z-index: 200;
   h3 {
     text-align: center;
   }

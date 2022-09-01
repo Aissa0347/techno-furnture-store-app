@@ -1,7 +1,6 @@
 import { add, filter, search, visit } from "../../components/icons";
 import InovoicesTable from "../../components/tables/invoicesTable";
 import { customersList, InvoicesList } from "../../../Website-Assets";
-import { Products_Catalog } from "../../../Website-Assets";
 
 import { sale, order, user } from "../../components/icons";
 

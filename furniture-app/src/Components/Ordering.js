@@ -13,7 +13,6 @@ import { GlobalContext } from "../App";
 import { UniqueCard } from "./Card";
 
 // import DATA
-import { Products_Catalog } from "../Website-Assets";
 
 // import Styles
 import "../styles/index.scss";

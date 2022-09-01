@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, lazy, Suspense } from "react";
 
 // import Icons
 import { BiFilter, BiSearchAlt, BiChevronLeft, BiX } from "react-icons/bi";
@@ -15,6 +15,7 @@ import { Products_Catalog } from "../Website-Assets";
 
 // import Styles
 import "../styles/index.scss";
+import { GlobalContext } from "../App";
 
 //* -------------------------------- Mini Hero ------------------------------- */
 
@@ -76,7 +77,7 @@ function SearchBar({
 
 //* ---------------------------- Catalog Products ---------------------------- */
 
-function ProductsCatalog({
+function ProductsCatalogList({
   filteredProductList,
   setFilteredProductList,
   setFilters,
@@ -126,29 +127,31 @@ function ProductsCatalog({
 
 //* ------------------------------- Filter Bar ------------------------------- */
 
-// filter categories and delete duplicated
-var uniq_categories = [
-  ...new Set(
-    Products_Catalog.map((product) => {
-      return product.category;
-    })
-  ),
-];
-
-// filter marks and delete duplicated
-var uniq_marks = [
-  ...new Set(
-    Products_Catalog.map((product) => {
-      return product.markName;
-    })
-  ),
-];
 function FilterBar({
   setFilters,
   filters,
   setIsFilterBarActive,
   isFilterBarActive,
 }) {
+  const { ProductsCatalog } = useContext(GlobalContext);
+
+  // filter categories and delete duplicated
+  var uniq_categories = [
+    ...new Set(
+      ProductsCatalog.map((product) => {
+        return product.category;
+      })
+    ),
+  ];
+
+  // filter marks and delete duplicated
+  var uniq_marks = [
+    ...new Set(
+      ProductsCatalog.map((product) => {
+        return product.markName;
+      })
+    ),
+  ];
   // toggle filters, function that filter products by the type u assigned
   function toggleSubFilter(event, type, filter) {
     if (event.target.checked) {
@@ -260,17 +263,19 @@ function FilterBar({
 //* --------------------------------- Catalog -------------------------------- */
 
 function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
+  const { ProductsCatalog } = useContext(GlobalContext);
+
   const [filteredProductList, setFilteredProductList] = useState([
-    ...Products_Catalog,
+    ...ProductsCatalog,
   ]);
   const [categoryProductList, setCategoryProductList] = useState([
-    ...Products_Catalog,
+    ...ProductsCatalog,
   ]);
   const [searchFilteredProducts, setSearchFilteredProducts] = useState([]);
   const [isFilterBarActive, setIsFilterBarActive] = useState(false);
 
   let setFiltersToProducts = (filtersType, filtersTypesNames) => {
-    let filteredProduct = [...Products_Catalog];
+    let filteredProduct = [...ProductsCatalog];
     filtersType
       .filter((filtersType) => filtersType.length > 0)
       .map((filterTypeArray, index) => {
@@ -326,7 +331,7 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
             isFilterBarActive={isFilterBarActive}
           />
 
-          <ProductsCatalog
+          <ProductsCatalogList
             filteredProductList={
               searchFilter.length > 0
                 ? searchFilteredProducts

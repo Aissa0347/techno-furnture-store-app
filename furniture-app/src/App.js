@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 //  import Libraries
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
@@ -9,7 +9,6 @@ import Home from "./Components/Home";
 import Catalog from "./Components/Catalog";
 import ProductPage from "./Components/Product_Page";
 import Dashboard from "./dashboard/Dashboard";
-import { Products_Catalog } from "./Website-Assets";
 
 // import Dashboard Components
 import Main from "./dashboard/pages/main/Main";
@@ -21,6 +20,11 @@ import Invoices from "./dashboard/pages/invoices/invoices";
 import "./styles/index.scss";
 import Product_Page from "./Components/Product_Page";
 import Ordering from "./Components/Ordering";
+import { collection, getDocs, limit } from "firebase/firestore";
+import { db } from "./firebase/firebaseConfig";
+import { async } from "@firebase/util";
+import { defaultProduct } from "./Website-Assets";
+import Auth from "./authentication/auth";
 
 //* ---------------------------- Main App Function --------------------------- */
 
@@ -43,6 +47,8 @@ export function scrollToTop() {
 }
 
 function App() {
+  const [ProductsCatalog, setProductsCatalog] = useState([defaultProduct]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [cardProducts, setCardProducts] = useState([]);
   const [searchFilter, setSearchFilter] = useState([]);
@@ -52,6 +58,7 @@ function App() {
   });
   const [subTotal, setSubTotal] = useState(0);
 
+  console.log(ProductsCatalog);
   function calcSubTotal() {
     return cardProducts.reduce(
       (prev, current) => prev + current.totalProductPrice,
@@ -59,7 +66,31 @@ function App() {
     );
   }
 
-  //  Toggle To Favorite Functions As example but it works also with card
+  //* -------------------------------- Get Data -------------------------------- */
+
+  const getData = async () => {
+    const ProductRef = collection(db, "ProductsList");
+    let dataPromise = await getDocs(ProductRef);
+    let fullData = dataPromise.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setProductsCatalog(fullData);
+    setIsDataLoaded(true);
+    console.log("its on", ProductsCatalog);
+  };
+  console.log(ProductsCatalog);
+
+  function updateData() {
+    getData();
+  }
+
+  useEffect(() => {
+    getData();
+    console.log(ProductsCatalog);
+  }, []);
+
+  //?  Toggle To Favorite Functions As example but it works also with card
 
   function addToFavorite(
     currentProduct,
@@ -103,9 +134,13 @@ function App() {
   }
 
   console.log("those are our favorite", favoriteProducts);
+
   return (
     <GlobalContext.Provider
       value={{
+        ProductsCatalog,
+        setProductsCatalog,
+        updateData,
         pickRandomProducts,
         findCurrentProduct,
         isFavorite,
@@ -122,41 +157,53 @@ function App() {
         calcSubTotal,
       }}
     >
-      <div className="main">
-        <Routes>
-          <Route path="/dashboard/" element={<Dashboard />}>
-            <Route index element={<Main />}></Route>
-            <Route path="customers" element={<Customers />}></Route>
-            <Route path="products" element={<Products />}></Route>
-            <Route path="invoices" element={<Invoices />}></Route>
-          </Route>
-          <Route
-            path="/"
-            element={
-              <Navbar
-                favoriteProducts={favoriteProducts}
-                cardProducts={cardProducts}
-              />
-            }
-          >
-            <Route index element={<Home />}></Route>
+      {" "}
+      {isDataLoaded ? (
+        <div className="main">
+          <Routes>
+            <Route path="/auth/" element={<Auth />}></Route>
+            <Route path="/dashboard/" element={<Dashboard />}>
+              <Route index element={<Main />}></Route>
+              <Route path="customers" element={<Customers />}></Route>
+              <Route path="products" element={<Products />}></Route>
+              <Route path="invoices" element={<Invoices />}></Route>
+            </Route>
             <Route
-              path="/catalog"
+              path="/"
               element={
-                <Catalog
-                  searchFilter={searchFilter}
-                  setSearchFilter={setSearchFilter}
-                  filters={filters}
-                  setFilters={setFilters}
+                <Navbar
+                  favoriteProducts={favoriteProducts}
+                  cardProducts={cardProducts}
                 />
               }
-            ></Route>
-            <Route path="/productpage" element={<ProductPage />}></Route>
-            <Route path="catalog/:productId" element={<ProductPage />}></Route>
-            <Route path="/ordering" element={<Ordering />}></Route>
-          </Route>
-        </Routes>
-      </div>
+            >
+              <Route index element={<Home />}></Route>
+              <Route
+                path="/catalog"
+                element={
+                  <Catalog
+                    searchFilter={searchFilter}
+                    setSearchFilter={setSearchFilter}
+                    filters={filters}
+                    setFilters={setFilters}
+                  />
+                }
+              ></Route>
+              <Route path="/productpage" element={<ProductPage />}></Route>
+              <Route
+                path="catalog/:productId"
+                element={<ProductPage />}
+              ></Route>
+              <Route path="/ordering" element={<Ordering />}></Route>
+            </Route>
+          </Routes>
+        </div>
+      ) : (
+        <div>
+          {" "}
+          <h1>is loading shut up and wait</h1>
+        </div>
+      )}
     </GlobalContext.Provider>
   );
 }

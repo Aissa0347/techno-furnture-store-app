@@ -170,11 +170,11 @@ export function SuggestedProducts() {
   const [filteredSuggestedProducts, setFilteredSuggestedProducts] = useState(
     []
   );
-  let { pickRandomProducts } = useContext(GlobalContext);
+  let { pickRandomProducts, ProductsCatalog } = useContext(GlobalContext);
   let { productId } = useParams();
   useEffect(() => {
     console.log("is it rerender too");
-    setFilteredSuggestedProducts(pickRandomProducts(Products_Catalog, 8));
+    setFilteredSuggestedProducts(pickRandomProducts(ProductsCatalog, 8));
   }, [productId]);
 
   return (
@@ -220,6 +220,7 @@ export function SuggestedProducts() {
 //* --------------------------- Shopping Cart List --------------------------- */
 
 export function ShoppingCartList() {
+  const { ProductsCatalog } = useContext(GlobalContext);
   return (
     <Swiper
       direction="vertical"
@@ -227,7 +228,7 @@ export function ShoppingCartList() {
       spaceBetween={50}
       className="product_list_swiper"
     >
-      {Products_Catalog.slice(0, 8).map((Product) => {
+      {ProductsCatalog.slice(0, 8).map((Product) => {
         return (
           <SwiperSlide>
             <li className="unique_card product-info">

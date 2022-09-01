@@ -56,9 +56,10 @@ function ProductInfo({
   price,
   category,
   mark,
+  markName,
   id,
   description,
-  demonsion,
+  dimensions,
   details,
   currentProduct,
 }) {
@@ -83,7 +84,8 @@ function ProductInfo({
         </li>
         <li className="product_maker info">
           <h4>Made by:</h4>
-          <img src={mark} alt="" />
+          {/* <img src={mark} alt="" /> */}
+          <p>{markName}</p>
         </li>
         <li className="product_dimensions info">
           <h4>Dimensions:</h4>
@@ -92,14 +94,14 @@ function ProductInfo({
               <tr>
                 <th>
                   {" "}
-                  <small>Width-</small>&nbsp;{demonsion?.width}m
+                  <small>Width-</small>&nbsp;{dimensions?.width}&nbsp;cm
                 </th>
                 <th>
-                  <small>Height-</small>&nbsp;{demonsion?.height}m
+                  <small>Height-</small>&nbsp;{dimensions?.height}&nbsp;cm
                 </th>
                 <th>
                   {" "}
-                  <small>Depth-</small>&nbsp;{demonsion?.depth}m
+                  <small>Depth-</small>&nbsp;{dimensions?.depth}&nbsp;cm
                 </th>
               </tr>
             </thead>
@@ -171,12 +173,12 @@ function ProductInfo({
 //* ------------------------------ Products Page ----------------------------- */
 
 function ProductPage() {
-  const { findCurrentProduct } = useContext(GlobalContext);
+  const { findCurrentProduct, ProductsCatalog } = useContext(GlobalContext);
   const [currentProduct, setCurrentProduct] = useState(defaultProduct);
   let { productId } = useParams();
   useEffect(() => {
     setCurrentProduct(
-      findCurrentProduct(Products_Catalog, productId) || defaultProduct
+      findCurrentProduct(ProductsCatalog, productId) || defaultProduct
     );
     window.scrollTo(0, 0);
   }, [productId]);

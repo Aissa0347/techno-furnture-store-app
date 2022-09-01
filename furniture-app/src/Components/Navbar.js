@@ -19,7 +19,6 @@ import "../styles/index.scss";
 import App, { GlobalContext, scrollToTop } from "../App";
 import { UniqueCard } from "./Card";
 import { ShoppingCartList } from "./Products";
-import { Products_Catalog } from "../Website-Assets";
 import { Footer } from "./Home";
 
 //  import libraries

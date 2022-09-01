@@ -79,7 +79,7 @@ export const Cards = ({ img, name, price, id, currentProduct, markName }) => {
     <div className="card bx">
       <Link to={`/catalog/${id}`}>
         <div className="imgBx">
-          <img src={img} alt={name} />
+          <img src={img[0].url} alt={name} loading={"lazy"} />
         </div>
         {/* <h3>{markName}</h3> */}
         <h3>{name}</h3>

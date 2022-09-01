@@ -1,0 +1,25 @@
+.auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  hr {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+.auth-title {
+  width: 100%;
+  font-size: 36px;
+  text-align: left;
+}
+
+.auth-wrapper {
+  display: flex;
+  justify-content: space-around;
+  height: 300px;
+  width: 100%;
+  border: 1px solid red;
+}

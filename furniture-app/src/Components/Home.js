@@ -95,8 +95,8 @@ function ProductsM() {
   const [limits, setLimits] = useState(10);
   const [isSmaller, setSmaller] = useState(false);
 
-  let { pickRandomProducts } = useContext(GlobalContext);
-  let ourProducts = pickRandomProducts(Products_Catalog, 8);
+  let { pickRandomProducts, ProductsCatalog } = useContext(GlobalContext);
+  let ourProducts = pickRandomProducts(ProductsCatalog, 8);
 
   function checkIsSmaller() {
     if (window.innerWidth > 767) {

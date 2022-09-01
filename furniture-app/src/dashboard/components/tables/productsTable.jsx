@@ -294,16 +294,16 @@ export default function EnhancedTable({
                       </TableCell>
                       <TableCell>
                         <span className="customer-avatar">
-                          <img src={row.productImg} alt="" />
-                          {row.name}
+                          <img src={row?.productImg} alt="" />
+                          {row?.name}
                         </span>
                       </TableCell>
-                      <TableCell align="left">{row.category}</TableCell>
-                      <TableCell align="left">{row.productQuantity}</TableCell>
-                      <TableCell align="left">{row.price}</TableCell>
+                      <TableCell align="left">{row?.category}</TableCell>
+                      <TableCell align="left">{row?.productQuantity}</TableCell>
+                      <TableCell align="left">{row?.price}</TableCell>
                       <TableCell align="left">
                         <span className={row.productStatus}>
-                          {row.productStatus}
+                          {row?.productStatus}
                         </span>
                       </TableCell>
                       <TableCell align="left">
