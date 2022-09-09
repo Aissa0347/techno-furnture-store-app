@@ -52,6 +52,15 @@ h1.dash-title {
   }
 }
 
+.table-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  svg {
+    width: 16px;
+  }
+}
+
 .center {
   display: flex;
   align-items: center;

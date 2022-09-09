@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 //  import Libraries
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
@@ -20,11 +27,20 @@ import Invoices from "./dashboard/pages/invoices/invoices";
 import "./styles/index.scss";
 import Product_Page from "./Components/Product_Page";
 import Ordering from "./Components/Ordering";
-import { collection, getDocs, limit } from "firebase/firestore";
-import { db } from "./firebase/firebaseConfig";
+import {
+  collection,
+  getDocs,
+  limit,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import { db, auth } from "./firebase/firebaseConfig";
 import { async } from "@firebase/util";
 import { defaultProduct } from "./Website-Assets";
 import Auth from "./authentication/auth";
+import { useLayoutEffect } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 
 //* ---------------------------- Main App Function --------------------------- */
 
@@ -57,6 +73,9 @@ function App() {
     markName: [],
   });
   const [subTotal, setSubTotal] = useState(0);
+  const [userUID, setUserUID] = useState("");
+  // const [isLoggedIn, setIsLoggedIn] = useState("");
+  const [currentUserData, setCurrentUserData] = useState("");
 
   console.log(ProductsCatalog);
   function calcSubTotal() {
@@ -65,6 +84,41 @@ function App() {
       0
     );
   }
+
+  //* ------------------------------ Get User Info ----------------------------- */
+
+  const getUserData = async (userUID) => {
+    const usersRef = collection(db, "Users");
+    const userQuery = query(usersRef, where("id", "==", userUID));
+    onSnapshot(
+      userQuery,
+      (user) => {
+        console.log("this is user on snapshot", user);
+        console.log("this is user data ", user.docs[0] == 1);
+        let data = user.docs[0].data();
+        setCurrentUserData(data);
+      },
+      undefined,
+      (error) => {
+        console.log("its error ", error.code, error.message);
+      }
+    );
+  };
+
+  console.log("this is current user data", currentUserData);
+
+  onAuthStateChanged(auth, async (user) => {
+    console.log("this is the true uid : ", user?.uid);
+    console.log("this is the top uid : ", userUID);
+    if (userUID !== user?.uid) setUserUID(user?.uid);
+    if (user?.uid && !currentUserData) await getUserData(user?.uid);
+    if (!user?.uid) setCurrentUserData("");
+  });
+
+  useCallback(() => {
+    console.log("samir");
+    getUserData(userUID);
+  }, [userUID]);
 
   //* -------------------------------- Get Data -------------------------------- */
 
@@ -155,13 +209,17 @@ function App() {
         subTotal,
         setSubTotal,
         calcSubTotal,
+        currentUserData,
       }}
     >
       {" "}
       {isDataLoaded ? (
         <div className="main">
           <Routes>
-            <Route path="/auth/" element={<Auth />}></Route>
+            <Route
+              path="/auth/"
+              element={<Auth setUserUID={setUserUID} />}
+            ></Route>
             <Route path="/dashboard/" element={<Dashboard />}>
               <Route index element={<Main />}></Route>
               <Route path="customers" element={<Customers />}></Route>

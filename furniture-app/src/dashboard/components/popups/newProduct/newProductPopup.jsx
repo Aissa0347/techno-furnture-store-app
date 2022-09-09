@@ -100,7 +100,6 @@ export default function NewProductPopup({
 
     files.map((file) => {
       const imageRef = ref(storage, `Product Images/${file.name + uuidv4()}`);
-
       uploadBytes(imageRef, file).then((reponse) => {
         getDownloadURL(reponse.ref).then((url) => {
           imgList.push({ url: url, path: reponse.ref.fullPath });

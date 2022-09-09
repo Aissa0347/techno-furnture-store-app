@@ -28,6 +28,7 @@ import { Outlet } from "react-router-dom";
 //  import SVG's
 import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
 import FAVORITE_SVG from "../Website-Assets/SVG/FAVORITE_SVG (2).svg";
+import AvatarProfile from "./smallComponents/avatarProfile/avatarProfile";
 
 //* --------------------------- Bag Side Component --------------------------- */
 
@@ -207,6 +208,7 @@ function UniqueCardFav({ Product }) {
 function Navbar({ favoriteProducts, cardProducts }) {
   const [showFavoriteProducts, setShowFavoriteProducts] = useState(false);
   const [showCardProducts, setShowCardProducts] = useState(false);
+  const { currentUserData } = useContext(GlobalContext);
   let favoriteProductsNumber = favoriteProducts.length;
   let cardProductsNumber = cardProducts.length;
   var favProducts = document.getElementById("favorite_products");
@@ -244,6 +246,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
             </li>
           </ul>
         </nav>
+        {/* ------------------------------ Mobile Navbar ------------------------------ */}
         <nav className="nav-links nav-icons">
           <ul>
             <li className="link N-1" onClick={scrollToTop}>
@@ -314,6 +317,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
             </li>
           </ul>
         </nav>
+        {/* ------------------------------ Tablet Navbar ------------------------------ */}
         <div className="icon">
           <div
             className="icon-set bag"
@@ -360,7 +364,13 @@ function Navbar({ favoriteProducts, cardProducts }) {
             setShowFavoriteProducts={setShowFavoriteProducts}
           />
           <div className="icon-set login">
-            <BiUser />
+            {currentUserData ? (
+              <AvatarProfile />
+            ) : (
+              <Link to="/auth">
+                <BiUser />
+              </Link>
+            )}
           </div>
           <div
             className="icon-set burger-menu"

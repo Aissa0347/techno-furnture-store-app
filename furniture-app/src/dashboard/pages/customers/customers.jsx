@@ -1,7 +1,12 @@
 import CustomersTable from "../../components/tables/customerTable";
-import { customersList } from "../../../Website-Assets";
+import { customersList, defaultUser } from "../../../Website-Assets";
 
 import { search, visit } from "../../components/icons";
+import { useMemo, useState } from "react";
+import { db } from "../../../firebase/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
+import { useEffect } from "react";
+import { useCallback } from "react";
 
 //* ------------------------------ Table Cell's and Rows ------------------------------ */
 
@@ -46,44 +51,65 @@ const headCells = [
 function createData(
   id,
   avatarImg,
-  firstName,
-  lastName,
+  name,
   mobileNumber,
   joinDate,
-  numOfOrders,
+  numberOfOrders,
   amountSpent
 ) {
   return {
     id,
     avatarImg,
-    name: firstName + " " + lastName,
-    lastName,
+    name,
     mobileNumber,
     joinDate,
-    numOfOrders,
+    numberOfOrders,
     amountSpent,
   };
 }
 
-let rows = [];
-customersList.map((customer) => {
-  rows.push(
-    createData(
-      customer.id,
-      customer.avatarImg,
-      customer.firstName,
-      customer.lastName,
-      customer.mobileNumber,
-      customer.joinDate,
-      customer.numOfOrders,
-      customer.amountSpent
-    )
-  );
-});
-
 //* ------------------------- Customer Main Component ------------------------ */
 
 function Customer() {
+  const [customers, setCustomers] = useState([defaultUser]);
+  let rows = [];
+  customers.map((customer) => {
+    rows.push(
+      createData(
+        customer.id,
+        customer.avatarImg,
+        customer.name,
+        customer.mobileNumber,
+        customer.createdAt,
+        customer.numberOfOrders,
+        customer.amountSpent
+      )
+    );
+  });
+
+  //* --------------------------- Get Users List Data -------------------------- */
+  const usersCol = collection(db, "Users");
+
+  function getUsersData() {
+    let userList = [];
+    console.log("heyyy friend");
+    getDocs(usersCol)
+      .then((users) => {
+        users.docs.map((user) => {
+          userList.push(user.data());
+        });
+        setCustomers(userList);
+      })
+      .catch((error) => {
+        console.log(error.code);
+        console.log(error.message);
+      });
+  }
+
+  useEffect(() => {
+    getUsersData();
+  }, []);
+
   return (
     <section className="in-dash-container">
       <h1 className="dash-title">Customers</h1>

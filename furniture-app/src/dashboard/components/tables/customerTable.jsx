@@ -18,9 +18,11 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { chevronDown, Dashboard, edit, editMenu, off } from "../icons";
+import { chevronDown, Dashboard, edit, editMenu, off, show } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
+import moment from "moment";
+import { Menu } from "@mantine/core";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -263,7 +265,9 @@ export default function EnhancedTable({ rows, headCells }) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  let createdAtMoment = moment.unix(row.joinDate.seconds);
+                  let createdAt = moment(createdAtMoment).format("MMM DD,y");
+                  console.log(createdAt);
                   return (
                     <TableRow
                       hover
@@ -286,24 +290,38 @@ export default function EnhancedTable({ rows, headCells }) {
                       </TableCell>
                       <TableCell>
                         <span className="customer-avatar">
-                          <img src={row.avatarImg} alt="" />
+                          <img
+                            src={row.avatarImg}
+                            alt={row.name}
+                            loading="lazy"
+                          />
                           {row.name}
                         </span>
                       </TableCell>
-                      <TableCell align="left">{row.mobileNumber}</TableCell>
-                      <TableCell align="left">{row.joinDate}</TableCell>
-                      <TableCell align="left">{row.numOfOrders}</TableCell>
+                      <TableCell align="left">
+                        {row.mobileNumber || "Not Avaible"}
+                      </TableCell>
+                      <TableCell align="left"> {createdAt}</TableCell>
+                      <TableCell align="left">{row.numberOfOrders}</TableCell>
                       <TableCell align="left">{row.amountSpent}</TableCell>
                       <TableCell align="left">
                         <div className="customer-actions dash-actions">
-                          <span className="action">{off}</span>
-                          <span className="action">{edit}</span>
+                          <span className="action">{show}</span>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="edit-menu dash-actions">
-                          <span className="action">{chevronDown}</span>
-                        </div>
+                        <Menu shadow="md" width={100}>
+                          <Menu.Target>
+                            <div className="edit-menu dash-actions">
+                              <span className="action">{editMenu}</span>
+                            </div>
+                          </Menu.Target>
+                          <Menu.Dropdown>
+                            <Menu.Item icon={edit} className="table-item-icon">
+                              <div className="table-icon">{edit} edit</div>{" "}
+                            </Menu.Item>
+                          </Menu.Dropdown>
+                        </Menu>{" "}
                       </TableCell>
                     </TableRow>
                   );

@@ -931,3 +931,110 @@ export const chevronUp = (
     />
   </svg>
 );
+
+//* ------------------------------- Brands Logo ------------------------------ */
+
+export const Facebook = (
+  <svg
+    height="100%"
+    version="1.1"
+    viewBox="0 0 512 512"
+    width="100%"
+    xmlns="http://www.w3.org/2000/svg"
+    className="btn-icon"
+  >
+    <path d="M374.245,285.825l14.104,-91.961l-88.233,0l0,-59.677c0,-25.159 12.325,-49.682 51.845,-49.682l40.117,0l0,-78.291c0,0 -36.408,-6.214 -71.214,-6.214c-72.67,0 -120.165,44.042 -120.165,123.775l0,70.089l-80.777,0l0,91.961l80.777,0l0,222.31c16.197,2.542 32.798,3.865 49.709,3.865c16.911,0 33.512,-1.323 49.708,-3.865l0,-222.31l74.129,0Z" />
+  </svg>
+);
+
+export const Google = (
+  <svg
+    id="Social_Icons"
+    version="1.1"
+    viewBox="0 0 128 128"
+    xmlns="http://www.w3.org/2000/svg"
+    className="btn-icon"
+  >
+    <g id="_x31__stroke">
+      <g id="Google">
+        <rect fill="none" height="128" width="128" />
+        <path
+          d="M27.585,64c0-4.157,0.69-8.143,1.923-11.881L7.938,35.648    C3.734,44.183,1.366,53.801,1.366,64c0,10.191,2.366,19.802,6.563,28.332l21.558-16.503C28.266,72.108,27.585,68.137,27.585,64"
+          fill="#FBBC05"
+        />
+        <path
+          d="M65.457,26.182c9.031,0,17.188,3.2,23.597,8.436L107.698,16    C96.337,6.109,81.771,0,65.457,0C40.129,0,18.361,14.484,7.938,35.648l21.569,16.471C34.477,37.033,48.644,26.182,65.457,26.182"
+          fill="#EA4335"
+        />
+        <path
+          d="M65.457,101.818c-16.812,0-30.979-10.851-35.949-25.937    L7.938,92.349C18.361,113.516,40.129,128,65.457,128c15.632,0,30.557-5.551,41.758-15.951L86.741,96.221    C80.964,99.86,73.689,101.818,65.457,101.818"
+          fill="#34A853"
+        />
+        <path
+          d="M126.634,64c0-3.782-0.583-7.855-1.457-11.636H65.457v24.727    h34.376c-1.719,8.431-6.397,14.912-13.092,19.13l20.474,15.828C118.981,101.129,126.634,84.861,126.634,64"
+          fill="#4285F4"
+        />
+      </g>
+    </g>
+  </svg>
+);
+
+export const error = (
+  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+    <g>
+      <g>
+        <g>
+          <polyline
+            fill="none"
+            points="11 9 13 8.5 13.5 10.5"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M13,8.5A6.6,6.6,0,0,1,7,13H7A6,6,0,0,1,1.36,9.05"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
+        <g>
+          <polyline
+            fill="none"
+            points="3 5 1 5.5 0.5 3.5"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          <path
+            d="M1,5.5A6.79,6.79,0,0,1,7,1H7a6,6,0,0,1,5.64,4"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
+      </g>
+      <line
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        x1="7"
+        x2="7"
+        y1="3.5"
+        y2="7.5"
+      />
+      <circle
+        cx="7"
+        cy="10"
+        fill="none"
+        r="0.5"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </g>
+  </svg>
+);

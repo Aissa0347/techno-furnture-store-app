@@ -41,6 +41,20 @@ export const CategoryP = [
 //*                              Products Catalog                              */
 //* -------------------------------------------------------------------------- */
 
+export const defaultUser = {
+  id: "",
+  name: "",
+  email: "",
+  avatarImg:
+    "https://firebasestorage.googleapis.com/v0/b/techno-furniture-ecommerce-app.appspot.com/o/Website%20Images%2FdefaultAvatar?alt=media&token=e9406c22-cbf4-41b6-af36-7ef96097544e",
+  mobileNumber: "",
+  favoriteProducts: [],
+  productsInCart: [],
+  numberOfOrders: 0,
+  amountSpent: 0,
+  createdAt: "",
+};
+
 export const defaultProduct = {
   name: "",
   category: "",
