@@ -36,6 +36,8 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
   const { removeFromFavorite, setCardProducts, subTotal } =
     useContext(GlobalContext);
   console.log(subTotal);
+
+  console.log("check if it;s updated : ", cardProducts);
   // set on value change subtotal change also
   return (
     <section
@@ -145,7 +147,11 @@ function UniqueCardFav({ Product }) {
     <li className="unique_card product-info">
       <Link to={`catalog/${Product.id}`}>
         <div className="img_name">
-          <img src={Product.img} alt={Product.name} className="product_image" />
+          <img
+            src={Product.img[0].url}
+            alt={Product.name}
+            className="product_image"
+          />
           <div className="product_title">
             <h5>{Product.name}</h5>
             <h4>{Product.category}</h4>

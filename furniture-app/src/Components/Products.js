@@ -111,20 +111,13 @@ export function Category() {
 
 //* ------------------------ Product Detail Show Media ----------------------- */
 
-export function MediaSlider() {
+export function MediaSlider({ images, name }) {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
-  const Pics = [
-    require("../Website-Assets/image-1.png"),
-    require("../Website-Assets/image-2.png"),
-    require("../Website-Assets/image-3.png"),
-    require("../Website-Assets/image-4.png"),
-    require("../Website-Assets/image-5.png"),
-  ];
   return (
     <>
       <Swiper
-        loop={true}
+        loop={images.length > 1 && true}
         modules={[Navigation, FreeMode, Thumbs, Autoplay]}
         autoplay={{
           delay: 2500,
@@ -134,10 +127,10 @@ export function MediaSlider() {
         thumbs={{ swiper: thumbsSwiper }}
         className="media-slider"
       >
-        {Pics.map((Pic, index) => {
+        {[...images].map((img, index) => {
           return (
             <SwiperSlide key={index}>
-              <object data={Pic} alt="">
+              <object data={img.url} alt={name}>
                 <param name="control" value="false" />
               </object>
             </SwiperSlide>
@@ -152,10 +145,10 @@ export function MediaSlider() {
         freeMode={true}
         className="media-slider-thumb"
       >
-        {Pics.map((Pic, index) => {
+        {[...images].map((img, index) => {
           return (
             <SwiperSlide key={index}>
-              <img src={Pic} alt="" />
+              <img src={img.url} alt={name} />
             </SwiperSlide>
           );
         })}

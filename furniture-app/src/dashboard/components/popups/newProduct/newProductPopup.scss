@@ -73,7 +73,6 @@
   justify-content: right;
   gap: 1rem;
   width: 100%;
-  margin-top: 2rem;
 
   .cancel-btn {
     // background-color: $greyColor;
@@ -83,6 +82,10 @@
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+
+.dash-mg-y {
+  margin-top: 2rem;
 }
 
 .mini-popup {
@@ -97,6 +100,25 @@
   background-color: $whiteColor;
   box-shadow: $shadow;
   z-index: 401;
+}
+
+.text-editor {
+  width: 100%;
+  max-height: 400px;
+  p {
+    margin: initial !important;
+  }
+  img {
+    max-height: 200px;
+    display: inline-block;
+    vertical-align: text-top;
+    margin: 15px !important;
+  }
+  .ql-editor {
+    min-height: 100px;
+    max-height: 100%;
+    overflow-y: auto;
+  }
 }
 
 //* -------------------------------------------------------------------------- */

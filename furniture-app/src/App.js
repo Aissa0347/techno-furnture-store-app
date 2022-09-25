@@ -28,6 +28,7 @@ import "./styles/index.scss";
 import Product_Page from "./Components/Product_Page";
 import Ordering from "./Components/Ordering";
 import {
+  addDoc,
   collection,
   getDocs,
   limit,
@@ -76,6 +77,18 @@ function App() {
   const [userUID, setUserUID] = useState("");
   // const [isLoggedIn, setIsLoggedIn] = useState("");
   const [currentUserData, setCurrentUserData] = useState("");
+  const [orderData, setOrderData] = useState({
+    userId: "",
+    willaya: "",
+    address: "",
+    phoneNumber: "",
+    orderId: "",
+    orderDate: "",
+    orderList: [],
+    status: "Pending",
+    totalCost: "",
+    totalQuantity: "",
+  });
 
   console.log(ProductsCatalog);
   function calcSubTotal() {
@@ -187,6 +200,14 @@ function App() {
       removeFromFavorite(currentProduct, favoriteProducts, setFavoriteProducts);
   }
 
+  //* ------------------------------- Send Order ------------------------------- */
+  function sendOrder(userInfo) {
+    const newOrderData = { ...orderData, ...userInfo };
+    const orderRef = collection(db, "Orders");
+    addDoc(orderRef, newOrderData);
+    console.log("this is what we send : ", orderData);
+  }
+
   console.log("those are our favorite", favoriteProducts);
 
   return (
@@ -210,6 +231,9 @@ function App() {
         setSubTotal,
         calcSubTotal,
         currentUserData,
+        orderData,
+        setOrderData,
+        sendOrder,
       }}
     >
       {" "}

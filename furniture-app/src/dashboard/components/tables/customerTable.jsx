@@ -299,7 +299,7 @@ export default function EnhancedTable({ rows, headCells }) {
                         </span>
                       </TableCell>
                       <TableCell align="left">
-                        {row.mobileNumber || "Not Avaible"}
+                        {row.phoneNumber || "Not Avaible"}
                       </TableCell>
                       <TableCell align="left"> {createdAt}</TableCell>
                       <TableCell align="left">{row.numberOfOrders}</TableCell>

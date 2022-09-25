@@ -26,7 +26,7 @@
     margin-top: 2rem;
   }
   .CTA {
-    width: 49%;
+    width: 100%;
     padding: 1rem 0% !important;
   }
 }
@@ -36,7 +36,9 @@
   column-gap: 2%;
   .input {
     color: $primaryColor;
-    // width: 100%;
+    input:focus {
+      border: $border;
+    }
   }
   .half {
     width: 49%;
@@ -289,6 +291,9 @@
       width: 100%;
       padding: 1rem 0% !important;
     }
+  }
+  .info_form .half {
+    width: 100%;
   }
 }
 

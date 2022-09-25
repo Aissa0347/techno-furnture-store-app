@@ -1038,3 +1038,9 @@ export const error = (
     </g>
   </svg>
 );
+
+//* -------------------------------------------------------------------------- */
+//*                               Animated Icons                               */
+//* -------------------------------------------------------------------------- */
+
+export const operationSuccess = require("../../Website-Assets/Gif/success.gif");

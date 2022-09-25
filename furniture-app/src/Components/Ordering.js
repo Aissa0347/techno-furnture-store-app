@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 // import Icons
 import { BiChevronDown, BiChevronLeft, BiChevronUp, BiX } from "react-icons/bi";
 
@@ -14,44 +14,114 @@ import { UniqueCard } from "./Card";
 
 // import DATA
 
+// import from Lib's
+import { useForm } from "@mantine/form";
+
 // import Styles
 import "../styles/index.scss";
+import { TextInput } from "@mantine/core";
+import { auth } from "../firebase/firebaseConfig";
+import { serverTimestamp } from "firebase/firestore";
 
 //* ------------------------------ Shipping Info ----------------------------- */
 
 function ShippingInfo() {
+  const { setOrderData, orderData, sendOrder } = useContext(GlobalContext);
+
+  const orderForm = useForm({
+    initialValues: {
+      fullName: "",
+      willaya: "",
+      address: "",
+      phoneNumber: "",
+    },
+  });
+
   return (
-    <section className="shipping_info ">
+    <section className="shipping_info  ">
       <h3 className="title">Shipping Information</h3>
-      <ul className="info_form">
-        <li className="input half">
-          <label htmlFor="FName">First Name </label>
-          <input type="text" name="FName" id="FName" />
-        </li>
-        <li className="input half">
-          <label htmlFor="LName">Last Name </label>
-          <input type="text" name="LName" id="LName" />
-        </li>
-        <li className="input ">
-          <label htmlFor="Address">Address </label>
-          <input type="text" name="Address" id="Address" />
-        </li>
-        <li className="input half">
-          <label htmlFor="Country">Country </label>
-          <input type="text" name="Country" id="Country" />
-        </li>
-        <li className="input half">
-          <label htmlFor="City">City </label>
-          <input type="text" name="City" id="City" />
-        </li>
-        <li className="input half">
-          <label htmlFor="Phone-Number">Phone Number </label>
-          <input type="tel" name="Phone-Number" id="Phone-Number" />
-        </li>
-      </ul>
-      <div className="btns">
-        <button className="btn CTA">Order Now</button>
-      </div>
+      <form
+        onSubmit={orderForm.onSubmit((formValues) => {
+          if (auth.currentUser) {
+            setOrderData(
+              (lastData) => ({
+                ...lastData,
+                userId: auth.currentUser.uid,
+                fullName: formValues.fullName,
+                willaya: formValues.willaya,
+                address: formValues.address,
+                phoneNumber: formValues.phoneNumber,
+              }),
+              sendOrder({
+                userId: auth.currentUser.uid,
+                fullName: formValues.fullName,
+                willaya: formValues.willaya,
+                address: formValues.address,
+                phoneNumber: formValues.phoneNumber,
+                orderDate: serverTimestamp(),
+              })
+            );
+          } else {
+            console.log("go to sign up sir");
+          }
+        })}
+      >
+        <div className=" info_form">
+          <TextInput
+            label="Full name"
+            type={"text"}
+            size={"md"}
+            className=" input half"
+            placeholder="Enter your full name"
+            withAsterisk
+            {...orderForm.getInputProps("fullName")}
+            required
+          />
+          <TextInput
+            label="Country"
+            type={"text"}
+            size={"md"}
+            className=" input half"
+            value={"Algeria"}
+            disabled
+          />
+          <TextInput
+            label="Willaya"
+            type={"text"}
+            size={"md"}
+            className=" input half"
+            placeholder="Enter your current willaya"
+            withAsterisk
+            {...orderForm.getInputProps("willaya")}
+            required
+          />
+          <TextInput
+            label="Address"
+            type={"text"}
+            size={"md"}
+            className=" input half"
+            placeholder="Enter your exact address"
+            withAsterisk
+            {...orderForm.getInputProps("address")}
+            required
+          />
+          <TextInput
+            label="Phone Number"
+            type={"number"}
+            size={"md"}
+            className=" input half"
+            placeholder="Enter your exact address"
+            withAsterisk
+            {...orderForm.getInputProps("phoneNumber")}
+            required
+          />
+        </div>
+        <div className="btns">
+          <button type="submit" className="btn CTA">
+            Order Now
+          </button>
+        </div>
+      </form>
     </section>
   );
 }
@@ -59,9 +129,34 @@ function ShippingInfo() {
 //* ------------------------------ Shopping Cart ----------------------------- */
 
 function ShoppingCart() {
-  const { cardProducts, subTotal } = useContext(GlobalContext);
+  const { cardProducts, subTotal, setOrderData } = useContext(GlobalContext);
+  const [trigger, setTrigger] = useState(false);
+  let totalQuantity, totalCost;
+  useEffect(() => {
+    totalQuantity = cardProducts.reduce(
+      (acc, current) => acc + ~~current.numberOfProduct,
+      0
+    );
+    totalCost = cardProducts.reduce(
+      (acc, current) => acc + ~~current?.totalProductPrice,
+      0
+    );
+    setOrderData((prevOrderData) => {
+      return {
+        ...prevOrderData,
+        orderList: cardProducts.map((product) => ({
+          productId: product.id,
+          quantity: product.numberOfProduct,
+          productTotal: ~~product.numberOfProduct * ~~product.price,
+        })),
+        totalCost,
+        totalQuantity,
+      };
+    });
+  }, [cardProducts, trigger]);
+
   const [expand, setExpand] = useState(false);
-  console.log("i am inside");
+  console.log("is shopping cart trigger again");
   return (
     <section className="shopping_cart">
       <h3 className="title">Shopping Cart</h3>
@@ -75,7 +170,7 @@ function ShoppingCart() {
           style={expand ? { height: "100%" } : { height: "60vh" }}
         >
           {cardProducts.slice(0, 8).map((Product) => {
-            return <UniqueCard Product={Product} />;
+            return <UniqueCard Product={Product} setTrigger={setTrigger} />;
           })}
         </ul>
       )}

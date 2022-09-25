@@ -18,10 +18,10 @@ const headCells = [
     label: "Full Name",
   },
   {
-    id: "mobileNumber",
+    id: "phoneNumber",
     numeric: true,
     disablePadding: false,
-    label: "Mobile Number",
+    label: "Phone Number",
   },
   {
     id: "joinDate",
@@ -52,7 +52,7 @@ function createData(
   id,
   avatarImg,
   name,
-  mobileNumber,
+  phoneNumber,
   joinDate,
   numberOfOrders,
   amountSpent
@@ -61,7 +61,7 @@ function createData(
     id,
     avatarImg,
     name,
-    mobileNumber,
+    phoneNumber,
     joinDate,
     numberOfOrders,
     amountSpent,
@@ -79,7 +79,7 @@ function Customer() {
         customer.id,
         customer.avatarImg,
         customer.name,
-        customer.mobileNumber,
+        customer.phoneNumber,
         customer.createdAt,
         customer.numberOfOrders,
         customer.amountSpent

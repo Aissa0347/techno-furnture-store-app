@@ -16,6 +16,7 @@ import "../styles/index.scss";
 import { BiChevronLeft, BiHeart } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
+import { TypographyStylesProvider } from "@mantine/core";
 
 // import Helper Functions
 // import { findCurrentProduct } from "../App";
@@ -23,6 +24,7 @@ import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 //* --------------------------- Product Media Show -------------------------- */
 
 export function ProductDetailShow(props) {
+  const { currentProduct } = props;
   const [isLoading, setIsLoading] = useState(true);
   window.onloadeddata = () => {
     setIsLoading(false);
@@ -31,18 +33,15 @@ export function ProductDetailShow(props) {
     <>
       <div className="destination">
         <span>
-          Home &nbsp;/&nbsp; Catalog &nbsp;/&nbsp; {props.currentProduct.name}
+          Home &nbsp;/&nbsp; Catalog &nbsp;/&nbsp; {currentProduct.name}
         </span>
       </div>
       <div className="product-show">
         <div className="product-show-media">
-          <MediaSlider />
+          <MediaSlider images={currentProduct.img} name={currentProduct.name} />
         </div>
         <div className="product-info">
-          <ProductInfo
-            {...props.currentProduct}
-            currentProduct={props.currentProduct}
-          />
+          <ProductInfo {...currentProduct} currentProduct={currentProduct} />
         </div>
       </div>
     </>
@@ -108,7 +107,10 @@ function ProductInfo({
           </table>
         </li>
         <li className="product_description ">
-          <p>{description}</p>
+          <p>
+            This product is really nice one I would to inform you that our
+            product ranked with top 10 of the world
+          </p>
         </li>
         <li className="product_colors">
           <h4>Colors:</h4>
@@ -159,10 +161,9 @@ function ProductInfo({
           </summary>
 
           <div className="col">
-            <p>
-              hello world i want to say this product is a good stuf and i am
-              sure that u gonna use it tommorrow
-            </p>
+            <TypographyStylesProvider>
+              <div dangerouslySetInnerHTML={{ __html: description }}></div>
+            </TypographyStylesProvider>
           </div>
         </details>
       </div>

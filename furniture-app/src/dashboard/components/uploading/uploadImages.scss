@@ -1,0 +1,76 @@
+.dropzone-container {
+  position: relative;
+  min-height: 100px;
+  background-color: $secondColor;
+  border: 2px dashed $greyColor;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  cursor: pointer;
+  p {
+    font-size: 16px;
+    color: $primaryColor;
+  }
+  &.acceptDragStyle {
+    border-color: $thirdColor;
+    //   background-color: $greyColor;
+  }
+  &.focusedStyle {
+    border-color: $thirdColor;
+    //   background-color: $greyColor;
+  }
+  &.failedDragStyle {
+    border-color: red;
+    //   background-color: $greyColor;
+  }
+}
+
+.dropzone-uploaded-images {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-height: 200px;
+  margin: 1rem 0%;
+  overflow-y: hidden;
+  overflow-x: auto;
+  cursor: pointer;
+  .image-wrapper {
+    position: relative;
+    min-height: 190px;
+    max-height: 190px;
+    min-width: 150px;
+    max-width: 150px;
+    background-color: $secondColor;
+    border: 1px solid $greyColor;
+    overflow: hidden;
+  }
+  img {
+    height: 190px;
+    width: 100%;
+    object-fit: contain;
+  }
+  .image-close {
+    position: absolute;
+    top: 0%;
+    right: 0%;
+  }
+}
+
+.image-upload-loading {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+}
+
+.upload-success {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  display: grid;
+  place-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: $secondColor;
+}

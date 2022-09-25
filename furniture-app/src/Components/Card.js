@@ -92,7 +92,7 @@ export const Cards = ({ img, name, price, id, currentProduct, markName }) => {
 
 //* ------------------------- Import Unique Cards ------------------------- */
 
-export function UniqueCard({ Product }) {
+export function UniqueCard({ Product, setTrigger }) {
   const {
     cardProducts,
     removeFromFavorite,
@@ -107,20 +107,37 @@ export function UniqueCard({ Product }) {
     console.log(typeof productNumber);
     setProductNumber(1);
   }
-  Product.numberOfProduct = productNumber;
-  Product.totalProductPrice = Product.price * Product.numberOfProduct;
+  let variable;
+
+  Product.numberOfProduct = ~~productNumber;
+  variable = productNumber;
+  console.log(Product.img);
+  Product.totalProductPrice = ~~Product.price * ~~Product.numberOfProduct;
+
+  useEffect(() => {
+    setProductNumber(Product.numberOfProduct);
+  }, [cardProducts]);
+
+  useEffect(() => {
+    if (setTrigger) setTrigger((prev) => !prev);
+  }, [variable]);
+
   useEffect(() => {
     setSubTotal(calcSubTotal());
   }, [productNumber]);
 
   function defaultNumberAndTotal() {
     Product.totalProductPrice = 0;
-    Product.numberOfProduct = 0;
+    Product.numberOfProduct = 1;
   }
   return (
     <li className="unique_card product-info">
       <div className="img_name">
-        <img src={Product.img} alt={Product.name} className="product_image" />
+        <img
+          src={Product.img[0].url}
+          alt={Product.name}
+          className="product_image"
+        />
         <div className="product_title">
           <h5>{Product.name}</h5>
           <h4>{Product.category}</h4>

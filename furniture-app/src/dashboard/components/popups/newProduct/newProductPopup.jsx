@@ -9,8 +9,7 @@ import {
 } from "@mantine/core";
 import { AddCategoriesPopup, AddColorsPopup } from "./addPopup";
 import TextArea from "../../textArea/textArea";
-// Import React FilePond
-import { FilePond, registerPlugin } from "react-filepond";
+// Import React Lib
 import { show } from "../../icons";
 import {
   addDoc,
@@ -27,13 +26,14 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { uuidv4 } from "@firebase/util";
-// Import FilePond styles
-import "filepond/dist/filepond.min.css";
-import { ImageList } from "@mui/material";
+// Import styles
+import { newImageList } from "@mui/material";
 import { type } from "@testing-library/user-event/dist/type";
 import { useContext } from "react";
 import { GlobalContext } from "../../../../App";
 import { defaultProduct } from "../../../../Website-Assets";
+import ImageDropzone from "../../uploading/uploadImages";
+import TextEditor from "../../textEditor/textEditor";
 
 export function collectionRef(colName) {
   return collection(db, colName);
@@ -53,7 +53,14 @@ export default function NewProductPopup({
 }) {
   const { updateData } = useContext(GlobalContext);
   const [isUploaded, setIsUploaded] = useState(false);
-  const [imageList, setImageList] = useState([]);
+  const [newImageList, setNewImageList] = useState([]);
+  const [primaryImages, setPrimaryImages] = useState([]);
+  const [descriptionTextContent, setDescriptionTextContent] = useState("");
+
+  const [isImagesUploaded, setIsImagesUploaded] = useState(
+    typeOfForm == "edit" ? true : false
+  );
+  const [isUploadImagesLoading, setIsUploadImagesLoading] = useState(false);
   const [selectColors, setSelectColors] = useState({
     state: false,
     value: [""],
@@ -79,6 +86,8 @@ export default function NewProductPopup({
     });
   };
 
+  console.log("this is image list : ", newImageList);
+
   useEffect(() => {
     document.querySelectorAll(".ql-blank").value = show;
     console.log(selectRef.current.value);
@@ -89,51 +98,67 @@ export default function NewProductPopup({
   let imgListRef = [];
 
   function submitImages(files) {
-    if (files == null) {
+    if (files.length < 1) {
       return;
     }
     let imgList = [];
 
+    setIsUploadImagesLoading(true);
     setIsUploaded(false);
 
     let fileNotUploaded = files.length;
 
-    files.map((file) => {
-      const imageRef = ref(storage, `Product Images/${file.name + uuidv4()}`);
-      uploadBytes(imageRef, file).then((reponse) => {
-        getDownloadURL(reponse.ref).then((url) => {
-          imgList.push({ url: url, path: reponse.ref.fullPath });
-          console.log("check this", reponse.ref.fullPath);
+    files.map(async (file) => {
+      if (!primaryImages.some((primaryImg) => file?.url === primaryImg.url)) {
+        const imageRef = ref(storage, `Product Images/${file.name + uuidv4()}`);
 
-          fileNotUploaded--;
+        await uploadBytes(imageRef, file)
+          .then(async (reponse) => {
+            await getDownloadURL(reponse.ref).then((url) => {
+              imgList.push({ url: url, path: reponse.ref.fullPath });
+              console.log("check this", reponse);
 
-          if (fileNotUploaded == 0) {
-            setImageList((prev) => [...prev, ...imgList]);
-            setIsUploaded(true);
-            console.log(typeof imageList, imageList); // object > Array [{..}] !?
-          }
-        });
-      });
+              fileNotUploaded--;
+            });
+          })
+          .catch((err) => console.log(err));
+      } else {
+        imgList.push(file);
+        console.log("this is uploaded one", file);
+
+        fileNotUploaded--;
+      }
+      if (fileNotUploaded == 0) {
+        setIsImagesUploaded(true);
+        setNewImageList((prev) => [...prev, ...imgList]);
+        setIsUploaded(true);
+        setIsUploadImagesLoading(false);
+        console.log(typeof newImageList, newImageList);
+      }
     });
   }
-  imageList.map((img) => console.log(img));
+  newImageList.map((img) => console.log(img));
 
-  function deleteImages() {
-    imageList.map((imgInfo) => {
+  function deleteImages(
+    selectedArray = newImageList,
+    setSelectedArray = setNewImageList
+  ) {
+    selectedArray.map((imgInfo) => {
       const imgRef = ref(storage, imgInfo.path);
       deleteObject(imgRef);
+      setSelectedArray([]);
     });
   }
 
   function assignedProduct() {
     const newProductForm = document.querySelector(".new-product-form");
     let productTemplate;
-    console.log("this is colors value", newProductForm.colors?.value);
+
     return {
       name: newProductForm.productName?.value,
       category: newProductForm.category?.value,
       colors: selectColors.value,
-      img: imageList,
+      img: newImageList[0] ? newImageList : primaryImages,
       price: Number(newProductForm.price?.value),
       pricePromotion: Number(newProductForm.promotionPrice?.value),
       mark: "",
@@ -147,16 +172,18 @@ export default function NewProductPopup({
       productQuantity: Number(50),
       numberOfProduct: Number(1),
       totalProductPrice: Number(0),
-      description:
-        "This Product is Such as a very good one u can try it for freee sir",
+      description: descriptionTextContent,
       details: "",
       id: uuidv4(),
     };
   }
-  console.log("interested right");
+  console.log("this is the primary images : ", primaryImages);
 
   //* ----------------------------- Get Categories ----------------------------- */
   const getFilters = async () => {
+    setPrimaryImages(primaryValues?.img);
+    console.log("this is the primary values images : ", primaryValues?.img);
+    setDescriptionTextContent(primaryValues?.description);
     await getDocs(colProductFilters).then((promiseData) => {
       console.log("its done downloading");
       let fullColorsData = {
@@ -189,11 +216,19 @@ export default function NewProductPopup({
   }
 
   useLayoutEffect(() => {
-    getFilters().then((res) => {
-      console.log("this is res ", res);
-      toPrimaryValues();
-    });
+    getFilters()
+      .then((res) => {
+        console.log("this is res of filters ", res);
+        toPrimaryValues();
+      })
+      .catch((error) => console.log("pls throw error", error));
   }, []);
+
+  const filterNotUploaded = (filterWith = newImageList) => {
+    return primaryImages.filter((primaryImg) =>
+      filterWith.map((newImg) => primaryImg.url !== newImg.url)
+    );
+  };
 
   return (
     <MantineProvider>
@@ -331,40 +366,45 @@ export default function NewProductPopup({
               defaultValue={primaryValues?.dimensions?.depth}
             />
           </div>
-          <div className="input half">
+          <div className=" text-editor">
             <label htmlFor="description" className="popup-label">
               description
             </label>
-            <TextArea
+            {/* <TextArea
               id="description"
               value={primaryValues?.description}
               name="description"
               className="description"
-            ></TextArea>
+            ></TextArea> */}
+            <TextEditor
+              descriptionTextContent={descriptionTextContent}
+              setDescriptionTextContent={setDescriptionTextContent}
+            />
           </div>
           <hr className="popup-line" />
           <div className="image-uploader">
             <h3>Add Product Images</h3>
-            <input
+            {/* <input
               type="file"
               name="productImg"
               id="productImg"
               multiple
               onChange={(e) => submitImages([...e.target.files])}
-            />
-            {/* <FilePond
-              allowMultiple={true}
-              maxFiles={3}
-              files={files}
-              onupdatefiles={(e) => {
-                setFiles(e.target.files[0]);
-              }}
-              server=""
-              className={"uploader"}
             /> */}
+            <ImageDropzone
+              submitImages={submitImages}
+              isImagesUploaded={isImagesUploaded}
+              setIsImagesUploaded={setIsImagesUploaded}
+              deleteImages={deleteImages}
+              newImageList={newImageList}
+              primaryImages={primaryImages}
+              setNewImageList={setNewImageList}
+              isUploadImagesLoading={isUploadImagesLoading}
+              typeOfForm={typeOfForm}
+            />
           </div>
           {typeOfForm == "edit" ? (
-            <div className="dash-submit-btns">
+            <div className="dash-submit-btns dash-mg-y">
               <Button
                 className="cancel-btn"
                 variant="subtle"
@@ -385,13 +425,16 @@ export default function NewProductPopup({
                 radius="xs"
                 size="md"
                 onClick={() => {
-                  console.log(imageList);
+                  console.log(newImageList);
                   updateDoc(
                     doc(db, "ProductsList", primaryValues.id),
                     assignedProduct()
                   ).then((res) => {
                     updateData();
                     setClose(false);
+                    console.log("last chance of new image list", newImageList);
+                    if (newImageList[0])
+                      deleteImages(filterNotUploaded(), setPrimaryImages);
                   });
                 }}
               >
@@ -420,7 +463,7 @@ export default function NewProductPopup({
                 radius="xs"
                 size="md"
                 onClick={() => {
-                  console.log(imageList);
+                  console.log(newImageList);
                   isUploaded
                     ? addDoc(colProductList, assignedProduct()).then((res) => {
                         updateData();
