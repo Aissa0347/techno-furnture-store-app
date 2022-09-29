@@ -74,7 +74,7 @@ function UploadImages({
       >
         {isImagesUploaded && (
           <div className="upload-success">
-            <img src={operationSuccess} />
+            <img loading="lazy" src={operationSuccess} />
           </div>
         )}
         <LoadingOverlay
@@ -95,7 +95,7 @@ function UploadImages({
           <Button
             className="cancel-btn"
             variant="subtle"
-            radius="xs"
+            radius="none"
             size="sm"
             color={"red"}
             onClick={() => {
@@ -109,7 +109,7 @@ function UploadImages({
             <Button
               className="submit-btn"
               variant="light"
-              radius="xs"
+              radius="none"
               size="sm"
               onClick={() => {
                 submitImages(files);
@@ -121,7 +121,7 @@ function UploadImages({
             <Button
               className="submit-btn"
               variant="light"
-              radius="xs"
+              radius="none"
               size="sm"
               onClick={() => submitImages(files)}
             >
@@ -134,7 +134,7 @@ function UploadImages({
           <Button
             className="submit-btn"
             variant="light"
-            radius="xs"
+            radius="none"
             size="sm"
             onClick={editImages}
             color="green"

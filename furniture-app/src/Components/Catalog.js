@@ -109,7 +109,7 @@ function ProductsCatalogList({
         </button>
       ) : (
         <div className="svg-interactions btns">
-          <img src={NO_RESULT} />
+          <img loading="lazy" src={NO_RESULT} />
           <h3>NO RESULT</h3>
           <button
             className="btn CTA-3"

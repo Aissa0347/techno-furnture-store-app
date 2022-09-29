@@ -103,7 +103,7 @@
   color: $primaryColor;
 }
 .auth-btn {
-  height: 3rem;
+  // height: 3rem;
   border-radius: 0%;
   background-color: $thirdColor;
   transition: 0.2s ease;
@@ -148,7 +148,7 @@
 .auth-toggle-btn {
   color: $primaryColor;
   border-radius: 0%;
-  height: 3rem;
+  // height: 3rem;
   &:hover {
     background-color: $whiteColor;
   }

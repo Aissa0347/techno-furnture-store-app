@@ -17,7 +17,7 @@ function UploadedImagesSlider({ files, setFiles, isImagesUploaded }) {
             {!isImagesUploaded && (
               <CloseButton
                 className="image-close"
-                radius={"xs"}
+                radius={"none"}
                 color={"red"}
                 onClick={() =>
                   setFiles((prevFiles) => {
@@ -27,7 +27,7 @@ function UploadedImagesSlider({ files, setFiles, isImagesUploaded }) {
                 }
               />
             )}
-            <img src={file.url} alt={file.name} />
+            <img loading="lazy" src={file.url} alt={file.name} />
           </SwiperSlide>
         );
       })}

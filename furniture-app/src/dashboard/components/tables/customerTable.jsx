@@ -22,7 +22,8 @@ import { chevronDown, Dashboard, edit, editMenu, off, show } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
 import moment from "moment";
-import { Menu } from "@mantine/core";
+import { CloseButton, Menu, Modal } from "@mantine/core";
+import CustomerView from "../detailsView/customerView";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -60,7 +61,11 @@ export default function EnhancedTable({ rows, headCells }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [showCustomer, setShowCustomer] = React.useState({
+    state: false,
+    data: {},
+  });
 
   console.log(orderBy);
   function EnhancedTableHead(props) {
@@ -240,118 +245,152 @@ export default function EnhancedTable({ rows, headCells }) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+    <>
+      <Box sx={{ width: "100%" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? "small" : "medium"}
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-                  let createdAtMoment = moment.unix(row.joinDate.seconds);
-                  let createdAt = moment(createdAtMoment).format("MMM DD,y");
-                  console.log(createdAt);
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      className="customers-table"
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          onClick={(event) => handleClick(event, row.id)}
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <span className="customer-avatar">
-                          <img
-                            src={row.avatarImg}
-                            alt={row.name}
-                            loading="lazy"
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
+                    let createdAtMoment = moment.unix(row.joinDate.seconds);
+                    let createdAt = moment(createdAtMoment).format("MMM DD,y");
+                    console.log(createdAt);
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
+                        className="customers-table"
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            onClick={(event) => handleClick(event, row.id)}
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
                           />
-                          {row.name}
-                        </span>
-                      </TableCell>
-                      <TableCell align="left">
-                        {row.phoneNumber || "Not Avaible"}
-                      </TableCell>
-                      <TableCell align="left"> {createdAt}</TableCell>
-                      <TableCell align="left">{row.numberOfOrders}</TableCell>
-                      <TableCell align="left">{row.amountSpent}</TableCell>
-                      <TableCell align="left">
-                        <div className="customer-actions dash-actions">
-                          <span className="action">{show}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Menu shadow="md" width={100}>
-                          <Menu.Target>
-                            <div className="edit-menu dash-actions">
-                              <span className="action">{editMenu}</span>
-                            </div>
-                          </Menu.Target>
-                          <Menu.Dropdown>
-                            <Menu.Item icon={edit} className="table-item-icon">
-                              <div className="table-icon">{edit} edit</div>{" "}
-                            </Menu.Item>
-                          </Menu.Dropdown>
-                        </Menu>{" "}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+                        </TableCell>
+                        <TableCell>
+                          <span className="customer-avatar">
+                            <img
+                              loading="lazy"
+                              src={row.avatarImg}
+                              alt={row.name}
+                            />
+                            {row.name}
+                          </span>
+                        </TableCell>
+                        <TableCell align="left">
+                          {row.mobileNumber || "Not Avaible"}
+                        </TableCell>
+                        <TableCell align="left"> {createdAt}</TableCell>
+                        <TableCell align="left">{row.numberOfOrders}</TableCell>
+                        <TableCell align="left">{row.amountSpent}</TableCell>
+                        <TableCell align="left">
+                          <div className="customer-actions dash-actions">
+                            <span
+                              className="action"
+                              onClick={() =>
+                                setShowCustomer({
+                                  state: true,
+                                  data: { ...row.order },
+                                  id: row.id,
+                                })
+                              }
+                            >
+                              {show}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Menu shadow="md" width={100}>
+                            <Menu.Target>
+                              <div className="edit-menu dash-actions">
+                                <span className="action">{editMenu}</span>
+                              </div>
+                            </Menu.Target>
+                            <Menu.Dropdown>
+                              <Menu.Item
+                                icon={edit}
+                                className="table-item-icon"
+                              >
+                                <div className="table-icon">{edit} edit</div>{" "}
+                              </Menu.Item>
+                            </Menu.Dropdown>
+                          </Menu>{" "}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[15, 25, 50]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+        <FormControlLabel
+          control={<Switch checked={dense} onChange={handleChangeDense} />}
+          label="Dense padding"
         />
-      </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
-    </Box>
+      </Box>
+
+      <Modal
+        size="80%"
+        radius="none"
+        title={<h3>Invoice detail</h3>}
+        withCloseButton={false}
+        onClose={() => setShowCustomer((prev) => ({ ...prev, state: false }))}
+        opened={showCustomer.state}
+        // centered
+      >
+        <CloseButton
+          size={"lg"}
+          style={{ position: "absolute", top: "0px", right: "0px" }}
+          color="red"
+          onClick={() => setShowCustomer((prev) => ({ ...prev, state: false }))}
+        />
+        <CustomerView data={showCustomer.data} id={showCustomer.id} />
+      </Modal>
+    </>
   );
 }

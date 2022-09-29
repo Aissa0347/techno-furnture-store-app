@@ -109,7 +109,7 @@ export default function NewProductPopup({
     let fileNotUploaded = files.length;
 
     files.map(async (file) => {
-      if (!primaryImages.some((primaryImg) => file?.url === primaryImg.url)) {
+      if (!primaryImages?.some((primaryImg) => file?.url === primaryImg.url)) {
         const imageRef = ref(storage, `Product Images/${file.name + uuidv4()}`);
 
         await uploadBytes(imageRef, file)
@@ -239,7 +239,7 @@ export default function NewProductPopup({
             <TextInput
               placeholder="Product name"
               label="Product name"
-              radius="xs"
+              radius="none"
               size="md"
               name="productName"
               defaultValue={primaryValues?.name}
@@ -271,7 +271,7 @@ export default function NewProductPopup({
             <TextInput
               placeholder="Brand"
               label="Brand"
-              radius="xs"
+              radius="none"
               size="md"
               name="brand"
               defaultValue={primaryValues?.markName}
@@ -282,7 +282,7 @@ export default function NewProductPopup({
             <Select
               placeholder="Status"
               label="Status"
-              radius="xs"
+              radius="none"
               size="md"
               data={["In Stock", "Pending"]}
               defaultValue={primaryValues?.productStatus}
@@ -313,7 +313,7 @@ export default function NewProductPopup({
             <MultiSelect
               placeholder="Pick all you like"
               label="Colors"
-              radius="xs"
+              radius="none"
               size="md"
               name="colors"
               className="multi-select"
@@ -408,7 +408,7 @@ export default function NewProductPopup({
               <Button
                 className="cancel-btn"
                 variant="subtle"
-                radius="xs"
+                radius="none"
                 size="md"
                 color={"red"}
                 onClick={(e) => {
@@ -422,7 +422,7 @@ export default function NewProductPopup({
 
               <Button
                 className="submit-btn"
-                radius="xs"
+                radius="none"
                 size="md"
                 onClick={() => {
                   console.log(newImageList);
@@ -446,7 +446,7 @@ export default function NewProductPopup({
               <Button
                 className="cancel-btn"
                 variant="subtle"
-                radius="xs"
+                radius="none"
                 size="md"
                 color={"red"}
                 onClick={(e) => {
@@ -460,7 +460,7 @@ export default function NewProductPopup({
 
               <Button
                 className="submit-btn"
-                radius="xs"
+                radius="none"
                 size="md"
                 onClick={() => {
                   console.log(newImageList);

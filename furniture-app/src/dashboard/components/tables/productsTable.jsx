@@ -66,7 +66,7 @@ export default function EnhancedTable({
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
   console.log(orderBy);
   function EnhancedTableHead(props) {
@@ -294,7 +294,7 @@ export default function EnhancedTable({
                       </TableCell>
                       <TableCell>
                         <span className="customer-avatar">
-                          <img src={row?.productImg} alt="" />
+                          <img loading="lazy" src={row?.productImg} alt="" />
                           {row?.name}
                         </span>
                       </TableCell>
@@ -354,7 +354,7 @@ export default function EnhancedTable({
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[15, 25, 50]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

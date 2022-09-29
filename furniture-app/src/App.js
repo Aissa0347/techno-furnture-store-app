@@ -30,10 +30,12 @@ import Ordering from "./Components/Ordering";
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
-  limit,
   onSnapshot,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db, auth } from "./firebase/firebaseConfig";
@@ -42,6 +44,7 @@ import { defaultProduct } from "./Website-Assets";
 import Auth from "./authentication/auth";
 import { useLayoutEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { ref } from "firebase/storage";
 
 //* ---------------------------- Main App Function --------------------------- */
 
@@ -88,6 +91,7 @@ function App() {
     status: "Pending",
     totalCost: "",
     totalQuantity: "",
+    avatarImg: "",
   });
 
   console.log(ProductsCatalog);
@@ -140,7 +144,7 @@ function App() {
     let dataPromise = await getDocs(ProductRef);
     let fullData = dataPromise.docs.map((doc) => ({
       ...doc.data(),
-      id: doc.id,
+      // id: doc.id,
     }));
     setProductsCatalog(fullData);
     setIsDataLoaded(true);
@@ -201,10 +205,32 @@ function App() {
   }
 
   //* ------------------------------- Send Order ------------------------------- */
+
+  const generateOrderId = (countOfOrder) => {
+    const includeZeros = countOfOrder.toString().padStart(4, "0");
+    return "INV-" + includeZeros;
+  };
+
   function sendOrder(userInfo) {
-    const newOrderData = { ...orderData, ...userInfo };
+    const ordersInfosRef = doc(db, "GeneralInfos", "ORDERS-GENERAL-INFOS");
     const orderRef = collection(db, "Orders");
-    addDoc(orderRef, newOrderData);
+    getDoc(ordersInfosRef)
+      .then((res) => {
+        const currentValue = res.data().ordersCount;
+        const newOrderData = {
+          ...orderData,
+          ...userInfo,
+          orderId: generateOrderId(currentValue + 1),
+        };
+        console.log(newOrderData);
+        addDoc(orderRef, newOrderData);
+        updateDoc(ordersInfosRef, { ordersCount: ~~currentValue + 1 });
+      })
+      .catch((error) => {
+        console.log(error.code);
+        console.log(error.message);
+      });
+
     console.log("this is what we send : ", orderData);
   }
 

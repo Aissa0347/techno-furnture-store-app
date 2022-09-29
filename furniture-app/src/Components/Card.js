@@ -23,7 +23,7 @@ export function Card(props) {
         }}
       >
         <div className="imgbx">
-          <img src={img} alt={name} />
+          <img loading="lazy" src={img} alt={name} />
         </div>
       </Link>
       <h3>{name}</h3>
@@ -79,7 +79,7 @@ export const Cards = ({ img, name, price, id, currentProduct, markName }) => {
     <div className="card bx">
       <Link to={`/catalog/${id}`}>
         <div className="imgBx">
-          <img src={img[0].url} alt={name} loading={"lazy"} />
+          <img loading="lazy" src={img[0].url} alt={name} />
         </div>
         {/* <h3>{markName}</h3> */}
         <h3>{name}</h3>

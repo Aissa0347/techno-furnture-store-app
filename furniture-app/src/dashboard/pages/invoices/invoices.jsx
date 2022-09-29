@@ -3,6 +3,10 @@ import InovoicesTable from "../../components/tables/invoicesTable";
 import { customersList, InvoicesList } from "../../../Website-Assets";
 
 import { sale, order, user } from "../../components/icons";
+import { useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../../firebase/firebaseConfig";
+import { useState } from "react";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -52,9 +56,15 @@ export const headCells = [
   },
   {
     id: "address",
-    numeric: true,
+    numeric: false,
     disablePadding: false,
     label: "Address",
+  },
+  {
+    id: "phoneNumber",
+    numeric: false,
+    disablePadding: false,
+    label: "Phone Number",
   },
   {
     id: "inDate",
@@ -66,7 +76,7 @@ export const headCells = [
     id: "orderQuantity",
     numeric: true,
     disablePadding: false,
-    label: "Order Quantity",
+    label: "QTY",
   },
   {
     id: "orderCost",
@@ -88,44 +98,66 @@ function createData(
   id,
   avatarImg,
   name,
+  phoneNumber,
   orderId,
   orderAddress,
   inDate,
   orderQuantity,
   orderCost,
-  orderStatus
+  orderStatus,
+  order
 ) {
   return {
     id,
     avatarImg,
     name,
+    phoneNumber,
     orderId,
     orderAddress,
     inDate,
     orderQuantity,
     orderCost,
     orderStatus,
+    order,
   };
 }
 
 export let rows = [];
-InvoicesList.map((order) => {
-  rows.push(
-    createData(
-      order.id,
-      order.avatarImg,
-      order.name,
-      order.orderId,
-      order.orderAddress,
-      order.inDate,
-      order.orderQuantity,
-      order.orderCost,
-      order.orderStatus
-    )
-  );
-});
 
 function Invoices() {
+  const [invoicesList, setInovicesList] = useState([]);
+
+  const invoicesRef = collection(db, "Orders");
+  const getInvoicesList = () => {
+    getDocs(invoicesRef).then((data) =>
+      setInovicesList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+    );
+  };
+  useEffect(() => {
+    getInvoicesList();
+  }, []);
+
+  console.log("inovices here : ", invoicesList);
+
+  rows = [];
+  invoicesList.map((order) => {
+    rows.push(
+      createData(
+        order?.id,
+        order?.avatarImg,
+        order?.fullName,
+        order?.phoneNumber,
+        order?.orderId,
+        order?.willaya + ", " + order?.address,
+        order?.orderDate,
+        order?.totalQuantity,
+        order?.totalCost,
+        order?.status,
+        order
+      )
+    );
+  });
+
   return (
     <section className="dash-products in-dash-container">
       <h1 className="dash-title">Products</h1>

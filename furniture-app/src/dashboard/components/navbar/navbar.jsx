@@ -31,13 +31,13 @@ function Navbar() {
         </div>
       </div>
       <div className="dash-logo">
-        <img src={logo} alt="Logo" />
+        <img loading="lazy" src={logo} alt="Logo" />
       </div>
 
       <div className="dash-right-nav">
         <div className="dash-icon">{Bell}</div>
         <div className="dash-avatar">
-          <img src={adminImg} alt="Admin Image" />
+          <img loading="lazy" src={adminImg} alt="Admin Image" />
         </div>
       </div>
     </div>

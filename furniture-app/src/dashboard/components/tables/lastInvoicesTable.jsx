@@ -21,52 +21,8 @@ import Switch from "@mui/material/Switch";
 import { Dashboard, download, show } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
-
-const headCells = [
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: false,
-    label: "Name",
-  },
-  {
-    id: "orderId",
-    numeric: true,
-    disablePadding: false,
-    label: "Order Id",
-  },
-  {
-    id: "address",
-    numeric: true,
-    disablePadding: false,
-    label: "Address",
-  },
-  {
-    id: "inDate",
-    numeric: true,
-    disablePadding: false,
-    label: "In Date",
-  },
-  {
-    id: "orderQuantity",
-    numeric: true,
-    disablePadding: false,
-    label: "Order Quantity",
-  },
-  {
-    id: "orderCost",
-    numeric: true,
-    disablePadding: false,
-    label: "Cost",
-  },
-  {
-    id: "orderStatus",
-    numeric: true,
-    disablePadding: false,
-    label: "Status",
-  },
-  { label: "Actions" },
-];
+import moment from "moment";
+import { headCells } from "../../pages/invoices/invoices";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -281,7 +237,8 @@ export default function EnhancedTable({ rows }) {
               .map((row, index) => {
                 const isItemSelected = isSelected(row.orderId);
                 const labelId = `enhanced-table-checkbox-${index}`;
-
+                let createdAtMoment = moment.unix(row.inDate?.seconds);
+                let createdAt = moment(createdAtMoment).format("MMM DD, y");
                 return (
                   <TableRow
                     hover
@@ -291,15 +248,16 @@ export default function EnhancedTable({ rows }) {
                   >
                     <TableCell>
                       <span className="customer-avatar">
-                        <img src={row.avatarImg} alt="" />
+                        <img loading="lazy" src={row.avatarImg} alt="" />
                         {row.name}
                       </span>
                     </TableCell>
                     <TableCell align="left">{row.orderId}</TableCell>
                     <TableCell align="left">{row.orderAddress}</TableCell>
-                    <TableCell align="left">{row.inDate}</TableCell>
+                    <TableCell align="left">{row.phoneNumber}</TableCell>
+                    <TableCell align="left">{createdAt}</TableCell>
                     <TableCell align="left">{row.orderQuantity}</TableCell>
-                    <TableCell align="left">{row.orderCost}</TableCell>
+                    <TableCell align="left">{row.orderCost} DZD</TableCell>
                     <TableCell align="left">
                       <span className={row.orderStatus}>{row.orderStatus}</span>
                     </TableCell>

@@ -61,12 +61,12 @@ function Hero() {
 function Brands() {
   return (
     <div className="brands">
-      <img src={brands.Brand1} alt="" />
-      <img src={brands.Brand2} alt="" />
-      <img src={brands.Brand3} alt="" />
-      <img src={brands.Brand4} alt="" />
-      <img src={brands.Brand5} alt="" />
-      <img src={brands.Brand6} alt="" />
+      <img loading="lazy" src={brands.Brand1} alt="" />
+      <img loading="lazy" src={brands.Brand2} alt="" />
+      <img loading="lazy" src={brands.Brand3} alt="" />
+      <img loading="lazy" src={brands.Brand4} alt="" />
+      <img loading="lazy" src={brands.Brand5} alt="" />
+      <img loading="lazy" src={brands.Brand6} alt="" />
     </div>
   );
 }
@@ -80,7 +80,7 @@ export function Features() {
         const { text, img, key = index } = feautre;
         return (
           <div className="feautre" key={uniqid.time()}>
-            <img src={img} alt={text} />
+            <img loading="lazy" src={img} alt={text} />
             <h4 className="ft">{text}</h4>
           </div>
         );

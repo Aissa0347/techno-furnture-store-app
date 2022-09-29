@@ -57,7 +57,7 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
       <h3 className="title">My Favorite</h3>
       {cardProducts.length < 1 ? (
         <div className="svg-interactions">
-          <img src={EMPTY_CART} alt="EMPTY CART" />
+          <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
         </div>
       ) : (
         <ul className="shopping_cart_list">
@@ -117,7 +117,7 @@ function FavoriteProducts({
       <h3 className="title">My Favorite</h3>
       {favoriteProducts.length < 1 ? (
         <div className="svg-interactions">
-          <img src={FAVORITE_SVG} alt="FAVORITE SVG" />
+          <img loading="lazy" src={FAVORITE_SVG} alt="FAVORITE SVG" />
         </div>
       ) : (
         <ul className="shopping_cart_list">
@@ -230,7 +230,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
       <div className="navbar  " id="navbar">
         <div className="logo">
           <Link to={"/"}>
-            <img src={logo} alt="Logo" />
+            <img loading="lazy" src={logo} alt="Logo" />
           </Link>
         </div>
         <nav className="nav-links">

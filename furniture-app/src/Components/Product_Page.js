@@ -83,7 +83,7 @@ function ProductInfo({
         </li>
         <li className="product_maker info">
           <h4>Made by:</h4>
-          {/* <img src={mark} alt="" /> */}
+          {/*  <img loading="lazy" src={mark} alt="" /> */}
           <p>{markName}</p>
         </li>
         <li className="product_dimensions info">

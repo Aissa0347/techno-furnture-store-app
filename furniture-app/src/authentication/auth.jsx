@@ -173,10 +173,10 @@ function Auth({ setUserUID }) {
                     })}
                     >
                     <div className="auth-links">
-                      <Button leftIcon={Google} uppercase fullWidth className="auth-btn google-btn" onClick={() => createNewUser('Google')} >
+                      <Button size="md" leftIcon={Google} uppercase fullWidth className="auth-btn google-btn" onClick={() => createNewUser('Google')} >
                         Google
                       </Button>
-                      <Button leftIcon={Facebook} uppercase fullWidth className="auth-btn fb-btn" onClick={() => createNewUser('Facebook')} >
+                      <Button size="md" leftIcon={Facebook} uppercase fullWidth className="auth-btn fb-btn" onClick={() => createNewUser('Facebook')} >
                         Facebook
                       </Button>
                       <span className="hr">
@@ -217,7 +217,7 @@ function Auth({ setUserUID }) {
                     >
                       Forgot Your Password
                     </Anchor>
-                    <Button
+                    <Button size="md"
                       type="submit"
                       fullWidth
                       className="auth-btn auth-CTA"
@@ -227,7 +227,7 @@ function Auth({ setUserUID }) {
                   </form>
                 </div>
               : 
-                <Button
+                <Button size="md"
                   fullWidth
                   className="signIn  auth-toggle-btn"
                   variant="light"
@@ -248,10 +248,10 @@ function Auth({ setUserUID }) {
                     }
                   >
                     <div className="auth-links">
-                      <Button leftIcon={Google} uppercase fullWidth className="auth-btn google-btn" onClick={() => createNewUser('Google')} >
+                      <Button size="md" leftIcon={Google} uppercase fullWidth className="auth-btn google-btn" onClick={() => createNewUser('Google')} >
                         Google
                       </Button>
-                      <Button leftIcon={Facebook} uppercase fullWidth className="auth-btn fb-btn" onClick={() => createNewUser('Facebook')} >
+                      <Button size="md" leftIcon={Facebook} uppercase fullWidth className="auth-btn fb-btn" onClick={() => createNewUser('Facebook')} >
                         Facebook
                       </Button>
                       <span className="hr">
@@ -291,7 +291,7 @@ function Auth({ setUserUID }) {
                       {...authForm.getInputProps("password")}
                       required
                     />
-                    <Button
+                    <Button size="md"
                       type="submit"
                       fullWidth
                       className="auth-btn auth-CTA"
@@ -301,7 +301,7 @@ function Auth({ setUserUID }) {
                   </form>
                 </div>
                : 
-                <Button
+                <Button size="md"
                   fullWidth
                   className="signUp  auth-toggle-btn"
                   variant="light"
@@ -310,7 +310,7 @@ function Auth({ setUserUID }) {
                   Create new Account ?
                 </Button>
               }
-              <Button
+              <Button size="md"
                 fullWidth
                 className="signIn  auth-toggle-btn"
                 variant="light"
@@ -350,7 +350,7 @@ function Auth({ setUserUID }) {
                       required
                     />
 
-                    <Button
+                    <Button size="md"
                       type="submit"
                       fullWidth
                       className="auth-btn auth-CTA"
@@ -397,7 +397,7 @@ function Auth({ setUserUID }) {
                       Email sent successfully, Check your inbox and reset your
                       password.
                     </Text>
-                    <Button
+                    <Button size="md"
                       type="submit"
                       fullWidth
                       className="auth-btn auth-CTA"

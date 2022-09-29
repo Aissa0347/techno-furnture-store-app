@@ -151,6 +151,7 @@ function ShoppingCart() {
         })),
         totalCost,
         totalQuantity,
+        avatarImg: auth.currentUser.photoURL,
       };
     });
   }, [cardProducts, trigger]);
@@ -162,7 +163,7 @@ function ShoppingCart() {
       <h3 className="title">Shopping Cart</h3>
       {cardProducts.length < 1 ? (
         <div className="svg-interactions">
-          <img src={EMPTY_CART} alt="EMPTY CART" />
+          <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
         </div>
       ) : (
         <ul

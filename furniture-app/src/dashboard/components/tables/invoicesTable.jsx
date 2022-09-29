@@ -21,6 +21,9 @@ import Switch from "@mui/material/Switch";
 import { show, download, edit, editMenu } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
+import moment from "moment";
+import { CloseButton, Group, Modal } from "@mantine/core";
+import InvoiceView from "../detailsView/invoiceView";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -58,7 +61,11 @@ export default function EnhancedTable({ rows, headCells }) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [showInvoice, setShowInvoice] = React.useState({
+    state: false,
+    data: {},
+  });
 
   console.log(orderBy);
   function EnhancedTableHead(props) {
@@ -238,108 +245,141 @@ export default function EnhancedTable({ rows, headCells }) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer>
-          <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? "small" : "medium"}
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+    <>
+      <Box sx={{ width: "100%" }}>
+        <Paper sx={{ width: "100%", mb: 2 }}>
+          <EnhancedTableToolbar numSelected={selected.length} />
+          <TableContainer>
+            <Table
+              sx={{ minWidth: 750 }}
+              aria-labelledby="tableTitle"
+              size={dense ? "small" : "medium"}
+            >
+              <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+              />
+              <TableBody>
+                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.orderId);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.orderId}
-                      selected={isItemSelected}
-                      className="customers-table invoices-table"
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          onClick={(event) => handleClick(event, row.orderId)}
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <span className="customer-avatar">
-                          <img src={row.avatarImg} alt="" />
-                          {row.name}
-                        </span>
-                      </TableCell>
-                      <TableCell align="left">{row.orderId}</TableCell>
-                      <TableCell align="left">{row.orderAddress}</TableCell>
-                      <TableCell align="left">{row.inDate}</TableCell>
-                      <TableCell align="left">{row.orderQuantity}</TableCell>
-                      <TableCell align="left">{row.orderCost}</TableCell>
-                      <TableCell align="left">
-                        <span className={row.orderStatus}>
-                          {row.orderStatus}
-                        </span>
-                      </TableCell>
-                      <TableCell align="left">
-                        <div className="invoices-actions dash-actions">
-                          <span className="action">{show}</span>
-                          <span className="action">{download}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="edit-menu dash-actions">
-                          <span className="action">{editMenu}</span>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
+                {stableSort(rows, getComparator(order, orderBy))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row, index) => {
+                    const isItemSelected = isSelected(row.orderId);
+                    const labelId = `enhanced-table-checkbox-${index}`;
+                    let createdAtMoment = moment.unix(row.inDate?.seconds);
+                    let createdAt = moment(createdAtMoment).format("MMM DD, y");
+                    return (
+                      <TableRow
+                        hover
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
+                        className="customers-table invoices-table"
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            color="primary"
+                            onClick={(event) => handleClick(event, row.orderId)}
+                            checked={isItemSelected}
+                            inputProps={{
+                              "aria-labelledby": labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <span className="customer-avatar">
+                            <img loading="lazy" src={row.avatarImg} />
+                            {row.name}
+                          </span>
+                        </TableCell>
+                        <TableCell align="left">{row.orderId}</TableCell>
+                        <TableCell align="left">{row.orderAddress}</TableCell>
+                        <TableCell align="left">{row.phoneNumber}</TableCell>
+                        <TableCell align="left">{createdAt}</TableCell>
+                        <TableCell align="left">{row.orderQuantity}</TableCell>
+                        <TableCell align="left">{row.orderCost} DZD</TableCell>
+                        <TableCell align="left">
+                          <span className={row.orderStatus}>
+                            {row.orderStatus}
+                          </span>
+                        </TableCell>
+                        <TableCell align="left">
+                          <div className="invoices-actions dash-actions">
+                            <span
+                              className="action"
+                              onClick={() =>
+                                setShowInvoice({
+                                  state: true,
+                                  data: { ...row.order },
+                                  id: row.id,
+                                })
+                              }
+                            >
+                              {show}
+                            </span>
+                            <span className="action">{download}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="edit-menu dash-actions">
+                            <span className="action">{editMenu}</span>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[15, 25, 50]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Paper>
+        <FormControlLabel
+          control={<Switch checked={dense} onChange={handleChangeDense} />}
+          label="Dense padding"
         />
-      </Paper>
-      <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
-      />
-    </Box>
+      </Box>
+
+      <Modal
+        size="80%"
+        radius="none"
+        title={<h3>Invoice detail</h3>}
+        withCloseButton={false}
+        onClose={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
+        opened={showInvoice.state}
+        // centered
+      >
+        <CloseButton
+          size={"lg"}
+          style={{ position: "absolute", top: "0px", right: "0px" }}
+          color="red"
+          onClick={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
+        />
+        <InvoiceView data={showInvoice.data} id={showInvoice.id} />
+      </Modal>
+    </>
   );
 }

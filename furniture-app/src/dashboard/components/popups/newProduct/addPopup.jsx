@@ -19,7 +19,7 @@ export function AddCategoriesPopup({ setSubmitAndState, submitAndState }) {
           placeholder="Add new category"
           label="Add new category"
           ref={valueInput}
-          radius="xs"
+          radius="none"
           size="md"
           name="newCategory"
         />
@@ -28,7 +28,7 @@ export function AddCategoriesPopup({ setSubmitAndState, submitAndState }) {
         <Button
           className="cancel-btn"
           variant="subtle"
-          radius="xs"
+          radius="none"
           size="md"
           color={"red"}
           onClick={(e) => {
@@ -43,7 +43,7 @@ export function AddCategoriesPopup({ setSubmitAndState, submitAndState }) {
 
         <Button
           className="submit-btn"
-          radius="xs"
+          radius="none"
           size="md"
           onClick={() => {
             updateDoc(categoriesRef, {
@@ -88,7 +88,7 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
           placeholder="Add new category"
           label="Add new category"
           ref={valueInput}
-          radius="xs"
+          radius="none"
           size="md"
           name="newCategory"
         />
@@ -97,7 +97,7 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
         <Button
           className="cancel-btn"
           variant="subtle"
-          radius="xs"
+          radius="none"
           size="md"
           color={"red"}
           onClick={(e) => {
@@ -112,7 +112,7 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
 
         <Button
           className="submit-btn"
-          radius="xs"
+          radius="none"
           size="md"
           onClick={() => {
             updateDoc(colorsRef, {
