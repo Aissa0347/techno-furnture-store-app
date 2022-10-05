@@ -57,7 +57,7 @@ function EditInvoice({
     let filteredProducts = orderedProductsList.filter((productFromList) =>
       orderedProducts.find(
         (productFromOrdered) =>
-          productFromList.id === productFromOrdered.productId
+          productFromList?.id === productFromOrdered?.productId
       )
     );
     setFilteredProductsList(filteredProducts);
@@ -192,13 +192,12 @@ export function InvoiceView({ data, id }) {
 
   const getOrderedProducts = async () => {
     let orderedQuery;
-    let orderedProducts = [];
     await productsId.forEach(async (id) => {
       orderedQuery = query(productsRef, where("id", "==", id));
       await getDocs(orderedQuery).then((orderedProductData) =>
         setOrderedProductsList((prev) => [
           ...prev,
-          orderedProductData.docs[0].data(),
+          orderedProductData.docs[0]?.data(),
         ])
       );
       console.log("we still inside ");

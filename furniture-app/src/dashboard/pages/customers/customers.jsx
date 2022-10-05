@@ -2,11 +2,16 @@ import CustomersTable from "../../components/tables/customerTable";
 import { customersList, defaultUser } from "../../../Website-Assets";
 
 import { search, visit } from "../../components/icons";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { db } from "../../../firebase/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect } from "react";
 import { useCallback } from "react";
+import { ActionIcon, Chip, TextInput } from "@mantine/core";
+import { BiRightArrowAlt } from "react-icons/bi";
+import { Key } from "@mui/icons-material";
+import { capitalizeSentence } from "../../../App";
+import ListFilter from "../../components/filtering/listFilter";
 
 //* ------------------------------ Table Cell's and Rows ------------------------------ */
 
@@ -55,7 +60,8 @@ function createData(
   phoneNumber,
   joinDate,
   numberOfOrders,
-  amountSpent
+  amountSpent,
+  customer
 ) {
   return {
     id,
@@ -65,29 +71,28 @@ function createData(
     joinDate,
     numberOfOrders,
     amountSpent,
+    customer,
   };
 }
+
+//* ------------------- Search Event and Regetting the data ------------------ */
+
+const chipsFilter = [
+  { value: "name", label: "Fullname" },
+  { value: "phoneNumber", label: "Phone number" },
+  { value: "joinDate", label: "Join date" },
+  { value: "numberOfOrders", label: "Orders", format: "number" },
+  { value: "amountSpent", label: "Spent", format: "number" },
+];
 
 //* ------------------------- Customer Main Component ------------------------ */
 
 function Customer() {
   const [customers, setCustomers] = useState([defaultUser]);
-  let rows = [];
-  customers.map((customer) => {
-    rows.push(
-      createData(
-        customer.id,
-        customer.avatarImg,
-        customer.name,
-        customer.phoneNumber,
-        customer.createdAt,
-        customer.numberOfOrders,
-        customer.amountSpent
-      )
-    );
-  });
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
 
   //* --------------------------- Get Users List Data -------------------------- */
+
   const usersCol = collection(db, "Users");
 
   function getUsersData() {
@@ -106,6 +111,27 @@ function Customer() {
       });
   }
 
+  //? wrap list of customers into the table
+  let rows = [];
+  function wrapCustomers(customersList = customers) {
+    customersList.map((customer) => {
+      rows.push(
+        createData(
+          customer.id,
+          customer.avatarImg,
+          customer.name,
+          customer.phoneNumber,
+          customer.createdAt,
+          customer.numberOfOrders,
+          customer.amountSpent,
+          customer
+        )
+      );
+    });
+  }
+
+  wrapCustomers(filteredCustomers?.length >= 1 ? filteredCustomers : customers);
+
   useEffect(() => {
     getUsersData();
   }, []);
@@ -113,14 +139,11 @@ function Customer() {
   return (
     <section className="in-dash-container">
       <h1 className="dash-title">Customers</h1>
-      <div className="dash-search-filter customer-filter">
-        <button className="icon-btn">{search}</button>
-        <input
-          type="text"
-          id="customer-search"
-          placeholder="Search Customers..."
-        />
-      </div>
+      <ListFilter
+        setFilteredValues={setFilteredCustomers}
+        chipsFilter={chipsFilter}
+        col="Orders"
+      />
       <CustomersTable headCells={headCells} rows={rows}></CustomersTable>
     </section>
   );

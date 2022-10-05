@@ -1,3 +1,4 @@
+import moment from "moment";
 import {
   ResponsiveContainer,
   LineChart,
@@ -8,14 +9,15 @@ import {
   Tooltip,
 } from "recharts";
 
-let data = [
-  { name: "day 1", value: "352", value2: "198" },
-  { name: "day 2", value: "410", value2: "265" },
-  { name: "day 3", value: "821", value2: "695" },
-  { name: "day 4", value: "452", value2: "760" },
-];
+function Visits({ analyticsData }) {
+  let data = analyticsData.map((day) => {
+    let createdAtMoment = moment.unix(day.date?.seconds);
+    let theDay = moment(createdAtMoment).format("DD MMM");
+    return { day: theDay, visits: day.visits, customers: day.newCustomers };
+  });
 
-function Visits() {
+  console.log("visits data : ", data);
+
   return (
     <div className="visits-chart chart-height">
       <h2>Visits</h2>
@@ -30,13 +32,18 @@ function Visits() {
             }}
           >
             <CartesianGrid strokeDasharray="3" vertical={false} opacity={0.5} />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="day" />
             <YAxis fontSize={14} width={45} tickLine={false} />
             <Tooltip />
-            <Line type="monotone" dataKey="value" stroke="red" fill="#f1f1f1" />
             <Line
               type="monotone"
-              dataKey="value2"
+              dataKey="visits"
+              stroke="red"
+              fill="#f1f1f1"
+            />
+            <Line
+              type="monotone"
+              dataKey="customers"
               stroke="blue"
               fill="#f1f1f1"
             />

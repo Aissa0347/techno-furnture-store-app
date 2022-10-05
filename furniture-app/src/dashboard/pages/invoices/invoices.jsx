@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { useState } from "react";
+import ListFilter from "../../components/filtering/listFilter";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -125,12 +126,13 @@ function createData(
 export let rows = [];
 
 function Invoices() {
-  const [invoicesList, setInovicesList] = useState([]);
+  const [invoicesList, setInvoicesList] = useState([]);
+  const [filteredInvoices, setFilteredInvoices] = useState([]);
 
   const invoicesRef = collection(db, "Orders");
   const getInvoicesList = () => {
     getDocs(invoicesRef).then((data) =>
-      setInovicesList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      setInvoicesList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
     );
   };
   useEffect(() => {
@@ -139,49 +141,54 @@ function Invoices() {
 
   console.log("inovices here : ", invoicesList);
 
+  //* ------------------- Search Event and Regetting the data ------------------ */
+
+  const chipsFilter = [
+    { value: "name", label: "Name" },
+    { value: "orderId", label: "Order id" },
+    { value: "willaya", label: "Willaya" },
+    { value: "address", label: "Address" },
+    { value: "orderDate", label: "In date" },
+    { value: "phoneNumber", label: "Phone number" },
+    { value: "totalQuantity", label: "QTY", format: "number" },
+    { value: "totalCost", label: "Cost", format: "number" },
+    { value: "status", label: "Status" },
+  ];
+
+  //? wrap list of customers into the table
   rows = [];
-  invoicesList.map((order) => {
-    rows.push(
-      createData(
-        order?.id,
-        order?.avatarImg,
-        order?.fullName,
-        order?.phoneNumber,
-        order?.orderId,
-        order?.willaya + ", " + order?.address,
-        order?.orderDate,
-        order?.totalQuantity,
-        order?.totalCost,
-        order?.status,
-        order
-      )
-    );
-  });
+  function wrapInvoices(listOfInvoices = invoicesList) {
+    listOfInvoices.map((order) => {
+      rows.push(
+        createData(
+          order?.id,
+          order?.avatarImg,
+          order?.fullName,
+          order?.phoneNumber,
+          order?.orderId,
+          order?.willaya + ", " + order?.address,
+          order?.orderDate,
+          order?.totalQuantity,
+          order?.totalCost,
+          order?.status,
+          order
+        )
+      );
+    });
+  }
+
+  wrapInvoices(filteredInvoices?.length >= 1 ? filteredInvoices : invoicesList);
 
   return (
     <section className="dash-products in-dash-container">
       <h1 className="dash-title">Products</h1>
       <Widgets />
-      <div className="filters newProducts">
-        <div className="dash-search-filter customer-filter">
-          <button className="icon-btn">{search}</button>
-          <input
-            type="text"
-            id="customer-search"
-            placeholder="Search Products..."
-          />
-        </div>
-        <div className="filter-btn">
-          <button className="icon-btn">{filter}</button>
-        </div>
-        <div className="new-product">
-          <button className="icon-btn">
-            <span className="icon ">{add}</span>&nbsp;
-            <span className="text">Add Invoice</span>
-          </button>
-        </div>
-      </div>
-
+      <ListFilter
+        setFilteredValues={setFilteredInvoices}
+        chipsFilter={chipsFilter}
+        col="Orders"
+        // RightButton={AddProductsBtn}
+      />
       <InovoicesTable headCells={headCells} rows={rows} />
     </section>
   );

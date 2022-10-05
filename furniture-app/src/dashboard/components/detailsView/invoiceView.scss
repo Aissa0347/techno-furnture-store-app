@@ -88,6 +88,9 @@
 //* ------------------------------ Media Query's ----------------------------- */
 
 @media only screen and (max-width: 967px) {
+  .invoice-view {
+    padding: 0% 0.5rem;
+  }
   .invoice-user-info {
     display: none;
   }

@@ -29,12 +29,15 @@ import Product_Page from "./Components/Product_Page";
 import Ordering from "./Components/Ordering";
 import {
   addDoc,
+  arrayUnion,
   collection,
   doc,
   getDoc,
   getDocs,
   onSnapshot,
   query,
+  serverTimestamp,
+  setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
@@ -45,6 +48,7 @@ import Auth from "./authentication/auth";
 import { useLayoutEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { ref } from "firebase/storage";
+import moment from "moment";
 
 //* ---------------------------- Main App Function --------------------------- */
 
@@ -66,6 +70,99 @@ export function scrollToTop() {
   window.scrollTo(0, 0);
 }
 
+export function capitalizeSentence(text, outForm = "string") {
+  let capitalizedText = text
+    .toLowerCase()
+    .split(" ")
+    .map((word) => word[0].toUpperCase() + word.substr(1));
+  if (outForm === "string") capitalizedText = capitalizedText.join(" ");
+  return capitalizedText;
+}
+
+//* ---------------------------- Setting Analytics --------------------------- */
+
+function setAnalytics() {
+  const defaultDayStatics = {
+    date: serverTimestamp(),
+    visits: 1,
+    sales: 0,
+    orders: 0,
+    newCustomers: 0,
+    ordersStatus: {
+      pending: 0,
+      completed: 0,
+      returned: 0,
+      ongoing: 0,
+      cancelled: 0,
+    },
+  };
+  const idOfCollection = moment().format("MMMM, YYYY");
+  const nameOfDayObject = moment().format("DD-MM");
+  const monthDocRef = doc(db, "AnalyticsData", idOfCollection);
+  getDoc(monthDocRef)
+    .then((res) => {
+      if (res.exists()) {
+        let oldData = res.get(nameOfDayObject);
+        console.log("old data is here : ", oldData);
+        oldData
+          ? updateDoc(monthDocRef, {
+              [nameOfDayObject]: { ...oldData, visits: ~~oldData.visits + 1 },
+            })
+          : updateDoc(monthDocRef, {
+              [nameOfDayObject]: { ...defaultDayStatics },
+            });
+      } else {
+        setDoc(monthDocRef, { [nameOfDayObject]: { ...defaultDayStatics } });
+      }
+    })
+    .catch((error) => {
+      console.log(error.code);
+      console.log(error.message);
+    });
+}
+
+export function setStaticValue(field, amount, status) {
+  const idOfCollection = moment().format("MMMM, YYYY");
+  const nameOfDayObject = moment().format("DD-MM");
+  const monthDocRef = doc(db, "AnalyticsData", idOfCollection);
+  getDoc(monthDocRef).then((res) => {
+    let oldData = res.get(nameOfDayObject);
+    if (field === "ordersStatus") {
+      updateDoc(monthDocRef, {
+        [nameOfDayObject]: {
+          ...oldData,
+          ordersStatus: {
+            ...oldData.ordersStatus,
+            [status]: oldData.ordersStatus[status] + amount,
+          },
+        },
+      });
+    } else if (field === "orders") {
+      updateDoc(monthDocRef, {
+        [nameOfDayObject]: {
+          ...oldData,
+          ordersStatus: {
+            ...oldData.ordersStatus,
+            pending: oldData.ordersStatus.pending + amount,
+          },
+          orders: oldData.orders + amount,
+        },
+      });
+    } else {
+      updateDoc(monthDocRef, {
+        [nameOfDayObject]: {
+          ...oldData,
+          [field]: oldData[field] + amount,
+        },
+      });
+    }
+  });
+}
+
+//* -------------------------------------------------------------------------- */
+//*                                App Component                               */
+//* -------------------------------------------------------------------------- */
+
 function App() {
   const [ProductsCatalog, setProductsCatalog] = useState([defaultProduct]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -78,7 +175,6 @@ function App() {
   });
   const [subTotal, setSubTotal] = useState(0);
   const [userUID, setUserUID] = useState("");
-  // const [isLoggedIn, setIsLoggedIn] = useState("");
   const [currentUserData, setCurrentUserData] = useState("");
   const [orderData, setOrderData] = useState({
     userId: "",
@@ -93,6 +189,10 @@ function App() {
     totalQuantity: "",
     avatarImg: "",
   });
+
+  useEffect(() => {
+    setAnalytics();
+  }, []);
 
   console.log(ProductsCatalog);
   function calcSubTotal() {
@@ -144,6 +244,7 @@ function App() {
     let dataPromise = await getDocs(ProductRef);
     let fullData = dataPromise.docs.map((doc) => ({
       ...doc.data(),
+      docId: doc.id,
       // id: doc.id,
     }));
     setProductsCatalog(fullData);
@@ -214,6 +315,7 @@ function App() {
   function sendOrder(userInfo) {
     const ordersInfosRef = doc(db, "GeneralInfos", "ORDERS-GENERAL-INFOS");
     const orderRef = collection(db, "Orders");
+    const userRef = query(collection(db, "Users"), where("id", "==", userUID));
     getDoc(ordersInfosRef)
       .then((res) => {
         const currentValue = res.data().ordersCount;
@@ -225,6 +327,16 @@ function App() {
         console.log(newOrderData);
         addDoc(orderRef, newOrderData);
         updateDoc(ordersInfosRef, { ordersCount: ~~currentValue + 1 });
+        setStaticValue("orders", 1);
+        getDocs(userRef).then((res) => {
+          const data = res.docs[0].data();
+          updateDoc(res.docs[0].ref, {
+            invoices: arrayUnion(newOrderData.orderId),
+            numberOfOrders: ~~data.numberOfOrders + 1,
+            amountSpent: ~~data.amountSpent + ~~newOrderData.totalCost,
+            phoneNumber: newOrderData.phoneNumber,
+          }).then((res) => console.log("thanks its fullfilled : ", res));
+        });
       })
       .catch((error) => {
         console.log(error.code);

@@ -6,18 +6,13 @@
   }
 }
 
-.dash-products .dash-search-filter {
-  width: 100%;
-  input {
-    width: 100%;
-  }
-}
-
 .dash-container .filters {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   width: 100%;
+  margin-top: 1rem;
   .filter-btn {
     height: 50px;
     background-color: $whiteColor;

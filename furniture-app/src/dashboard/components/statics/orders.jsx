@@ -10,6 +10,7 @@ import {
 
 import { useEffect } from "react";
 import { useState } from "react";
+import moment from "moment";
 
 let data = [
   { name: "completed", value: 352, value2: "198" },
@@ -18,7 +19,7 @@ let data = [
   { name: "cancelled", value: 452, value2: "760" },
 ];
 
-let colors = ["red", "grey", "purple", "yellow"];
+let colors = ["red", "grey", "purple", "orange", "black"];
 
 function CustomLegend(props) {
   console.log(props);
@@ -35,7 +36,7 @@ function CustomLegend(props) {
                 className="icon-legend"
                 style={{ backgroundColor: payload.fill }}
               ></span>
-              {payload.name}{" "}
+              {payload.label}{" "}
             </h5>
             <span>{payload.value}</span>
           </div>
@@ -45,10 +46,47 @@ function CustomLegend(props) {
   );
 }
 
-function Orders() {
+function Orders({ analyticsData }) {
   const [isSmall, setIsSmall] = useState(
     window.innerWidth > 967 ? false : true
   );
+  const [data, setData] = useState([]);
+
+  function getOrdersStatics() {
+    let pending = 0;
+    let completed = 0;
+    let returned = 0;
+    let ongoing = 0;
+    let cancelled = 0;
+    analyticsData.forEach((current) => {
+      pending += ~~current.ordersStatus?.pending;
+      completed += ~~current.ordersStatus?.completed;
+      returned += ~~current.ordersStatus?.returned;
+      ongoing += ~~current.ordersStatus?.ongoing;
+      cancelled += ~~current.ordersStatus?.cancelled;
+    });
+    console.log(
+      "is those status : ",
+      pending,
+      completed,
+      returned,
+      ongoing,
+      cancelled
+    );
+
+    setData((prev) => [
+      { label: "pending", value: ~~pending },
+      { label: "completed", value: ~~completed },
+      { label: "returned", value: ~~returned },
+      { label: "ongoing", value: ~~ongoing },
+      { label: "cancelled", value: ~~cancelled },
+    ]);
+    console.log("values are here : ", analyticsData);
+  }
+
+  useEffect(() => {
+    getOrdersStatics();
+  }, [analyticsData]);
 
   window.onresize = () => {
     setIsSmall(window.innerWidth > 967 ? false : true);
@@ -77,8 +115,8 @@ function Orders() {
           <PieChart className={"pie-serface"}>
             <Pie
               data={data}
-              dataKey="value"
-              nameKey="name"
+              dataKey="label"
+              nameKey="label"
               cx={isSmall ? "30%" : "50%"}
               cy={isSmall ? "100%" : "50%"}
               outerRadius={isSmall ? 120 : 100}

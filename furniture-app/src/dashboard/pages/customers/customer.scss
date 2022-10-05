@@ -1,21 +1,5 @@
 .dash-search-filter {
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  height: 50px;
-  margin: 1rem 0;
-  border: $border;
-  background-color: $whiteColor;
-
-  input {
-    font-size: 18px;
-    height: 48px;
-    width: 350px;
-    padding: 0.5rem;
-    border: none;
-    outline: none;
-    background-color: transparent;
-  }
+  width: 50%;
 }
 .icon-btn {
   display: flex;
@@ -54,7 +38,7 @@
 //*                                Media Query's                               */
 //* -------------------------------------------------------------------------- */
 
-@media only screen and (max-width: 567px) {
+@media only screen and (max-width: 767px) {
   .dash-search-filter {
     width: 100%;
   }

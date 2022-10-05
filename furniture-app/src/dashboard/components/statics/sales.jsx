@@ -1,3 +1,5 @@
+import moment from "moment";
+import { useEffect, useState } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -8,16 +10,19 @@ import {
   Tooltip,
 } from "recharts";
 
-let data = [
-  { name: "day 1", value: "352", value2: "198" },
-  { name: "day 2", value: "410", value2: "265" },
-  { name: "day 3", value: "821", value2: "695" },
-  { name: "day 4", value: "452", value2: "760" },
-  { name: "day 5", value: "269", value2: "760" },
-  { name: "day 6", value: "752", value2: "760" },
-];
+function Sales({ analyticsData }) {
+  const [data, setData] = useState([]);
 
-function Sales() {
+  let calculatedData = analyticsData.map((day) => {
+    let createdAtMoment = moment.unix(day.date?.seconds);
+    let theDay = moment(createdAtMoment).format("DD MMM");
+    return { Day: theDay, Sales: day.sales + " DZD" };
+  });
+
+  useEffect(() => {
+    setData(calculatedData);
+  }, [analyticsData]);
+
   return (
     <div className="sales-chart chart-height">
       <h2>Sales</h2>
@@ -32,12 +37,12 @@ function Sales() {
             }}
           >
             {/* <CartesianGrid strokeDasharray="3 3" opacity={0.5} /> */}
-            {/* <XAxis dataKey="name" /> */}
+            <XAxis dataKey="Day" hide />
             {/* <YAxis fontSize={14} width={45} tickBar={false} /> */}
             <Tooltip />
             <Bar
               type="monotone"
-              dataKey="value"
+              dataKey="Sales"
               maxBarSize={35}
               fill="blue"
               // background={"#f1f1f1"}

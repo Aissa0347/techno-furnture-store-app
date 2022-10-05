@@ -174,7 +174,7 @@ export default function NewProductPopup({
       totalProductPrice: Number(0),
       description: descriptionTextContent,
       details: "",
-      id: uuidv4(),
+      id: typeOfForm === "edit" ? primaryValues?.id : uuidv4(),
     };
   }
   console.log("this is the primary images : ", primaryImages);
@@ -427,7 +427,7 @@ export default function NewProductPopup({
                 onClick={() => {
                   console.log(newImageList);
                   updateDoc(
-                    doc(db, "ProductsList", primaryValues.id),
+                    doc(db, "ProductsList", primaryValues.docId),
                     assignedProduct()
                   ).then((res) => {
                     updateData();

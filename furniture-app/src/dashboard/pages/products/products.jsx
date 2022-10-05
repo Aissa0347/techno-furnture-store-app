@@ -2,7 +2,7 @@
 import ProductsTable from "../../components/tables/productsTable";
 import NewProductPopup from "../../components/popups/newProduct/newProductPopup";
 import { ProductDetailShow } from "../../../Components/Product_Page";
-import { MantineProvider, CloseButton, Group } from "@mantine/core";
+import { MantineProvider, CloseButton, Group, Button } from "@mantine/core";
 import { onSnapshot, collection } from "firebase/firestore";
 import { colProductList } from "../../components/popups/newProduct/newProductPopup.jsx";
 
@@ -12,6 +12,7 @@ import { customersList, defaultProduct } from "../../../Website-Assets";
 import { add, filter, search, visit, sale } from "../../components/icons";
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../../App";
+import ListFilter from "../../components/filtering/listFilter";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -112,6 +113,7 @@ function createData(
 function Products() {
   const { ProductsCatalog, setProductsCatalog } = useContext(GlobalContext);
   const [newProductPopup, setNewProductPopup] = useState(false);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [editProductPopup, setEditProductPopup] = useState({
     state: false,
     defaultValues: "",
@@ -130,50 +132,64 @@ function Products() {
     // });
   });
 
+  //* ------------------- Search Event and Regetting the data ------------------ */
+
+  const chipsFilter = [
+    { value: "name", label: "Name" },
+    { value: "category", label: "Category" },
+    { value: "productQuantity", label: "QTY" },
+    { value: "productStatus", label: "Status" },
+    { value: "price", label: "Price", format: "number" },
+  ];
+
+  //? wrap list of customers into the table
   let rows = [];
-  ProductsCatalog.map((product) => {
-    rows.push(
-      createData(
-        product?.id,
-        product?.img[0]?.url,
-        product?.name,
-        product?.category,
-        product?.productQuantity,
-        product?.price,
-        product?.productStatus,
-        product
-      )
-    );
-  });
+  function wrapProducts(ProductsList = ProductsCatalog) {
+    ProductsList.map((product) => {
+      rows.push(
+        createData(
+          product?.id,
+          product?.img[0]?.url,
+          product?.name,
+          product?.category,
+          product?.productQuantity,
+          product?.price,
+          product?.productStatus,
+          product
+        )
+      );
+    });
+  }
+
+  wrapProducts(
+    filteredProducts?.length >= 1 ? filteredProducts : ProductsCatalog
+  );
+
+  const AddProductsBtn = ({ radius, size }) => (
+    <Button
+      size={size}
+      radius={radius}
+      style={{ backgroundColor: "#d96b52" }}
+      leftIcon={
+        <span style={{ width: "18px", marginRight: "0.5rem" }}>{add}</span>
+      }
+      onClick={() => setNewProductPopup(true)}
+    >
+      Add Products
+    </Button>
+  );
 
   return (
     <>
       <section className="dash-products in-dash-container">
         <h1 className="dash-title">Products</h1>
         <Widgets />
-        <div className="filters newProducts">
-          <div className="dash-search-filter customer-filter">
-            <button className="icon-btn">{search}</button>
-            <input
-              type="text"
-              id="customer-search"
-              placeholder="Search Products..."
-            />
-          </div>
-          <div className="filter-btn">
-            <button className="icon-btn"> {filter}</button>
-          </div>
-          <div className="new-product">
-            <button
-              className="icon-btn"
-              onClick={() => setNewProductPopup(true)}
-            >
-              <span className="icon ">{add}</span>&nbsp;
-              <span className="text">Add Product</span>
-            </button>
-          </div>
-        </div>
-
+        <ListFilter
+          setFilteredValues={setFilteredProducts}
+          chipsFilter={chipsFilter}
+          col="ProductsList"
+          RightButton={AddProductsBtn}
+        />
         <ProductsTable
           headCells={headCells}
           rows={rows}

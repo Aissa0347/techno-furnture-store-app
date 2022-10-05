@@ -273,7 +273,7 @@ export default function EnhancedTable({ rows, headCells }) {
                     const labelId = `enhanced-table-checkbox-${index}`;
                     let createdAtMoment = moment.unix(row.joinDate.seconds);
                     let createdAt = moment(createdAtMoment).format("MMM DD,y");
-                    console.log(createdAt);
+                    console.log(typeof row.numberOfOrders);
                     return (
                       <TableRow
                         hover
@@ -305,9 +305,9 @@ export default function EnhancedTable({ rows, headCells }) {
                           </span>
                         </TableCell>
                         <TableCell align="left">
-                          {row.mobileNumber || "Not Avaible"}
+                          {row.phoneNumber || "Not Avaible"}
                         </TableCell>
-                        <TableCell align="left"> {createdAt}</TableCell>
+                        <TableCell align="left">{createdAt}</TableCell>
                         <TableCell align="left">{row.numberOfOrders}</TableCell>
                         <TableCell align="left">{row.amountSpent}</TableCell>
                         <TableCell align="left">
@@ -317,7 +317,7 @@ export default function EnhancedTable({ rows, headCells }) {
                               onClick={() =>
                                 setShowCustomer({
                                   state: true,
-                                  data: { ...row.order },
+                                  data: { ...row.customer },
                                   id: row.id,
                                 })
                               }

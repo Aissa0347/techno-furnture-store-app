@@ -1,0 +1,31 @@
+.customer-view {
+  .user-info {
+    line-height: 1.7;
+    span {
+      font-weight: 500;
+    }
+    p {
+      width: 100%;
+    }
+  }
+  .invoice-products-wrapper {
+    min-width: max-content;
+    justify-content: unset;
+    gap: 0.5rem;
+    padding-right: 1px;
+  }
+  .invoice-product-info {
+    // min-width: 100%;
+    height: 100px !important;
+  }
+  .inline-product-info {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+    min-width: max-content;
+    margin-left: unset;
+  }
+}
