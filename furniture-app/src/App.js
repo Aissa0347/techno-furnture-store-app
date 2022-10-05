@@ -52,7 +52,7 @@ import moment from "moment";
 
 //* ---------------------------- Main App Function --------------------------- */
 
-export const GlobalContext = createContext([]);
+export const GlobalContext = createContext({});
 
 //  Helper Functions
 const pickRandomProducts = (productsArray, productsMaxNumber) => {

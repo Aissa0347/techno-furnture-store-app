@@ -3,11 +3,12 @@ import InovoicesTable from "../../components/tables/invoicesTable";
 import { customersList, InvoicesList } from "../../../Website-Assets";
 
 import { sale, order, user } from "../../components/icons";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { useState } from "react";
 import ListFilter from "../../components/filtering/listFilter";
+import { DashboardContext } from "../../Dashboard";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -126,20 +127,16 @@ function createData(
 export let rows = [];
 
 function Invoices() {
-  const [invoicesList, setInvoicesList] = useState([]);
+  const { setPrimaryInvoices, primaryInvoices, getData } =
+    useContext(DashboardContext);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
 
-  const invoicesRef = collection(db, "Orders");
-  const getInvoicesList = () => {
-    getDocs(invoicesRef).then((data) =>
-      setInvoicesList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
-    );
-  };
-  useEffect(() => {
-    getInvoicesList();
-  }, []);
-
-  console.log("inovices here : ", invoicesList);
+  // const invoicesRef = collection(db, "Orders");
+  // const getInvoicesList = () => {
+  //   getDocs(invoicesRef).then((data) =>
+  //     setInvoicesList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+  //   );
+  // };
 
   //* ------------------- Search Event and Regetting the data ------------------ */
 
@@ -157,7 +154,7 @@ function Invoices() {
 
   //? wrap list of customers into the table
   rows = [];
-  function wrapInvoices(listOfInvoices = invoicesList) {
+  function wrapInvoices(listOfInvoices = primaryInvoices) {
     listOfInvoices.map((order) => {
       rows.push(
         createData(
@@ -177,7 +174,14 @@ function Invoices() {
     });
   }
 
-  wrapInvoices(filteredInvoices?.length >= 1 ? filteredInvoices : invoicesList);
+  wrapInvoices(
+    filteredInvoices?.length >= 1 ? filteredInvoices : primaryInvoices
+  );
+
+  useEffect(() => {
+    if (primaryInvoices.length < 1)
+      getData("Orders", setPrimaryInvoices, "orderDate");
+  }, []);
 
   return (
     <section className="dash-products in-dash-container">

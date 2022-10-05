@@ -6,15 +6,15 @@ import LastInvoicesTable from "../tables/lastInvoicesTable";
 import { rows } from "../../pages/invoices/invoices";
 //* ---------------------------- Statics Component --------------------------- */
 
-function Statics({ analyticsData }) {
+function Statics() {
   return (
     <div className="statics-wrapper">
       <section className="analyse">
-        <Visits analyticsData={analyticsData} />
-        <Sales analyticsData={analyticsData} />
+        <Visits />
+        <Sales />
       </section>
       <section className="statics-order-invoices">
-        <Orders analyticsData={analyticsData} />
+        <Orders />
         <div className="last-invoices">
           <LastInvoicesTable rows={rows} />
         </div>

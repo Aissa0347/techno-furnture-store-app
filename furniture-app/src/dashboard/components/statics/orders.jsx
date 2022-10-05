@@ -8,9 +8,10 @@ import {
   Tooltip,
 } from "recharts";
 
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import moment from "moment";
+import { DashboardContext } from "../../Dashboard";
 
 let data = [
   { name: "completed", value: 352, value2: "198" },
@@ -46,7 +47,8 @@ function CustomLegend(props) {
   );
 }
 
-function Orders({ analyticsData }) {
+function Orders() {
+  const { analyticsData } = useContext(DashboardContext);
   const [isSmall, setIsSmall] = useState(
     window.innerWidth > 967 ? false : true
   );
@@ -115,7 +117,7 @@ function Orders({ analyticsData }) {
           <PieChart className={"pie-serface"}>
             <Pie
               data={data}
-              dataKey="label"
+              dataKey="value"
               nameKey="label"
               cx={isSmall ? "30%" : "50%"}
               cy={isSmall ? "100%" : "50%"}

@@ -3,7 +3,14 @@ import ProductsTable from "../../components/tables/productsTable";
 import NewProductPopup from "../../components/popups/newProduct/newProductPopup";
 import { ProductDetailShow } from "../../../Components/Product_Page";
 import { MantineProvider, CloseButton, Group, Button } from "@mantine/core";
-import { onSnapshot, collection } from "firebase/firestore";
+import {
+  onSnapshot,
+  collection,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+} from "firebase/firestore";
 import { colProductList } from "../../components/popups/newProduct/newProductPopup.jsx";
 
 // Import Data
@@ -13,6 +20,8 @@ import { add, filter, search, visit, sale } from "../../components/icons";
 import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../../App";
 import ListFilter from "../../components/filtering/listFilter";
+import { DashboardContext } from "../../Dashboard";
+import { db } from "../../../firebase/firebaseConfig";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -111,7 +120,8 @@ function createData(
 }
 
 function Products() {
-  const { ProductsCatalog, setProductsCatalog } = useContext(GlobalContext);
+  const { primaryProducts, setPrimaryProducts, getData } =
+    useContext(DashboardContext);
   const [newProductPopup, setNewProductPopup] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [editProductPopup, setEditProductPopup] = useState({
@@ -122,15 +132,10 @@ function Products() {
     state: false,
     currentProduct: defaultProduct,
   });
+
   useEffect(() => {
-    // let realtimeUpdate = onSnapshot(colProductList, (res) => {
-    //   let resData = [];
-    //   res.docs.map((doc) => resData.push(doc.data()));
-    //   console.log(resData);
-    //   setProductsCatalog(resData);
-    //   console.log("its done");
-    // });
-  });
+    if (primaryProducts.length < 1) getData("ProductsList", setPrimaryProducts);
+  }, []);
 
   //* ------------------- Search Event and Regetting the data ------------------ */
 
@@ -144,7 +149,7 @@ function Products() {
 
   //? wrap list of customers into the table
   let rows = [];
-  function wrapProducts(ProductsList = ProductsCatalog) {
+  function wrapProducts(ProductsList = primaryProducts) {
     ProductsList.map((product) => {
       rows.push(
         createData(
@@ -162,7 +167,7 @@ function Products() {
   }
 
   wrapProducts(
-    filteredProducts?.length >= 1 ? filteredProducts : ProductsCatalog
+    filteredProducts?.length >= 1 ? filteredProducts : primaryProducts
   );
 
   const AddProductsBtn = ({ radius, size }) => (

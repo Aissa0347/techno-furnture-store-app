@@ -2,7 +2,7 @@ import CustomersTable from "../../components/tables/customerTable";
 import { customersList, defaultUser } from "../../../Website-Assets";
 
 import { search, visit } from "../../components/icons";
-import { useMemo, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import { db } from "../../../firebase/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect } from "react";
@@ -12,6 +12,7 @@ import { BiRightArrowAlt } from "react-icons/bi";
 import { Key } from "@mui/icons-material";
 import { capitalizeSentence } from "../../../App";
 import ListFilter from "../../components/filtering/listFilter";
+import { DashboardContext } from "../../Dashboard";
 
 //* ------------------------------ Table Cell's and Rows ------------------------------ */
 
@@ -88,32 +89,33 @@ const chipsFilter = [
 //* ------------------------- Customer Main Component ------------------------ */
 
 function Customer() {
-  const [customers, setCustomers] = useState([defaultUser]);
+  const { setPrimaryCustomers, primaryCustomers, getData } =
+    useContext(DashboardContext);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
 
   //* --------------------------- Get Users List Data -------------------------- */
 
-  const usersCol = collection(db, "Users");
+  // const usersCol = collection(db, "Users");
 
-  function getUsersData() {
-    let userList = [];
-    console.log("heyyy friend");
-    getDocs(usersCol)
-      .then((users) => {
-        users.docs.map((user) => {
-          userList.push(user.data());
-        });
-        setCustomers(userList);
-      })
-      .catch((error) => {
-        console.log(error.code);
-        console.log(error.message);
-      });
-  }
+  // function getUsersData() {
+  //   let userList = [];
+  //   console.log("heyyy friend");
+  //   getDocs(usersCol)
+  //     .then((users) => {
+  //       users.docs.map((user) => {
+  //         userList.push(user.data());
+  //       });
+  //       setCustomers(userList);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.code);
+  //       console.log(error.message);
+  //     });
+  // }
 
   //? wrap list of customers into the table
   let rows = [];
-  function wrapCustomers(customersList = customers) {
+  function wrapCustomers(customersList = primaryCustomers) {
     customersList.map((customer) => {
       rows.push(
         createData(
@@ -130,10 +132,12 @@ function Customer() {
     });
   }
 
-  wrapCustomers(filteredCustomers?.length >= 1 ? filteredCustomers : customers);
+  wrapCustomers(
+    filteredCustomers?.length >= 1 ? filteredCustomers : primaryCustomers
+  );
 
   useEffect(() => {
-    getUsersData();
+    if (primaryCustomers.length < 1) getData("Users", setPrimaryCustomers);
   }, []);
 
   return (

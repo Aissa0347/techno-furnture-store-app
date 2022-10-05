@@ -3,10 +3,11 @@ import Statics from "../../components/statics/statics";
 // Import Icons
 import { visit, sale, order, user } from "../../components/icons";
 import moment from "moment";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { useEffect } from "react";
+import { DashboardContext } from "../../Dashboard";
 
 //* --------------------------- Duration Component --------------------------- */
 
@@ -23,7 +24,8 @@ export function DurationSelect() {
 
 //* ---------------------------- Widgets Component --------------------------- */
 
-function Widgets({ analyticsData }) {
+function Widgets() {
+  const { analyticsData } = useContext(DashboardContext);
   const [overallStatics, setOverallStatics] = useState({
     visits: 0,
     sales: 0,
@@ -118,38 +120,25 @@ function Widgets({ analyticsData }) {
 
 //* ----------------------------- Main Component ----------------------------- */
 function Main() {
-  const [analyticsData, setAnalyticsData] = useState([]);
-  console.log("TODAT IS : ", moment().format("MMMM, YYYY"));
-  console.log("TODAT IS : ", moment().format("DD-MM"));
-
-  function getAnalytics() {
-    const defaultDayStatics = {
-      visits: 1,
-      sales: 0,
-      orders: 0,
-      ordersStatus: { completed: 0, returned: 0, ongoing: 0, cancelled: 0 },
-    };
-    const idOfCollection = moment().format("MMMM, YYYY");
-    const nameOfDayObject = moment().format("DD-MM");
-    const monthDocRef = doc(db, "AnalyticsData", idOfCollection);
-    getDoc(monthDocRef)
-      .then((res) => {
-        let arrayOfValues = Object.values(res.data());
-        setAnalyticsData(arrayOfValues);
-      })
-      .catch((error) => console.log(error.message, error.code));
-  }
-
-  console.log("analytics are here sir : ", analyticsData);
-  useEffect(() => {
-    getAnalytics();
-  }, []);
+  // useEffect(() => {
+  //   let smallObj = [];
+  //   const docRef = doc(db, "Testing", "Max");
+  //   for (let i = 0; i <= 1000; i++) {
+  //     smallObj.push({
+  //       name: "Madara" + i,
+  //       age: i * 5,
+  //       address: "abs" + i * 3,
+  //       workout: i + i,
+  //     });
+  //   }
+  //   updateDoc(docRef, { MAX_RANGE: [...smallObj] });
+  // }, []);
 
   return (
     <section className="main in-dash-container">
       <h1 className="dash-title">Dashboard</h1>
-      <Widgets analyticsData={analyticsData} />
-      <Statics analyticsData={analyticsData} />
+      <Widgets />
+      <Statics />
     </section>
   );
 }

@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -9,14 +9,16 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import { DashboardContext } from "../../Dashboard";
 
-function Sales({ analyticsData }) {
+function Sales() {
+  const { analyticsData } = useContext(DashboardContext);
   const [data, setData] = useState([]);
 
   let calculatedData = analyticsData.map((day) => {
     let createdAtMoment = moment.unix(day.date?.seconds);
     let theDay = moment(createdAtMoment).format("DD MMM");
-    return { Day: theDay, Sales: day.sales + " DZD" };
+    return { Day: theDay, Sales: day.sales };
   });
 
   useEffect(() => {
@@ -37,7 +39,7 @@ function Sales({ analyticsData }) {
             }}
           >
             {/* <CartesianGrid strokeDasharray="3 3" opacity={0.5} /> */}
-            <XAxis dataKey="Day" hide />
+            <XAxis dataKey="Day" />
             {/* <YAxis fontSize={14} width={45} tickBar={false} /> */}
             <Tooltip />
             <Bar

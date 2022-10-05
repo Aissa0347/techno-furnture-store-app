@@ -1,4 +1,5 @@
 import moment from "moment";
+import { useContext } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -8,8 +9,10 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import { DashboardContext } from "../../Dashboard";
 
-function Visits({ analyticsData }) {
+function Visits() {
+  const { analyticsData } = useContext(DashboardContext);
   let data = analyticsData.map((day) => {
     let createdAtMoment = moment.unix(day.date?.seconds);
     let theDay = moment(createdAtMoment).format("DD MMM");
