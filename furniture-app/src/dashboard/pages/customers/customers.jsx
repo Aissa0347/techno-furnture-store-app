@@ -137,7 +137,8 @@ function Customer() {
   );
 
   useEffect(() => {
-    if (primaryCustomers.length < 1) getData("Users", setPrimaryCustomers);
+    if (primaryCustomers.length < 1)
+      getData("Users", setPrimaryCustomers, "createdAt");
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -24,6 +24,7 @@ import { visuallyHidden } from "@mui/utils";
 import moment from "moment";
 import { CloseButton, Menu, Modal } from "@mantine/core";
 import CustomerView from "../detailsView/customerView";
+import { DashboardContext } from "../../Dashboard";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -66,6 +67,8 @@ export default function EnhancedTable({ rows, headCells }) {
     state: false,
     data: {},
   });
+  const { goNext, setPrimaryCustomers, primaryCustomers } =
+    useContext(DashboardContext);
 
   console.log(orderBy);
   function EnhancedTableHead(props) {
@@ -77,6 +80,7 @@ export default function EnhancedTable({ rows, headCells }) {
       rowCount,
       onRequestSort,
     } = props;
+
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
@@ -226,7 +230,13 @@ export default function EnhancedTable({ rows, headCells }) {
   };
   console.log(selected);
   const handleChangePage = (event, newPage) => {
+    // const { page, rowsPerPage } = event;
     setPage(newPage);
+    let startIn = newPage * rowsPerPage + 1;
+    let endIn = startIn + rowsPerPage;
+    console.log(startIn, endIn);
+
+    goNext("Orders", setPrimaryCustomers, startIn, endIn, "createdAt");
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -366,6 +376,7 @@ export default function EnhancedTable({ rows, headCells }) {
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
+            // ActionsComponent={}
           />
         </Paper>
         <FormControlLabel
