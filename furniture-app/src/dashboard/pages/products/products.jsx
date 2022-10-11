@@ -190,10 +190,12 @@ function Products() {
         <h1 className="dash-title">Products</h1>
         <Widgets />
         <ListFilter
+          primaryValues={primaryProducts}
           setFilteredValues={setFilteredProducts}
           chipsFilter={chipsFilter}
           col="ProductsList"
           RightButton={AddProductsBtn}
+          date={""}
         />
         <ProductsTable
           headCells={headCells}

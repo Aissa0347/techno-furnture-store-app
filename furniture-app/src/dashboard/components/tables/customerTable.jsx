@@ -67,7 +67,7 @@ export default function EnhancedTable({ rows, headCells }) {
     state: false,
     data: {},
   });
-  const { goNext, setPrimaryCustomers, primaryCustomers } =
+  const { setPrimaryCustomers, primaryCustomers } =
     useContext(DashboardContext);
 
   console.log(orderBy);
@@ -232,11 +232,6 @@ export default function EnhancedTable({ rows, headCells }) {
   const handleChangePage = (event, newPage) => {
     // const { page, rowsPerPage } = event;
     setPage(newPage);
-    let startIn = newPage * rowsPerPage + 1;
-    let endIn = startIn + rowsPerPage;
-    console.log(startIn, endIn);
-
-    goNext("Orders", setPrimaryCustomers, startIn, endIn, "createdAt");
   };
 
   const handleChangeRowsPerPage = (event) => {

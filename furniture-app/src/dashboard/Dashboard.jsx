@@ -64,7 +64,7 @@ function Dashboard() {
 
   function getData(colName, setPrimaryValues, orderedBy = "name") {
     const col = collection(db, colName);
-    const theQuery = query(col, orderBy(orderedBy), limit(16));
+    const theQuery = query(col, orderBy(orderedBy));
     let finalList = [];
     getDocs(theQuery)
       .then((res) => {
@@ -79,40 +79,40 @@ function Dashboard() {
       });
   }
 
-  function goNext(
-    colName,
-    setPrimaryValues,
-    startIn,
-    endIn,
-    orderedBy = "name"
-    // { currentPage, setNextPage }
-  ) {
-    const col = collection(db, colName);
-    const theQuery = query(
-      col,
-      orderBy(orderedBy),
-      startAt(startIn),
-      endAt(endIn)
-    );
-    let finalList = [];
-    getDocs(theQuery)
-      .then((res) => {
-        console.log(res.docs);
-        res.docs.map((doc) => {
-          finalList.push(doc.data());
-        });
-        // if (finalList.length >= 30) {
-        //   setNextPage(currentPage + 1);
-        // }
-        console.log("we put here the finalList ", finalList);
+  // function goNext(
+  //   colName,
+  //   setPrimaryValues,
+  //   startIn,
+  //   endIn,
+  //   orderedBy = "name"
+  //   // { currentPage, setNextPage }
+  // ) {
+  //   const col = collection(db, colName);
+  //   const theQuery = query(
+  //     col,
+  //     orderBy(orderedBy),
+  //     startAt(startIn),
+  //     endAt(endIn)
+  //   );
+  //   let finalList = [];
+  //   getDocs(theQuery)
+  //     .then((res) => {
+  //       console.log(res.docs);
+  //       res.docs.map((doc) => {
+  //         finalList.push(doc.data());
+  //       });
+  //       // if (finalList.length >= 30) {
+  //       //   setNextPage(currentPage + 1);
+  //       // }
+  //       console.log("we put here the finalList ", finalList);
 
-        setPrimaryValues((prev) => [...prev, ...finalList]);
-      })
-      .catch((error) => {
-        console.log(error.code);
-        console.log(error.message);
-      });
-  }
+  //       setPrimaryValues((prev) => [...prev, ...finalList]);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.code);
+  //       console.log(error.message);
+  //     });
+  // }
 
   return (
     <DashboardContext.Provider
@@ -125,7 +125,6 @@ function Dashboard() {
         setPrimaryProducts,
         setPrimaryInvoices,
         getData,
-        goNext,
       }}
     >
       <div className="dashboard">

@@ -16,6 +16,15 @@ import { Products_Catalog } from "../Website-Assets";
 // import Styles
 import "../styles/index.scss";
 import { GlobalContext } from "../App";
+import {
+  Button,
+  Group,
+  NumberInput,
+  Pagination,
+  RangeSlider,
+} from "@mantine/core";
+import { max } from "moment";
+import { useRef } from "react";
 
 //* -------------------------------- Mini Hero ------------------------------- */
 
@@ -39,6 +48,15 @@ function SearchBar({
   setIsFilterBarActive,
 }) {
   const [searchFilterText, setSearchFilterText] = useState([]);
+  const submitRef = useRef();
+  const searchWrapperRef = useRef();
+
+  useEffect(() => {
+    searchWrapperRef.current.onkeyup = (press) => {
+      submitRef.current.click();
+    };
+  });
+
   return (
     <div className="search-bar onTop" id="search-bar">
       <div className="filter">
@@ -47,9 +65,10 @@ function SearchBar({
           <label>Filter</label>
         </button>
       </div>
-      <div className="search-type ">
+      <div className="search-type" ref={searchWrapperRef}>
         <button
           className=""
+          ref={submitRef}
           onClick={() => {
             setSearchFilter(searchFilterText);
             window.scrollTo(0, 270);
@@ -77,36 +96,45 @@ function SearchBar({
 
 //* ---------------------------- Catalog Products ---------------------------- */
 
-function ProductsCatalogList({
-  filteredProductList,
-  setFilteredProductList,
-  setFilters,
-}) {
-  const [productNumberLimite, setProductNumberLimite] = useState(15);
+function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
+  const [page, setPage] = useState(1);
+  const [productPerPage, setProductPerPage] = useState(2);
+
+  let pageData = productsList.slice(
+    (page - 1) * productPerPage,
+    page * productPerPage
+  );
 
   function setFiltersToDefault() {
     setFilters({ category: [], markName: [] });
     window.scrollTo(0, 270);
   }
-  // if (filteredProductList.length <= 0) {
+  // if (productsList?.length <= 0) {
   //   var setToDefaultTimeOut = setTimeout(setFiltersToDefault, 2000);
   // }
   return (
     <div className="products-catalog btns">
       <div className="products">
-        {filteredProductList.map((card, index) => {
-          if (index < productNumberLimite) {
+        {pageData.map((card, index) => {
+          if (index < productPerPage) {
             return <Cards currentProduct={card} {...card} key={index} />;
           }
         })}
       </div>
-      {filteredProductList.length > 0 ? (
-        <button
-          className="btn CTA-3"
-          onClick={() => setProductNumberLimite(productNumberLimite + 10)}
+      {productsList?.length > 0 ? (
+        <Group
+          align={"center"}
+          position={"center"}
+          className="catalog-pagination"
         >
-          Show More
-        </button>
+          <Pagination
+            size={"md"}
+            radius={"none"}
+            page={page}
+            onChange={setPage}
+            total={Math.ceil(productsList?.length / productPerPage)}
+          />
+        </Group>
       ) : (
         <div className="svg-interactions btns">
           <img loading="lazy" src={NO_RESULT} />
@@ -154,25 +182,41 @@ function FilterBar({
   ];
   // toggle filters, function that filter products by the type u assigned
   function toggleSubFilter(event, type, filter) {
-    if (event.target.checked) {
+    if (type === "price") {
       setFilters((lastFilters) => {
         return {
           ...lastFilters,
-          [type]: [...lastFilters[type], filter],
+          [type]: filter,
         };
       });
-      console.log(type, event);
     } else {
-      setFilters((lastFilters) => {
-        return {
-          ...lastFilters,
-          [type]: [
-            ...lastFilters[type].filter((eachFilter) => eachFilter !== filter),
-          ],
-        };
-      });
+      if (event.target.checked) {
+        setFilters((lastFilters) => {
+          return {
+            ...lastFilters,
+            [type]: [...lastFilters[type], filter],
+          };
+        });
+        console.log(type, event);
+      } else {
+        setFilters((lastFilters) => {
+          return {
+            ...lastFilters,
+            [type]: [
+              ...lastFilters[type].filter(
+                (eachFilter) => eachFilter !== filter
+              ),
+            ],
+          };
+        });
+      }
     }
   }
+
+  function removeSubFilter(type) {
+    setFilters((lastFilters) => ({ ...lastFilters, [type]: [] }));
+  }
+
   useEffect(() => {
     uniq_categories.forEach((category) => {
       if (filters.category.some((filter) => category === filter)) {
@@ -191,6 +235,7 @@ function FilterBar({
       }
     });
   }, [filters]);
+
   return (
     <div className={isFilterBarActive ? "active filter-bar" : "filter-bar"}>
       <div className="filter-wrapper">
@@ -228,7 +273,10 @@ function FilterBar({
               Price range <BiChevronLeft className="chevron" />
             </summary>
             <div className="col">
-              <input type="range" className="range" />
+              <PriceRange
+                toggleSubFilter={toggleSubFilter}
+                removeSubFilter={removeSubFilter}
+              />
             </div>
           </details>
         </div>
@@ -260,14 +308,77 @@ function FilterBar({
   );
 }
 
+function PriceRange({ toggleSubFilter, removeSubFilter }) {
+  const [localRange, setLocalRange] = useState([0, 15000]);
+  let min, max;
+  min = localRange[0];
+  max = localRange[1];
+
+  useEffect(() => {});
+
+  let defaultMarks = [
+    { value: 10000, label: "10.000 DZD" },
+    { value: 100000, label: "100.000 DZD" },
+  ];
+
+  return (
+    <>
+      <RangeSlider
+        value={localRange}
+        onChange={setLocalRange}
+        step={100}
+        max={300000}
+        // marks={defaultMarks}
+      />
+      <Group align={"center"} position={"apart"} mt={"md"} mb={"md"}>
+        <NumberInput
+          label="Min"
+          value={min}
+          onChange={(current) => setLocalRange([current, max])}
+          step={1000}
+          min={0}
+          radius={"none"}
+          style={{ width: "90px" }}
+        />
+        <NumberInput
+          label="Max"
+          value={max}
+          onChange={(current) => setLocalRange([min, current])}
+          step={1000}
+          min={0}
+          radius={"none"}
+          style={{ width: "90px" }}
+        />
+      </Group>
+      <Group>
+        <Button
+          variant="light"
+          color={"red"}
+          size={"sm"}
+          radius={"none"}
+          onClick={(event) => removeSubFilter("price")}
+        >
+          Remove
+        </Button>
+        <Button
+          variant="light"
+          size={"sm"}
+          radius={"none"}
+          onClick={(event) => toggleSubFilter(event, "price", localRange)}
+        >
+          Apply
+        </Button>
+      </Group>
+    </>
+  );
+}
+
 //* --------------------------------- Catalog -------------------------------- */
 
 function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
   const { ProductsCatalog } = useContext(GlobalContext);
 
-  const [filteredProductList, setFilteredProductList] = useState([
-    ...ProductsCatalog,
-  ]);
+  const [productsList, setProductsList] = useState([...ProductsCatalog]);
   const [categoryProductList, setCategoryProductList] = useState([
     ...ProductsCatalog,
   ]);
@@ -276,24 +387,30 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
 
   let setFiltersToProducts = (filtersType, filtersTypesNames) => {
     let filteredProduct = [...ProductsCatalog];
-    filtersType
-      .filter((filtersType) => filtersType.length > 0)
-      .map((filterTypeArray, index) => {
-        return (filteredProduct = [
+    console.log(filtersType, filtersTypesNames);
+    filtersType.forEach((filterTypeArray, index) => {
+      if (filterTypeArray?.length > 0) {
+        filteredProduct = [
           ...filteredProduct.filter((product) => {
             console.log(index);
-            if (filtersType[0].length == 0) index = 1;
+            if (filtersTypesNames[index] === "price") {
+              return (
+                product.price >= filterTypeArray[0] &&
+                product.price <= filterTypeArray[1]
+              );
+            }
             return filterTypeArray.some(
               (eachFilter) => product[filtersTypesNames[index]] === eachFilter
             );
           }),
-        ]);
-      });
+        ];
+      }
+    });
     return filteredProduct;
   };
 
   function searchFiltering() {
-    let searchProductList = filteredProductList.filter((filteredProduct) =>
+    let searchProductList = productsList.filter((filteredProduct) =>
       ["name", "category", "markName"].some((eachType) =>
         filteredProduct[eachType].toLowerCase().includes(searchFilter)
       )
@@ -303,11 +420,12 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
   useEffect(() => {
     searchFiltering();
   }, [searchFilter]);
+
   useEffect(() => {
-    setFilteredProductList(
+    setProductsList(
       setFiltersToProducts(
-        [filters.category, filters.markName],
-        ["category", "markName"]
+        [filters.category, filters.markName, filters.price],
+        ["category", "markName", "price"]
       )
     );
   }, [filters]);
@@ -332,13 +450,11 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
           />
 
           <ProductsCatalogList
-            filteredProductList={
-              searchFilter.length > 0
-                ? searchFilteredProducts
-                : filteredProductList
+            productsList={
+              searchFilter?.length > 0 ? searchFilteredProducts : productsList
             }
             setFilters={setFilters}
-            setFilteredProductList={setFilteredProductList}
+            setProductsList={setProductsList}
           />
         </div>
       </div>

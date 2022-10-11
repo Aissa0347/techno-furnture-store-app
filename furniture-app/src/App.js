@@ -172,6 +172,7 @@ function App() {
   const [filters, setFilters] = useState({
     category: [],
     markName: [],
+    price: [],
   });
   const [subTotal, setSubTotal] = useState(0);
   const [userUID, setUserUID] = useState("");

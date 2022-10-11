@@ -188,9 +188,11 @@ function Invoices() {
       <h1 className="dash-title">Products</h1>
       <Widgets />
       <ListFilter
+        primaryValues={primaryInvoices}
         setFilteredValues={setFilteredInvoices}
         chipsFilter={chipsFilter}
         col="Orders"
+        date={"orderDate"}
         // RightButton={AddProductsBtn}
       />
       <InovoicesTable headCells={headCells} rows={rows} />

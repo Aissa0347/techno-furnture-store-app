@@ -21,6 +21,7 @@ import { BiEdit, BiFile, BiShowAlt } from "react-icons/bi";
 import { filter, order } from "../icons";
 import { LensTwoTone } from "@mui/icons-material";
 import { async } from "@firebase/util";
+import MainPDF from "../../../invoicePDF/mainPDF";
 
 //* ---------------------------- Frame of invoice ---------------------------- */
 
@@ -247,7 +248,9 @@ export function InvoiceView({ data, id }) {
         <h4 className="sm-title">overview</h4>
         <section className="invoice-overview-wrapper">
           {showPDF ? (
-            <div>Frame of invoice</div>
+            <div>
+              <MainPDF />
+            </div>
           ) : (
             <EditInvoice
               data={data}

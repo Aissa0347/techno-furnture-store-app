@@ -145,9 +145,11 @@ function Customer() {
     <section className="in-dash-container">
       <h1 className="dash-title">Customers</h1>
       <ListFilter
+        primaryValues={primaryCustomers}
         setFilteredValues={setFilteredCustomers}
         chipsFilter={chipsFilter}
         col="Orders"
+        date={"createdAt"}
       />
       <CustomersTable headCells={headCells} rows={rows}></CustomersTable>
     </section>
