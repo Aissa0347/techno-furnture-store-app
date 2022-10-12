@@ -22,7 +22,7 @@ import { show, download, edit, editMenu } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
 import moment from "moment";
-import { CloseButton, Group, Modal } from "@mantine/core";
+import { CloseButton, Group, Modal, NativeSelect, Select } from "@mantine/core";
 import InvoiceView from "../detailsView/invoiceView";
 
 function descendingComparator(a, b, orderBy) {
@@ -65,6 +65,7 @@ export default function EnhancedTable({ rows, headCells }) {
   const [showInvoice, setShowInvoice] = React.useState({
     state: false,
     data: {},
+    id: "",
   });
 
   console.log(orderBy);
@@ -306,9 +307,22 @@ export default function EnhancedTable({ rows, headCells }) {
                         <TableCell align="left">{row.orderQuantity}</TableCell>
                         <TableCell align="left">{row.orderCost} DZD</TableCell>
                         <TableCell align="left">
-                          <span className={row.orderStatus}>
-                            {row.orderStatus}
-                          </span>
+                          <Select
+                            variant="unstyled"
+                            rightSection={<span></span>}
+                            rightSectionWidth={0}
+                            size={"md"}
+                            radius={"none"}
+                            data={[
+                              "Pending",
+                              "Ongoing",
+                              "Returned",
+                              "Completed",
+                              "Cancelled",
+                            ]}
+                            value={row.orderStatus}
+                            className={row.orderStatus}
+                          />
                         </TableCell>
                         <TableCell align="left">
                           <div className="invoices-actions dash-actions">

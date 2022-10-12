@@ -22,6 +22,7 @@ import { filter, order } from "../icons";
 import { LensTwoTone } from "@mui/icons-material";
 import { async } from "@firebase/util";
 import MainPDF from "../../../invoicePDF/mainPDF";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 
 //* ---------------------------- Frame of invoice ---------------------------- */
 
@@ -99,7 +100,8 @@ function DashUniqueCard({
   useEffect(() => {
     if (quantityValue > 0) {
       orderProduct.quantity = quantityValue;
-      orderProduct.productTotal = ~~Product?.price * quantityValue;
+      orderProduct.productTotal =
+        (~~orderProduct?.currentPrice || ~~Product?.price) * quantityValue;
       setOrderedProducts([...orderedProducts]);
     } else if (quantityValue < 1) {
       setQuantityValue(1);
@@ -215,7 +217,6 @@ export function InvoiceView({ data, id }) {
   //? update ordered products on Firestore
 
   const updateOrder = () => {
-    console.log(orderedProducts, id);
     const orderRef = doc(db, "Orders", id);
     let totalQuantity = orderedProducts.reduce(
       (acc, current) => acc + ~~current.quantity,
@@ -248,9 +249,13 @@ export function InvoiceView({ data, id }) {
         <h4 className="sm-title">overview</h4>
         <section className="invoice-overview-wrapper">
           {showPDF ? (
-            <div>
-              <MainPDF />
-            </div>
+            <PDFViewer
+              children={<MainPDF data={orderedProducts} />}
+              height={"99%"}
+              width={"100%"}
+              className="pdf-viewer"
+              showToolbar={false}
+            />
           ) : (
             <EditInvoice
               data={data}
@@ -281,7 +286,13 @@ export function InvoiceView({ data, id }) {
               radius="none"
               size="sm"
             >
-              Download
+              <PDFDownloadLink
+                fileName="InvoiceSir"
+                document={<MainPDF data={orderedProducts} />}
+                style={{ color: "#228BE6" }}
+              >
+                Download me
+              </PDFDownloadLink>
             </Button>
           ) : (
             <div>

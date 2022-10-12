@@ -148,6 +148,8 @@ function ShoppingCart() {
           productId: product.id,
           quantity: product.numberOfProduct,
           productTotal: ~~product.numberOfProduct * ~~product.price,
+          currentPrice: ~~product.price,
+          productName: product.name,
         })),
         totalCost,
         totalQuantity,

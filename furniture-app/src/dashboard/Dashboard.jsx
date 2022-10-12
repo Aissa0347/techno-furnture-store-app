@@ -69,7 +69,7 @@ function Dashboard() {
     getDocs(theQuery)
       .then((res) => {
         res.docs.map((doc) => {
-          finalList.push(doc.data());
+          finalList.push({ ...doc.data(), id: doc.id });
         });
         setPrimaryValues([...finalList]);
       })

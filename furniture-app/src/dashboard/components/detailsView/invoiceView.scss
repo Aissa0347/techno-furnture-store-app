@@ -41,6 +41,12 @@
   height: 90%;
   overflow: auto;
 }
+
+.pdf-viewer {
+  min-height: 99%;
+  max-height: 99%;
+}
+
 .invoice-products-wrapper {
   height: 100%;
   display: flex;
