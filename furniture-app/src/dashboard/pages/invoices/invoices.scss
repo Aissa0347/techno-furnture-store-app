@@ -1,34 +1,59 @@
-.Completed {
-  padding: 0.5rem;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
+.status {
+  display: flex;
+  align-items: center;
+  input {
+    width: 100%;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  width: fit-content;
+  min-width: 90px;
+  max-width: 100px;
+  max-height: 35px;
+  padding: 0.5rem 0rem;
+}
+
+.dashboard .mantine-Select-dropdown {
+  min-width: fit-content;
+  border-radius: 0px;
+  .mantine-Select-item {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 0px !important;
+  }
+}
+
+.completed {
+  input {
+    color: rgb(35, 148, 7);
+  }
   background-color: rgba(21, 255, 0, 0.329);
-  color: rgb(35, 148, 7);
 }
-.Returned {
-  padding: 0.5rem;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
+.returned {
+  input {
+    color: rgb(255, 56, 56);
+  }
   background-color: rgba(243, 66, 66, 0.212);
-  color: rgb(255, 56, 56);
 }
-.Pending {
-  padding: 0.5rem;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
+.pending {
+  input {
+    color: rgb(255, 94, 0);
+  }
   background-color: rgb(253, 203, 181);
-  color: rgb(255, 94, 0);
 }
-.Canceled {
-  padding: 0.5rem;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: bold;
+.cancelled {
+  input {
+    color: red;
+  }
   background-color: rgba(255, 0, 0, 0.212);
-  color: red;
+}
+.ongoing {
+  input {
+    color: rgb(0, 89, 255);
+  }
+  background-color: rgba(0, 89, 255, 0.212);
 }
 
 .invoices-actions {

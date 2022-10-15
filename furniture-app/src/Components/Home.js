@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 
 import { GlobalContext } from "../App";
 import { brands } from "../Website-Assets";
-import { Card, Cards } from "./Card";
+import { ProductsCard } from "./Card";
 import { CategoryP } from "../Website-Assets/index";
 import { FeautreP } from "../Website-Assets/index";
 import { semiCategory } from "../Website-Assets/index";
@@ -23,6 +23,7 @@ import {
   RiWhatsappLine,
 } from "react-icons/ri";
 import uniqid from "uniqid";
+import { SimpleGrid } from "@mantine/core";
 
 //* -------------------------------------------------------------------------- */
 //*                                 Components                                 */
@@ -127,15 +128,25 @@ function ProductsM() {
       <h2>Our Products</h2>
       {/* <Control /> */}
       {(() => {
-        if (isSmaller) {
+        if (false) {
           return <Products ourProducts={ourProducts} />;
         } else {
           return (
-            <div className="main-Products cards">
+            <SimpleGrid
+              cols={5}
+              breakpoints={[
+                { maxWidth: 1400, cols: 4, spacing: "md" },
+                { maxWidth: 981, cols: 3, spacing: "sm" },
+                { maxWidth: 768, cols: 2, spacing: "sm" },
+                { maxWidth: 400, cols: 1, spacing: "xs" },
+              ]}
+            >
               {ourProducts.map((card) => {
-                return <Cards {...card} currentProduct={card} key={card.id} />;
+                return (
+                  <ProductsCard {...card} currentProduct={card} key={card.id} />
+                );
               })}
-            </div>
+            </SimpleGrid>
           );
         }
       })()}

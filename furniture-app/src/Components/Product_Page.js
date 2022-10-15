@@ -5,7 +5,6 @@ import React, { useContext, useEffect, useState } from "react";
 // import Components needed
 import { MediaSlider, SuggestedProducts } from "./Products";
 import { NewsLetter } from "./Home";
-import { Cards } from "./Card";
 import { GlobalContext } from "../App";
 
 // import DATA

@@ -427,7 +427,7 @@ export default function NewProductPopup({
                 onClick={() => {
                   console.log(newImageList);
                   updateDoc(
-                    doc(db, "ProductsList", primaryValues.docId),
+                    doc(db, "ProductsList", primaryValues.id),
                     assignedProduct()
                   ).then((res) => {
                     updateData();

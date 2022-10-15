@@ -158,7 +158,7 @@ label {
 }
 .filter-bar {
   position: sticky;
-  top: 160px;
+  top: 86px;
   display: none;
   width: max(25%, 300px);
   height: min-content;
@@ -201,6 +201,9 @@ label {
 
 details {
   .col {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     padding: 1rem 0.5rem 0rem;
     user-select: none;
     input {

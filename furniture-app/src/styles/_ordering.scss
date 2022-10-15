@@ -16,7 +16,6 @@
   width: 43%;
   height: 100%;
   .shopping_cart_list {
-    height: 60vh;
     overflow-y: auto;
   }
 }
@@ -234,6 +233,28 @@
     text-align: center;
   }
 }
+
+.cardProducts-drawer {
+  display: flex;
+  flex-direction: column;
+  .shopping_cart_total {
+    padding: 0.5rem 1rem;
+    margin-bottom: 0px !important;
+    min-height: max-content;
+    border: none;
+    border-top: $borderThirdColor;
+  }
+}
+.cardProducts-drawer .mantine-Drawer-header,
+.favorite-drawer .mantine-Drawer-header {
+  flex-direction: row-reverse;
+
+  .mantine-Drawer-closeButton {
+    border-radius: 0px;
+    color: red;
+  }
+}
+
 .favorite,
 .bag {
   position: relative;
@@ -262,6 +283,7 @@
     }
   }
 }
+
 .favorite_products.active,
 .card_products.active {
   right: 1%;

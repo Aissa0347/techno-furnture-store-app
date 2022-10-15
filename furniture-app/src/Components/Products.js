@@ -32,7 +32,7 @@ import {
 
 // import data
 import { CategoryP, FeautreP, Products_Catalog } from "../Website-Assets";
-import { Cards, Card } from "./Card";
+import { ProductsCard, SmallCard } from "./Card";
 import { useParams } from "react-router-dom";
 
 //* --------------------------- Our Products component --------------------------- */
@@ -56,7 +56,7 @@ export default function Products({ ourProducts }) {
           return (
             <SwiperSlide key={card.id}>
               {" "}
-              <Cards {...card} currentProduct={card} />{" "}
+              <ProductsCard {...card} currentProduct={card} />{" "}
             </SwiperSlide>
           );
         })}
@@ -96,7 +96,7 @@ export function Category() {
           {CategoryP.map((Category, index) => {
             return (
               <SwiperSlide className="category" key={uniqid.time()}>
-                <Card {...Category} />
+                <SmallCard {...Category} />
               </SwiperSlide>
             );
           })}
@@ -200,7 +200,7 @@ export function SuggestedProducts() {
           {filteredSuggestedProducts.map((Product) => {
             return (
               <SwiperSlide key={uniqid.time()}>
-                <Cards {...Product} currentProduct={Product} />
+                <ProductsCard {...Product} currentProduct={Product} />
               </SwiperSlide>
             );
           })}

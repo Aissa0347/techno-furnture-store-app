@@ -8,7 +8,7 @@ import NOT_FOUND from "../Website-Assets/SVG/NOT_FOUND.svg";
 import NO_RESULT from "../Website-Assets/SVG/NO_RESULT.svg";
 
 // import Components needed
-import { Cards } from "./Card";
+import { ProductsCard } from "./Card";
 
 // import DATA
 import { Products_Catalog } from "../Website-Assets";
@@ -22,6 +22,7 @@ import {
   NumberInput,
   Pagination,
   RangeSlider,
+  SimpleGrid,
 } from "@mantine/core";
 import { max } from "moment";
 import { useRef } from "react";
@@ -98,7 +99,7 @@ function SearchBar({
 
 function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
   const [page, setPage] = useState(1);
-  const [productPerPage, setProductPerPage] = useState(2);
+  const [productPerPage, setProductPerPage] = useState(25);
 
   let pageData = productsList.slice(
     (page - 1) * productPerPage,
@@ -114,13 +115,21 @@ function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
   // }
   return (
     <div className="products-catalog btns">
-      <div className="products">
+      <SimpleGrid
+        cols={5}
+        breakpoints={[
+          { maxWidth: 1400, cols: 4, spacing: "md" },
+          { maxWidth: 981, cols: 3, spacing: "sm" },
+          { maxWidth: 768, cols: 2, spacing: "sm" },
+          { maxWidth: 400, cols: 1, spacing: "xs" },
+        ]}
+      >
         {pageData.map((card, index) => {
           if (index < productPerPage) {
-            return <Cards currentProduct={card} {...card} key={index} />;
+            return <ProductsCard currentProduct={card} {...card} key={index} />;
           }
         })}
-      </div>
+      </SimpleGrid>
       {productsList?.length > 0 ? (
         <Group
           align={"center"}

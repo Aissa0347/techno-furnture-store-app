@@ -121,7 +121,7 @@ function setAnalytics() {
     });
 }
 
-export function setStaticValue(field, amount, status) {
+export function setStaticValue(field, amount, status, lastStatus) {
   const idOfCollection = moment().format("MMMM, YYYY");
   const nameOfDayObject = moment().format("DD-MM");
   const monthDocRef = doc(db, "AnalyticsData", idOfCollection);
@@ -133,7 +133,8 @@ export function setStaticValue(field, amount, status) {
           ...oldData,
           ordersStatus: {
             ...oldData.ordersStatus,
-            [status]: oldData.ordersStatus[status] + amount,
+            [status]: ~~amount + ~~oldData.ordersStatus[status],
+            [lastStatus]: ~~oldData.ordersStatus[lastStatus] - ~~amount,
           },
         },
       });
@@ -143,16 +144,16 @@ export function setStaticValue(field, amount, status) {
           ...oldData,
           ordersStatus: {
             ...oldData.ordersStatus,
-            pending: oldData.ordersStatus.pending + amount,
+            pending: ~~oldData.ordersStatus.pending + ~~amount,
           },
-          orders: oldData.orders + amount,
+          orders: ~~oldData.orders + ~~amount,
         },
       });
     } else {
       updateDoc(monthDocRef, {
         [nameOfDayObject]: {
           ...oldData,
-          [field]: oldData[field] + amount,
+          [field]: ~~oldData[field] + ~~amount,
         },
       });
     }
@@ -185,7 +186,7 @@ function App() {
     orderId: "",
     orderDate: "",
     orderList: [],
-    status: "Pending",
+    status: "pending",
     totalCost: "",
     totalQuantity: "",
     avatarImg: "",
@@ -317,6 +318,7 @@ function App() {
     const ordersInfosRef = doc(db, "GeneralInfos", "ORDERS-GENERAL-INFOS");
     const orderRef = collection(db, "Orders");
     const userRef = query(collection(db, "Users"), where("id", "==", userUID));
+    const notificationsRef = doc(db, "Notifications", "Orders-Notifications");
     getDoc(ordersInfosRef)
       .then((res) => {
         const currentValue = res.data().ordersCount;
@@ -338,6 +340,25 @@ function App() {
             phoneNumber: newOrderData.phoneNumber,
           }).then((res) => console.log("thanks its fullfilled : ", res));
         });
+        getDoc(notificationsRef)
+          .then((res) => {
+            const oldData = res.data().notifications;
+            const avatarImg = auth.currentUser.photoURL;
+            updateDoc(notificationsRef, {
+              notifications: [
+                ...oldData,
+                {
+                  name: newOrderData.fullName,
+                  action: "order",
+                  time: moment().unix(),
+                  userId: newOrderData.userId,
+                  orderId: newOrderData.orderId,
+                  avatarImg,
+                },
+              ],
+            }).catch((error) => console.log(error.code, error.message));
+          })
+          .catch((error) => console.log(error.code, error.message));
       })
       .catch((error) => {
         console.log(error.code);

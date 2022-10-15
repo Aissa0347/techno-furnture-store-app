@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import logo from "../Website-Assets/logo.png";
 import {
+  BiCartAlt,
   BiCategory,
   BiChevronDown,
   BiCreditCard,
@@ -17,7 +18,7 @@ import "../styles/index.scss";
 
 //  import Components
 import App, { GlobalContext, scrollToTop } from "../App";
-import { UniqueCard } from "./Card";
+import { DashUniqueCard, FavUniqueCard } from "./Card";
 import { ShoppingCartList } from "./Products";
 import { Footer } from "./Home";
 
@@ -29,6 +30,15 @@ import { Outlet } from "react-router-dom";
 import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
 import FAVORITE_SVG from "../Website-Assets/SVG/FAVORITE_SVG (2).svg";
 import AvatarProfile from "./smallComponents/avatarProfile/avatarProfile";
+import {
+  ActionIcon,
+  Button,
+  createStyles,
+  Drawer,
+  Group,
+  SimpleGrid,
+  Stack,
+} from "@mantine/core";
 
 //* --------------------------- Bag Side Component --------------------------- */
 
@@ -40,42 +50,40 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
   console.log("check if it;s updated : ", cardProducts);
   // set on value change subtotal change also
   return (
-    <section
-      className="shopping_cart shopping_bag card_products"
-      id="card_products"
+    <Drawer
+      position="right"
+      size={"550px"}
+      padding={"md"}
+      className="cardProducts-drawer"
+      opened={showCardProducts}
+      onClose={() => setShowCardProducts(false)}
+      title="Card Products List"
     >
-      <BiX
-        className="exit-icon icon"
-        onClick={() => {
-          let cartProducts = document.getElementById("card_products");
-          if (showCardProducts) {
-            cartProducts.classList.remove("active");
-            setShowCardProducts(false);
-          }
-        }}
-      />
-      <h3 className="title">My Favorite</h3>
-      {cardProducts.length < 1 ? (
-        <div className="svg-interactions">
-          <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
-        </div>
-      ) : (
-        <ul className="shopping_cart_list">
-          {cardProducts.map((Product) => {
-            return <UniqueCard Product={Product} />;
-          })}
-        </ul>
-      )}
-      <ul className="shopping_cart_total unique_card">
-        <li className="facture_price total">
-          <h5 className="cart-total">SUBTOTAL</h5>
-          <h5>{`${subTotal}`} DZD</h5>
-        </li>
-      </ul>
-      <div className="btns">
-        <Link to={"/ordering"}>
-          <button
-            className="CTA btn"
+      <Stack justify={"space-between"} style={{ flex: 1 }}>
+        {cardProducts.length < 1 ? (
+          <div className="svg-interactions">
+            <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
+          </div>
+        ) : (
+          <SimpleGrid style={{ width: "100%" }}>
+            {cardProducts.map((Product) => {
+              return <DashUniqueCard Product={Product} />;
+            })}
+          </SimpleGrid>
+        )}
+        <Stack style={{ width: "100%", gap: "8px" }}>
+          <div className="shopping_cart_total unique_card">
+            <li className="facture_price total">
+              <h5 className="cart-total">SUBTOTAL</h5>
+              <h5>{`${subTotal}`} DZD</h5>
+            </li>
+          </div>
+
+          <Button
+            size="md"
+            radius={"none"}
+            fullWidth
+            color={"red"}
             onClick={() => {
               let cartProducts = document.getElementById("card_products");
               if (showCardProducts) {
@@ -84,11 +92,11 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
               }
             }}
           >
-            Check Out
-          </button>
-        </Link>
-      </div>
-    </section>
+            <Link to={"/ordering"}>Check Out</Link>
+          </Button>
+        </Stack>
+      </Stack>
+    </Drawer>
   );
 }
 
@@ -100,103 +108,31 @@ function FavoriteProducts({
   setShowFavoriteProducts,
 }) {
   return (
-    <section
-      className="shopping_cart shopping_bag favorite_products"
+    <Drawer
+      position="right"
+      size={"550px"}
+      padding={"md"}
+      title="FAVORITE PRODUCTS"
+      opened={showFavoriteProducts}
+      onClose={() => setShowFavoriteProducts(false)}
       id="favorite_products"
+      className="favorite-drawer"
     >
-      <BiX
-        className="exit-icon icon"
-        onClick={() => {
-          let favProducts = document.getElementById("favorite_products");
-          if (showFavoriteProducts) {
-            favProducts.classList.remove("active");
-            setShowFavoriteProducts(false);
-          }
-        }}
-      />
-      <h3 className="title">My Favorite</h3>
       {favoriteProducts.length < 1 ? (
         <div className="svg-interactions">
           <img loading="lazy" src={FAVORITE_SVG} alt="FAVORITE SVG" />
         </div>
       ) : (
-        <ul className="shopping_cart_list">
+        <SimpleGrid cols={1}>
           {favoriteProducts.map((Product) => {
-            return <UniqueCardFav Product={Product} />;
+            return <FavUniqueCard Product={Product} />;
           })}
-        </ul>
+        </SimpleGrid>
       )}
-    </section>
+    </Drawer>
   );
 }
 
-function UniqueCardFav({ Product }) {
-  const {
-    toggleToFavorite,
-    isFavorite,
-    addToFavorite,
-    removeFromFavorite,
-    cardProducts,
-    setCardProducts,
-    favoriteProducts,
-    setFavoriteProducts,
-  } = useContext(GlobalContext);
-  const [productNumber, setProductNumber] = useState(1);
-
-  return (
-    <li className="unique_card product-info">
-      <Link to={`catalog/${Product.id}`}>
-        <div className="img_name">
-          <img
-            src={Product.img[0].url}
-            alt={Product.name}
-            className="product_image"
-          />
-          <div className="product_title">
-            <h5>{Product.name}</h5>
-            <h4>{Product.category}</h4>
-          </div>
-        </div>
-      </Link>
-      <label htmlFor="Qty-input" className="product_quantity">
-        {" "}
-        Qty:&nbsp;
-        <button onClick={() => setProductNumber(+(productNumber + 1))}>
-          +
-        </button>
-        <input
-          type="number"
-          name="Qty-input"
-          id="Qty-input"
-          value={productNumber}
-          onChange={(event) => setProductNumber(+event.target.value)}
-        />
-        <button onClick={() => setProductNumber(+(productNumber - 1))}>
-          -
-        </button>
-      </label>
-      <h4 className="product_price">{Product.price} DZD</h4>
-      <BiX
-        className="remove-icon icon"
-        onClick={() =>
-          removeFromFavorite(Product, favoriteProducts, setFavoriteProducts)
-        }
-      />
-      <div className="btns">
-        <button
-          className="btn CTA"
-          onClick={() => {
-            addToFavorite(Product, cardProducts, setCardProducts);
-            Product.numberOfProduct = productNumber;
-            setProductNumber(0);
-          }}
-        >
-          Add to cart
-        </button>
-      </div>
-    </li>
-  );
-}
 //* ---------------------------- Helper Functions ---------------------------- */
 
 // function stickyBar(element) {

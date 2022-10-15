@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -24,6 +24,12 @@ import { visuallyHidden } from "@mui/utils";
 import moment from "moment";
 import { CloseButton, Group, Modal, NativeSelect, Select } from "@mantine/core";
 import InvoiceView from "../detailsView/invoiceView";
+import { collection, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase/firebaseConfig";
+import { useEffect } from "react";
+import { setStaticValue } from "../../../App";
+import MainPDF from "../../../invoicePDF/mainPDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -245,6 +251,45 @@ export default function EnhancedTable({ rows, headCells }) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  //* ---------------------------- Status Component ---------------------------- */
+
+  function SelectStatus({ row }) {
+    const [currentStatus, setCurrentStatus] = useState(row.orderStatus);
+
+    function updateStatus(currentObj, newStatus) {
+      const orderRef = doc(db, "Orders", currentObj.id);
+      updateDoc(orderRef, { status: newStatus }).then((res) => {
+        console.log("the current :", currentStatus);
+        console.log("the new one : ", currentObj);
+        setStaticValue("ordersStatus", 1, newStatus, currentStatus);
+        setCurrentStatus(newStatus);
+        if (newStatus === "completed") {
+          setStaticValue("sales", currentObj.orderCost);
+        } else if (currentStatus === "completed") {
+          setStaticValue("sales", -currentObj.orderCost);
+        }
+      });
+    }
+
+    useEffect(() => {
+      console.log(currentStatus);
+    }, [currentStatus]);
+
+    return (
+      <Select
+        variant="unstyled"
+        rightSection={<span></span>}
+        rightSectionWidth={0}
+        size={"sm"}
+        radius={"none"}
+        data={["pending", "ongoing", "returned", "completed", "cancelled"]}
+        value={currentStatus}
+        onChange={(selectedValue) => updateStatus(row, selectedValue)}
+        className={"status " + currentStatus}
+      />
+    );
+  }
+
   return (
     <>
       <Box sx={{ width: "100%" }}>
@@ -272,6 +317,7 @@ export default function EnhancedTable({ rows, headCells }) {
                   .map((row, index) => {
                     const isItemSelected = isSelected(row.orderId);
                     const labelId = `enhanced-table-checkbox-${index}`;
+                    console.log("this is the row : ", row);
                     let createdAtMoment = moment.unix(row.inDate?.seconds);
                     let createdAt = moment(createdAtMoment).format("MMM DD, y");
                     return (
@@ -307,22 +353,7 @@ export default function EnhancedTable({ rows, headCells }) {
                         <TableCell align="left">{row.orderQuantity}</TableCell>
                         <TableCell align="left">{row.orderCost} DZD</TableCell>
                         <TableCell align="left">
-                          <Select
-                            variant="unstyled"
-                            rightSection={<span></span>}
-                            rightSectionWidth={0}
-                            size={"md"}
-                            radius={"none"}
-                            data={[
-                              "Pending",
-                              "Ongoing",
-                              "Returned",
-                              "Completed",
-                              "Cancelled",
-                            ]}
-                            value={row.orderStatus}
-                            className={row.orderStatus}
-                          />
+                          <SelectStatus row={row} />
                         </TableCell>
                         <TableCell align="left">
                           <div className="invoices-actions dash-actions">
@@ -338,12 +369,16 @@ export default function EnhancedTable({ rows, headCells }) {
                             >
                               {show}
                             </span>
-                            <span className="action">{download}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="edit-menu dash-actions">
-                            <span className="action">{editMenu}</span>
+                            <span className="action">
+                              <PDFDownloadLink
+                                fileName="InvoiceSir"
+                                document={
+                                  <MainPDF data={row.order.orderList} />
+                                }
+                              >
+                                {download}
+                              </PDFDownloadLink>
+                            </span>
                           </div>
                         </TableCell>
                       </TableRow>
