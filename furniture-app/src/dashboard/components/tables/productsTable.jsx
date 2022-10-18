@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -24,6 +24,9 @@ import { visuallyHidden } from "@mui/utils";
 
 //  Import Icons
 import { off, on, edit } from "../icons";
+import { Select } from "@mantine/core";
+import { db } from "../../../firebase/firebaseConfig";
+import { updateDoc, doc } from "firebase/firestore";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -245,6 +248,42 @@ export default function EnhancedTable({
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  //* ------------------------- Change Products Status ------------------------- */
+
+  function SelectStatus({ row }) {
+    const [currentStatus, setCurrentStatus] = useState(row.productStatus);
+
+    function updateStatus(currentObj, newStatus) {
+      const orderRef = doc(db, "ProductsList", currentObj.id);
+      updateDoc(orderRef, { productStatus: newStatus }).then((res) => {
+        console.log("the current :", currentStatus);
+        console.log("the new one : ", currentObj);
+      });
+      setCurrentStatus(newStatus);
+    }
+
+    useEffect(() => {
+      console.log(currentStatus);
+    }, [currentStatus]);
+
+    return (
+      <Select
+        variant="unstyled"
+        rightSection={<span></span>}
+        rightSectionWidth={0}
+        size={"sm"}
+        radius={"none"}
+        data={[
+          { value: "outStock", label: "OUT STOCK" },
+          { value: "inStock", label: "IN STOCK" },
+        ]}
+        value={currentStatus}
+        onChange={(selectedValue) => updateStatus(row, selectedValue)}
+        className={"status " + "product-" + currentStatus}
+      />
+    );
+  }
+
   return (
     <Box sx={{ width: "100%" }}>
       <Paper sx={{ width: "100%", mb: 2 }}>
@@ -302,9 +341,7 @@ export default function EnhancedTable({
                       <TableCell align="left">{row?.productQuantity}</TableCell>
                       <TableCell align="left">{row?.price}</TableCell>
                       <TableCell align="left">
-                        <span className={row.productStatus}>
-                          {row?.productStatus}
-                        </span>
+                        <SelectStatus row={row} />
                       </TableCell>
                       <TableCell align="left">
                         <div className="product-actions dash-actions">

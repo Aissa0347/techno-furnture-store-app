@@ -9,6 +9,7 @@ import { db } from "../../../firebase/firebaseConfig";
 import { useState } from "react";
 import ListFilter from "../../components/filtering/listFilter";
 import { DashboardContext } from "../../Dashboard";
+import { Tabs } from "@mantine/core";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -130,6 +131,8 @@ function Invoices() {
   const { setPrimaryInvoices, primaryInvoices, getData } =
     useContext(DashboardContext);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
+  const [generalStatus, setGeneralStatus] = useState("all");
+  const [trigger, setTrigger] = useState(true);
 
   // const invoicesRef = collection(db, "Orders");
   // const getInvoicesList = () => {
@@ -137,6 +140,11 @@ function Invoices() {
   //     setInvoicesList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
   //   );
   // };
+
+  function filterStatus(targetedList, currentStatus) {
+    if (currentStatus === "all") return targetedList;
+    return targetedList.filter((listItem) => listItem.status === currentStatus);
+  }
 
   //* ------------------- Search Event and Regetting the data ------------------ */
 
@@ -153,8 +161,8 @@ function Invoices() {
   ];
 
   //? wrap list of customers into the table
-  rows = [];
   function wrapInvoices(listOfInvoices = primaryInvoices) {
+    rows = [];
     listOfInvoices.map((order) => {
       rows.push(
         createData(
@@ -172,21 +180,42 @@ function Invoices() {
         )
       );
     });
+    setTrigger((prev) => !prev);
   }
-
-  wrapInvoices(
-    filteredInvoices?.length >= 1 ? filteredInvoices : primaryInvoices
-  );
 
   useEffect(() => {
     if (primaryInvoices.length < 1)
       getData("Orders", setPrimaryInvoices, "orderDate");
   }, []);
 
+  useEffect(() => {
+    wrapInvoices(
+      filteredInvoices?.length >= 1
+        ? filterStatus(filteredInvoices, generalStatus)
+        : filterStatus(primaryInvoices, generalStatus)
+    );
+  }, [filteredInvoices, primaryInvoices, generalStatus]);
+
   return (
     <section className="dash-products in-dash-container">
       <h1 className="dash-title">Products</h1>
       <Widgets />
+      <Tabs
+        defaultValue={"all"}
+        value={generalStatus}
+        onTabChange={setGeneralStatus}
+        radius={"none"}
+        color={"red"}
+      >
+        <Tabs.List grow>
+          <Tabs.Tab value="all">All</Tabs.Tab>
+          <Tabs.Tab value="pending">PENDING</Tabs.Tab>
+          <Tabs.Tab value="completed">COMPLETED</Tabs.Tab>
+          <Tabs.Tab value="ongoing">ONGOING</Tabs.Tab>
+          <Tabs.Tab value="returned">RETURNED</Tabs.Tab>
+          <Tabs.Tab value="cancelled">CANCELLED</Tabs.Tab>
+        </Tabs.List>
+      </Tabs>
       <ListFilter
         primaryValues={primaryInvoices}
         setFilteredValues={setFilteredInvoices}

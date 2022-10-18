@@ -262,6 +262,7 @@ export default function EnhancedTable({ rows, headCells }) {
         console.log("the current :", currentStatus);
         console.log("the new one : ", currentObj);
         setStaticValue("ordersStatus", 1, newStatus, currentStatus);
+        row.orderStatus = newStatus;
         setCurrentStatus(newStatus);
         if (newStatus === "completed") {
           setStaticValue("sales", currentObj.orderCost);

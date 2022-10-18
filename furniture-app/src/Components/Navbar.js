@@ -59,13 +59,13 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
       onClose={() => setShowCardProducts(false)}
       title="Card Products List"
     >
-      <Stack justify={"space-between"} style={{ flex: 1 }}>
+      <Stack justify={"space-between"} style={{ flex: 1, overflow: "hidden" }}>
         {cardProducts.length < 1 ? (
           <div className="svg-interactions">
             <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
           </div>
         ) : (
-          <SimpleGrid style={{ width: "100%" }}>
+          <SimpleGrid style={{ width: "100%", overflow: "auto" }}>
             {cardProducts.map((Product) => {
               return <DashUniqueCard Product={Product} />;
             })}
@@ -78,19 +78,14 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
               <h5>{`${subTotal}`} DZD</h5>
             </li>
           </div>
-
           <Button
             size="md"
             radius={"none"}
             fullWidth
             color={"red"}
-            onClick={() => {
-              let cartProducts = document.getElementById("card_products");
-              if (showCardProducts) {
-                cartProducts.classList.remove("active");
-                setShowCardProducts(false);
-              }
-            }}
+            uppercase
+            className="checkout"
+            onClick={() => setShowCardProducts(false)}
           >
             <Link to={"/ordering"}>Check Out</Link>
           </Button>

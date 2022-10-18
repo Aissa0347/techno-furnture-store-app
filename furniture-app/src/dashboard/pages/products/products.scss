@@ -1,5 +1,6 @@
 .dash-products .widgets {
   margin-top: 1rem;
+
   .widget {
     max-width: 300px;
     height: 120px;
@@ -12,7 +13,7 @@
   justify-content: space-between;
   gap: 1rem;
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 10px;
   margin-bottom: 1rem;
   .filter-btn {
     height: 50px;
@@ -59,23 +60,17 @@
 }
 
 .product-table {
-  .Stock {
-    display: inline-block;
-    width: max-content;
-    padding: 0.5rem;
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: bold;
+  .product-inStock {
+    input {
+      color: rgb(35, 148, 7);
+    }
     background-color: rgba(21, 255, 0, 0.329);
-    color: rgb(35, 148, 7);
   }
-  .Pending {
-    padding: 0.5rem;
-    text-transform: uppercase;
-    font-size: 12px;
-    font-weight: bold;
-    background-color: rgba(255, 0, 0, 0.212);
-    color: red;
+  .product-outStock {
+    input {
+      color: rgb(255, 56, 56);
+    }
+    background-color: rgba(243, 66, 66, 0.212);
   }
 }
 
@@ -134,8 +129,6 @@
   }
   .dash-container .filters {
     gap: 0.5rem;
-    .filter-btn {
-    }
     .new-product {
       .icon {
         margin: 0%;

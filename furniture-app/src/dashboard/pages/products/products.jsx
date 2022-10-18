@@ -2,7 +2,13 @@
 import ProductsTable from "../../components/tables/productsTable";
 import NewProductPopup from "../../components/popups/newProduct/newProductPopup";
 import { ProductDetailShow } from "../../../Components/Product_Page";
-import { MantineProvider, CloseButton, Group, Button } from "@mantine/core";
+import {
+  MantineProvider,
+  CloseButton,
+  Group,
+  Button,
+  Tabs,
+} from "@mantine/core";
 import {
   onSnapshot,
   collection,
@@ -119,11 +125,15 @@ function createData(
   };
 }
 
+let rows = [];
+
 function Products() {
   const { primaryProducts, setPrimaryProducts, getData } =
     useContext(DashboardContext);
   const [newProductPopup, setNewProductPopup] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [generalStatus, setGeneralStatus] = useState("all");
+  const [trigger, setTrigger] = useState(true);
   const [editProductPopup, setEditProductPopup] = useState({
     state: false,
     defaultValues: "",
@@ -133,10 +143,14 @@ function Products() {
     currentProduct: defaultProduct,
   });
 
-  useEffect(() => {
-    if (primaryProducts.length < 1) getData("ProductsList", setPrimaryProducts);
-  }, []);
+  console.log("check those lists : ", rows);
 
+  function filterStatus(targetedList, currentStatus) {
+    if (currentStatus === "all") return targetedList;
+    return targetedList.filter(
+      (listItem) => listItem.productStatus === currentStatus
+    );
+  }
   //* ------------------- Search Event and Regetting the data ------------------ */
 
   const chipsFilter = [
@@ -148,8 +162,8 @@ function Products() {
   ];
 
   //? wrap list of customers into the table
-  let rows = [];
   function wrapProducts(ProductsList = primaryProducts) {
+    rows = [];
     ProductsList.map((product) => {
       rows.push(
         createData(
@@ -164,11 +178,20 @@ function Products() {
         )
       );
     });
+    setTrigger((prev) => !prev);
   }
 
-  wrapProducts(
-    filteredProducts?.length >= 1 ? filteredProducts : primaryProducts
-  );
+  useEffect(() => {
+    if (primaryProducts.length < 1) getData("ProductsList", setPrimaryProducts);
+  }, []);
+
+  useEffect(() => {
+    wrapProducts(
+      filteredProducts?.length >= 1
+        ? filterStatus(filteredProducts, generalStatus)
+        : filterStatus(primaryProducts, generalStatus)
+    );
+  }, [filteredProducts, primaryProducts, generalStatus]);
 
   const AddProductsBtn = ({ radius, size }) => (
     <Button
@@ -189,6 +212,19 @@ function Products() {
       <section className="dash-products in-dash-container">
         <h1 className="dash-title">Products</h1>
         <Widgets />
+        <Tabs
+          defaultValue={"all"}
+          value={generalStatus}
+          onTabChange={setGeneralStatus}
+          radius={"none"}
+          color={"red"}
+        >
+          <Tabs.List grow>
+            <Tabs.Tab value="all">All</Tabs.Tab>
+            <Tabs.Tab value="inStock">IN STOCK</Tabs.Tab>
+            <Tabs.Tab value="outStock">OUT STOCK</Tabs.Tab>
+          </Tabs.List>
+        </Tabs>
         <ListFilter
           primaryValues={primaryProducts}
           setFilteredValues={setFilteredProducts}

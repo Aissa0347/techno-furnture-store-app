@@ -6,6 +6,7 @@ import {
   Button,
   NumberInput,
   MultiSelect,
+  CloseButton,
 } from "@mantine/core";
 import { AddCategoriesPopup, AddColorsPopup } from "./addPopup";
 import TextArea from "../../textArea/textArea";
@@ -63,7 +64,7 @@ export default function NewProductPopup({
   const [isUploadImagesLoading, setIsUploadImagesLoading] = useState(false);
   const [selectColors, setSelectColors] = useState({
     state: false,
-    value: [""],
+    value: [],
     data: ["+ ADD NEW COLOR"],
     id: "",
   });
@@ -230,6 +231,8 @@ export default function NewProductPopup({
     );
   };
 
+  console.log("colors : ", primaryValues?.colors);
+
   return (
     <MantineProvider>
       <div className="popup popup_new-product">
@@ -284,7 +287,10 @@ export default function NewProductPopup({
               label="Status"
               radius="none"
               size="md"
-              data={["In Stock", "Pending"]}
+              data={[
+                { value: "inStock", label: "IN STOCK" },
+                { value: "outStock", label: "OUT OF STOCK" },
+              ]}
               defaultValue={primaryValues?.productStatus}
               name="status"
               withAsterisk
@@ -310,7 +316,7 @@ export default function NewProductPopup({
             />
           </div>
           <div className="input half ">
-            <MultiSelect
+            {/* <MultiSelect
               placeholder="Pick all you like"
               label="Colors"
               radius="none"
@@ -322,7 +328,7 @@ export default function NewProductPopup({
               style={{ marginBottom: "20px" }}
               ref={selectRef}
               onChange={(event) => {
-                console.log("this is colors event", selectColors.value);
+                console.log("this is colors event", event);
                 setSelectColors((prev) => {
                   return {
                     ...prev,
@@ -338,9 +344,76 @@ export default function NewProductPopup({
                   setSelectColors
                 );
               }}
+              valueComponent={(props) => {
+                const { label, value, onRemove, ref, ...others } = props;
+                console.log("check tose others : ", others);
+                return (
+                  <div className="color-label">
+                    <span
+                      className="color-shower"
+                      style={{ backgroundColor: value?.value || value }}
+                    ></span>
+                    <span>{label}</span>
+                    <CloseButton
+                      variant="transparent"
+                      size={"xs"}
+                      onMouseDown={onRemove}
+                    />
+                  </div>
+                );
+              }}
+              itemComponent={(props) => {
+                const { label, value, ref, className, ...others } = props;
+                console.log("check tose props : ", props);
+                return (
+                  <div
+                    ref={ref}
+                    {...others}
+                    className={className + " color-label color-item "}
+                  >
+                    <span
+                      className="color-shower"
+                      style={{ backgroundColor: value?.value || value }}
+                    ></span>
+                    <span>{label}</span>
+                  </div>
+                );
+              }}
               nothingFound="No options"
               data={selectColors.data}
               value={selectColors.value}
+            /> */}
+            <MultiSelect
+              placeholder="Pick all you like"
+              label="Colors"
+              radius="none"
+              size="md"
+              name="colors"
+              className="multi-select"
+              searchable
+              style={{ marginBottom: "20px" }}
+              ref={selectRef}
+              nothingFound="No options"
+              data={[
+                {
+                  value: { colorName: "truck", colorRref: "522235" },
+                  label: "truck",
+                  image: "nike",
+                },
+                {
+                  value: { colorName: "basket", colorRref: "9996655" },
+                  label: "basket",
+                  image: "lask",
+                },
+              ]}
+              defaultValue={primaryValues?.colors}
+              onChange={(event) => {
+                console.log("this is onchange : ", event);
+              }}
+              valueComponent={(event) => {
+                console.log("here is the event : ", event);
+                return <span>{event.value.colorRref}</span>;
+              }}
             />
           </div>
           <div className="input half new-product-dimension">

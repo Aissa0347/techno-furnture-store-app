@@ -15,7 +15,7 @@ import "../styles/index.scss";
 import { BiChevronLeft, BiHeart } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
-import { TypographyStylesProvider } from "@mantine/core";
+import { ColorPicker, TypographyStylesProvider } from "@mantine/core";
 
 // import Helper Functions
 // import { findCurrentProduct } from "../App";
@@ -70,6 +70,7 @@ function ProductInfo({
     cardProducts,
     setCardProducts,
   } = useContext(GlobalContext);
+  const [colorPicked, setColorPicked] = useState();
   let isSaved = isFavorite(currentProduct, favoriteProducts);
   return (
     <>
@@ -113,11 +114,11 @@ function ProductInfo({
         </li>
         <li className="product_colors">
           <h4>Colors:</h4>
-          <span className="color"></span>
-          <span className="color"></span>
-          <span className="color"></span>
-          <span className="color"></span>
-          <span className="color"></span>
+          <ColorPicker
+            value={colorPicked}
+            onChange={setColorPicked}
+            withPicker={false}
+          />
         </li>
         <li className="product_quantity">
           <label htmlFor="quantity">Qty:</label>

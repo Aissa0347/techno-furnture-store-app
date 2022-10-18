@@ -10,7 +10,7 @@ import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
 import { NewsLetter } from "./Home";
 import { ShoppingCartList } from "./Products";
 import { GlobalContext } from "../App";
-import { UniqueCard } from "./Card";
+import { DashUniqueCard } from "./Card";
 
 // import DATA
 
@@ -19,7 +19,7 @@ import { useForm } from "@mantine/form";
 
 // import Styles
 import "../styles/index.scss";
-import { TextInput } from "@mantine/core";
+import { SimpleGrid, Stack, TextInput } from "@mantine/core";
 import { auth } from "../firebase/firebaseConfig";
 import { serverTimestamp } from "firebase/firestore";
 
@@ -168,14 +168,15 @@ function ShoppingCart() {
           <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
         </div>
       ) : (
-        <ul
+        <Stack
           className="shopping_cart_list"
+          spacing={10}
           style={expand ? { height: "100%" } : { height: "60vh" }}
         >
           {cardProducts.slice(0, 8).map((Product) => {
-            return <UniqueCard Product={Product} setTrigger={setTrigger} />;
+            return <DashUniqueCard Product={Product} setTrigger={setTrigger} />;
           })}
-        </ul>
+        </Stack>
       )}
       <div className="expand-icon">
         {expand ? (

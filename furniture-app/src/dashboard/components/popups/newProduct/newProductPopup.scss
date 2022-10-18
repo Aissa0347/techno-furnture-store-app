@@ -102,6 +102,34 @@
   z-index: 401;
 }
 
+.color-shower {
+  height: 20px;
+  width: 20px;
+  border-radius: 50px;
+}
+
+.color-label {
+  display: flex;
+  align-items: center;
+  background-color: $secondColor;
+  gap: 5px;
+  padding: 5px;
+  margin: 2px;
+  line-height: 0px;
+  .color-shower {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.color-item {
+  background-color: transparent;
+  gap: 8px;
+  padding: 15px 10px;
+  margin: 2px;
+  cursor: pointer;
+}
+
 .text-editor {
   width: 100%;
   max-height: 400px;
