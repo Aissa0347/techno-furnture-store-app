@@ -218,10 +218,12 @@
   }
 }
 .product_quantity {
+  label {
+    display: block;
+  }
   button {
     width: 30px;
     height: 35px;
-    border: 1px solid $primaryColor;
     font-size: 1rem;
     // background-color: ;
     border-radius: 0%;

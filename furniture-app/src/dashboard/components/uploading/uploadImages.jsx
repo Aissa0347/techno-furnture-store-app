@@ -46,10 +46,14 @@ function UploadImages({
 
   console.log("after changes : ", primaryImages, "/n then files : ", files);
 
-  useEffect(() => {
+  function togglePrimaryImages() {
     if (primaryImages)
       setFiles(primaryImages.map((imgObj) => ({ ...imgObj, id: uuidv4() })));
     console.log("newImageList files", newImageList, files);
+  }
+
+  useEffect(() => {
+    togglePrimaryImages();
   }, [primaryImages]);
 
   function editImages() {
@@ -57,9 +61,10 @@ function UploadImages({
     setNewImageList([]);
     setIsUpdate(true);
     setIsImagesUploaded(false);
+    togglePrimaryImages();
   }
 
-  console.log(files);
+  console.log("here is files : ", files);
 
   const acceptDragStyle = isDragAccept ? "acceptDragStyle" : "";
   const focusedStyle = isFocused ? "focusedStyle" : "";
@@ -67,24 +72,26 @@ function UploadImages({
 
   return (
     <section>
-      <div
-        {...getRootProps({
-          className: ` dropzone dropzone-container ${acceptDragStyle} ${focusedStyle} ${failedDragStyle}`,
-        })}
-      >
-        {isImagesUploaded && (
-          <div className="upload-success">
-            <img loading="lazy" src={operationSuccess} />
-          </div>
-        )}
-        <LoadingOverlay
-          visible={isUploadImagesLoading}
-          className="image-upload-loading"
-          overlayBlur={2}
-        />
-        <input {...getInputProps()} />
-        <p>drag it here</p>
-      </div>
+      {isImagesUploaded ? (
+        <div className="upload-success dropzone dropzone-container">
+          <img loading="lazy" src={operationSuccess} />
+        </div>
+      ) : (
+        <div
+          {...getRootProps({
+            className: ` dropzone dropzone-container ${acceptDragStyle} ${focusedStyle} ${failedDragStyle}`,
+          })}
+        >
+          <LoadingOverlay
+            visible={isUploadImagesLoading}
+            className="image-upload-loading"
+            overlayBlur={2}
+          />
+          <input {...getInputProps()} />
+          <p>drag it here</p>
+        </div>
+      )}
+
       <UploadedImagesSlider
         files={files}
         setFiles={setFiles}
@@ -123,7 +130,7 @@ function UploadImages({
               variant="light"
               radius="none"
               size="sm"
-              onClick={() => submitImages(files)}
+              onClick={() => submitImages(files, "update")}
             >
               update
             </Button>

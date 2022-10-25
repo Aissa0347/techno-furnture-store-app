@@ -8,6 +8,7 @@ import {
   BiCurrentLocation,
   BiHome,
   BiMessageDetail,
+  BiRevision,
   BiShoppingBag,
   BiStore,
   BiUser,
@@ -33,21 +34,40 @@ import AvatarProfile from "./smallComponents/avatarProfile/avatarProfile";
 import {
   ActionIcon,
   Button,
+  CloseButton,
   createStyles,
   Drawer,
   Group,
   SimpleGrid,
   Stack,
+  Text,
 } from "@mantine/core";
+import Auth from "../authentication/auth";
 
 //* --------------------------- Bag Side Component --------------------------- */
 
 function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
-  const { removeFromFavorite, setCardProducts, subTotal } =
+  const { updateCard, setCardProducts, subTotal, setSubTotal, calcSubTotal } =
     useContext(GlobalContext);
-  console.log(subTotal);
+  const [cardProductsClone, setCardProductsClone] = useState(
+    structuredClone(cardProducts)
+  );
+  const [isChanged, setIsChanged] = useState(false);
 
-  console.log("check if it;s updated : ", cardProducts);
+  useEffect(() => {
+    setSubTotal(calcSubTotal(cardProductsClone));
+  }, [cardProductsClone]);
+
+  useEffect(() => {
+    setCardProductsClone(structuredClone(cardProducts));
+    setSubTotal(calcSubTotal());
+  }, [cardProducts]);
+
+  useEffect(() => {
+    !isChanged && setCardProductsClone(structuredClone(cardProducts));
+  }, [isChanged]);
+
+  console.log("check if it;s updated : ", cardProductsClone);
   // set on value change subtotal change also
   return (
     <Drawer
@@ -60,18 +80,53 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
       title="Card Products List"
     >
       <Stack justify={"space-between"} style={{ flex: 1, overflow: "hidden" }}>
-        {cardProducts.length < 1 ? (
+        {cardProductsClone.length < 1 ? (
           <div className="svg-interactions">
             <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
           </div>
         ) : (
           <SimpleGrid style={{ width: "100%", overflow: "auto" }}>
-            {cardProducts.map((Product) => {
-              return <DashUniqueCard Product={Product} />;
+            {cardProductsClone.map((Product) => {
+              return (
+                <DashUniqueCard
+                  Product={Product}
+                  setIsChanged={setIsChanged}
+                  cardProductsClone={cardProductsClone}
+                />
+              );
             })}
           </SimpleGrid>
         )}
         <Stack style={{ width: "100%", gap: "8px" }}>
+          {isChanged && (
+            <Group spacing={5} noWrap>
+              <Button
+                variant="filled"
+                fullWidth
+                radius={"none"}
+                size="md"
+                onClick={() => {
+                  updateCard(cardProductsClone);
+                  setIsChanged(false);
+                }}
+              >
+                UPDATE
+              </Button>
+              <ActionIcon
+                variant="filled"
+                color={"red"}
+                radius={"none"}
+                size={42}
+                onClick={() => {
+                  setCardProductsClone(structuredClone(cardProducts));
+                  setIsChanged(false);
+                }}
+              >
+                <BiRevision size={24} />
+              </ActionIcon>
+            </Group>
+          )}
+
           <div className="shopping_cart_total unique_card">
             <li className="facture_price total">
               <h5 className="cart-total">SUBTOTAL</h5>
@@ -143,12 +198,13 @@ function FavoriteProducts({
 //* ---------------------------- Navbar Component ---------------------------- */
 
 function Navbar({ favoriteProducts, cardProducts }) {
+  const { currentUserData, isUser, openAuthDrawer, setOpenAuthDrawer } =
+    useContext(GlobalContext);
   const [showFavoriteProducts, setShowFavoriteProducts] = useState(false);
   const [showCardProducts, setShowCardProducts] = useState(false);
-  const { currentUserData } = useContext(GlobalContext);
+
   let favoriteProductsNumber = favoriteProducts.length;
   let cardProductsNumber = cardProducts.length;
-  var favProducts = document.getElementById("favorite_products");
 
   // useEffect(() => {
   //   const barOffset = document.getElementById("navbar").offsetTop;
@@ -156,9 +212,10 @@ function Navbar({ favoriteProducts, cardProducts }) {
   //     stickyBar(document.getElementById("navbar"))
   //   );
   // }, []);
+
   return (
     <>
-      <div className="navbar  " id="navbar">
+      <div className="navbar" id="navbar">
         <div className="logo">
           <Link to={"/"}>
             <img loading="lazy" src={logo} alt="Logo" />
@@ -177,10 +234,12 @@ function Navbar({ favoriteProducts, cardProducts }) {
               {" "}
               <Link to="/ordering">Basket</Link>
             </li>
-            <li className="link N-3" onClick={scrollToTop}>
-              {" "}
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
+            {!isUser && (
+              <li className="link N-3" onClick={scrollToTop}>
+                {" "}
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+            )}
           </ul>
         </nav>
         {/* ------------------------------ Mobile Navbar ------------------------------ */}
@@ -203,20 +262,19 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 <BiCreditCard />{" "}
               </Link>
             </li>
-            <li className="link N-4" onClick={scrollToTop}>
-              {" "}
-              <Link to="/dashboard">
-                <BiCategory />{" "}
-              </Link>
-            </li>
+            {!isUser && (
+              <li className="link N-4" onClick={scrollToTop}>
+                {" "}
+                <Link to="/dashboard">
+                  <BiCategory />{" "}
+                </Link>
+              </li>
+            )}
+
             <li
               className="icon-set bag"
               onClick={() => {
                 setShowCardProducts(!showCardProducts);
-                var cartProducts = document.getElementById("card_products");
-                if (!showCardProducts) {
-                  cartProducts.classList.add("active");
-                } else cartProducts.classList.remove("active");
               }}
             >
               <a>
@@ -233,11 +291,6 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 className="icon-set favorite"
                 onClick={() => {
                   setShowFavoriteProducts(!showFavoriteProducts);
-                  var favProducts =
-                    document.getElementById("favorite_products");
-                  if (!showFavoriteProducts) {
-                    favProducts.classList.add("active");
-                  } else favProducts.classList.remove("active");
                 }}
               >
                 <a>
@@ -260,10 +313,6 @@ function Navbar({ favoriteProducts, cardProducts }) {
             className="icon-set bag"
             onClick={() => {
               setShowCardProducts(!showCardProducts);
-              var cartProducts = document.getElementById("card_products");
-              if (!showCardProducts) {
-                cartProducts.classList.add("active");
-              } else cartProducts.classList.remove("active");
             }}
           >
             <BiShoppingBag />
@@ -282,10 +331,6 @@ function Navbar({ favoriteProducts, cardProducts }) {
             className="icon-set favorite"
             onClick={() => {
               setShowFavoriteProducts(!showFavoriteProducts);
-              var favProducts = document.getElementById("favorite_products");
-              if (!showFavoriteProducts) {
-                favProducts.classList.add("active");
-              } else favProducts.classList.remove("active");
             }}
           >
             <RiHeartLine />
@@ -321,6 +366,15 @@ function Navbar({ favoriteProducts, cardProducts }) {
             <RiMenuFill />
           </div>
         </div>
+        <Drawer
+          opened={!currentUserData && openAuthDrawer}
+          onClose={() => setOpenAuthDrawer(false)}
+          withCloseButton={false}
+          size={"75%"}
+          padding={0}
+        >
+          <Auth />{" "}
+        </Drawer>
       </div>
       <Outlet />
       <Footer />

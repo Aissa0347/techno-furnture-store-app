@@ -1,5 +1,8 @@
 .auth {
-  background: url("../Website-Assets/Heross.png");
+  position: relative;
+  background: url("../Website-Assets/1\ \(5\).webp");
+  // background-position: bottom;
+  // background-color: #1a0d00;
   background-size: cover;
   .info_form input {
     margin: 0%;
@@ -12,6 +15,8 @@
   flex-direction: column;
   min-height: 100vh;
   padding-top: 10vh;
+  // backdrop-filter: blur(20px);
+
   & > hr {
     width: 100%;
     margin: 1rem 0px 3rem;

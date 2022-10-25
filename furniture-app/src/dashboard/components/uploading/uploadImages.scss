@@ -1,6 +1,7 @@
 .dropzone-container {
   position: relative;
   min-height: 100px;
+  height: 100px;
   background-color: $secondColor;
   border: 2px dashed $greyColor;
   display: flex;
@@ -65,12 +66,7 @@
 }
 
 .upload-success {
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  display: grid;
-  place-items: center;
-  height: 100%;
-  width: 100%;
-  background-color: $secondColor;
+  border: 1px solid #88c057;
+  background-color: #ebfbee;
+  cursor: default;
 }

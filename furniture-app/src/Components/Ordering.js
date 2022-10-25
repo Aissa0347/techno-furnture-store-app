@@ -1,7 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import Icons
-import { BiChevronDown, BiChevronLeft, BiChevronUp, BiX } from "react-icons/bi";
+import {
+  BiChevronDown,
+  BiChevronLeft,
+  BiChevronUp,
+  BiRevision,
+  BiX,
+} from "react-icons/bi";
 
 //  import SVG's
 import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
@@ -19,7 +25,14 @@ import { useForm } from "@mantine/form";
 
 // import Styles
 import "../styles/index.scss";
-import { SimpleGrid, Stack, TextInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Button,
+  Group,
+  SimpleGrid,
+  Stack,
+  TextInput,
+} from "@mantine/core";
 import { auth } from "../firebase/firebaseConfig";
 import { serverTimestamp } from "firebase/firestore";
 
@@ -129,9 +142,24 @@ function ShippingInfo() {
 //* ------------------------------ Shopping Cart ----------------------------- */
 
 function ShoppingCart() {
-  const { cardProducts, subTotal, setOrderData } = useContext(GlobalContext);
+  const { cardProducts, subTotal, setOrderData, updateCard } =
+    useContext(GlobalContext);
   const [trigger, setTrigger] = useState(false);
+  const [expand, setExpand] = useState(false);
   let totalQuantity, totalCost;
+  const [cardProductsClone, setCardProductsClone] = useState(
+    structuredClone(cardProducts)
+  );
+  const [isChanged, setIsChanged] = useState(false);
+
+  useEffect(() => {
+    setCardProductsClone(structuredClone(cardProducts));
+  }, [cardProducts]);
+
+  useEffect(() => {
+    !isChanged && setCardProductsClone(structuredClone(cardProducts));
+  }, [isChanged]);
+
   useEffect(() => {
     totalQuantity = cardProducts.reduce(
       (acc, current) => acc + ~~current.numberOfProduct,
@@ -153,17 +181,16 @@ function ShoppingCart() {
         })),
         totalCost,
         totalQuantity,
-        avatarImg: auth.currentUser.photoURL,
+        avatarImg: auth?.currentUser?.photoURL,
       };
     });
   }, [cardProducts, trigger]);
 
-  const [expand, setExpand] = useState(false);
   console.log("is shopping cart trigger again");
   return (
     <section className="shopping_cart">
       <h3 className="title">Shopping Cart</h3>
-      {cardProducts.length < 1 ? (
+      {cardProductsClone.length < 1 ? (
         <div className="svg-interactions">
           <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
         </div>
@@ -173,8 +200,14 @@ function ShoppingCart() {
           spacing={10}
           style={expand ? { height: "100%" } : { height: "60vh" }}
         >
-          {cardProducts.slice(0, 8).map((Product) => {
-            return <DashUniqueCard Product={Product} setTrigger={setTrigger} />;
+          {cardProductsClone.map((Product) => {
+            return (
+              <DashUniqueCard
+                Product={Product}
+                setIsChanged={setIsChanged}
+                cardProductsClone={cardProductsClone}
+              />
+            );
           })}
         </Stack>
       )}
@@ -185,6 +218,34 @@ function ShoppingCart() {
           <BiChevronDown className="icon" onClick={() => setExpand(!expand)} />
         )}
       </div>
+      {isChanged && (
+        <Group spacing={5} mb={5} noWrap>
+          <Button
+            variant="filled"
+            fullWidth
+            radius={"none"}
+            size="md"
+            onClick={() => {
+              updateCard(cardProductsClone);
+              setIsChanged(false);
+            }}
+          >
+            UPDATE
+          </Button>
+          <ActionIcon
+            variant="filled"
+            color={"red"}
+            radius={"none"}
+            size={42}
+            onClick={() => {
+              setCardProductsClone(structuredClone(cardProducts));
+              setIsChanged(false);
+            }}
+          >
+            <BiRevision size={24} />
+          </ActionIcon>
+        </Group>
+      )}
       <ul className="shopping_cart_total unique_card">
         <li className="facture_price ">
           <h5>Subtotal</h5>

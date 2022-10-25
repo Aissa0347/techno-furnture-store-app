@@ -310,21 +310,7 @@ function Auth({ setUserUID }) {
                   Create new Account ?
                 </Button>
               }
-              <Button size="md"
-                fullWidth
-                className="signIn  auth-toggle-btn"
-                variant="light"
-                onClick={() => {
-                  console.log(auth.currentUser);
-                  signOut(auth)
-                    .then((res) => {
-                      console.log("logged out", res);
-                    })
-                    .catch((error) => console.log(error));
-                }}
-              >
-                Sign Out
-              </Button>  
+            
             </div>
           ) : (
             <div className="auth-wrapper">

@@ -81,7 +81,7 @@
       color: $greyColor;
       font-weight: bold;
       padding-right: 2rem;
-      margin-bottom: 5px;
+      margin-bottom: 7px;
     }
     // .info {
     //   margin-bottom: 0.5rem;
@@ -105,7 +105,7 @@
       padding: 0.5rem 0.5rem;
     }
     &_colors {
-      display: flex;
+      display: block;
       span {
         display: inline-block;
         width: 18px;
@@ -155,6 +155,21 @@
       summary {
         font-weight: bold;
       }
+    }
+  }
+}
+
+.select-product-color {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  .product-color {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    &.selected {
+      border: 1px solid #ffff;
+      outline: 2px solid black;
     }
   }
 }

@@ -7,9 +7,9 @@ import {
   NumberInput,
   MultiSelect,
   CloseButton,
+  Group,
 } from "@mantine/core";
 import { AddCategoriesPopup, AddColorsPopup } from "./addPopup";
-import TextArea from "../../textArea/textArea";
 // Import React Lib
 import { show } from "../../icons";
 import {
@@ -35,6 +35,7 @@ import { GlobalContext } from "../../../../App";
 import { defaultProduct } from "../../../../Website-Assets";
 import ImageDropzone from "../../uploading/uploadImages";
 import TextEditor from "../../textEditor/textEditor";
+import { MultiSelectColors } from "../../multiSelectColors/multiSelectColors";
 
 export function collectionRef(colName) {
   return collection(db, colName);
@@ -65,7 +66,7 @@ export default function NewProductPopup({
   const [selectColors, setSelectColors] = useState({
     state: false,
     value: [],
-    data: ["+ ADD NEW COLOR"],
+    data: [],
     id: "",
   });
   const [selectCategory, setSelectCategory] = useState({
@@ -77,7 +78,6 @@ export default function NewProductPopup({
 
   const [defaultValues, setDefaultValues] = useState(defaultProduct);
 
-  const categoryData = ["Bed", "Bad", "Chair", "Sofa", "+ ADD NEW CATEGORY"];
   const selectRef = useRef();
 
   const addNewCategory = (value, textOfAdd, setState) => {
@@ -98,7 +98,7 @@ export default function NewProductPopup({
   // console.log(files.name);
   let imgListRef = [];
 
-  function submitImages(files) {
+  function submitImages(files, operation = "upload") {
     if (files.length < 1) {
       return;
     }
@@ -108,9 +108,12 @@ export default function NewProductPopup({
     setIsUploaded(false);
 
     let fileNotUploaded = files.length;
-
+    console.log("primary Images : ", primaryImages);
     files.map(async (file) => {
-      if (!primaryImages?.some((primaryImg) => file?.url === primaryImg.url)) {
+      if (
+        !primaryImages?.some((primaryImg) => file?.url === primaryImg.url) ||
+        operation === "update"
+      ) {
         const imageRef = ref(storage, `Product Images/${file.name + uuidv4()}`);
 
         await uploadBytes(imageRef, file)
@@ -158,10 +161,17 @@ export default function NewProductPopup({
     return {
       name: newProductForm.productName?.value,
       category: newProductForm.category?.value,
-      colors: selectColors.value,
+      colors: selectColors?.value,
       img: newImageList[0] ? newImageList : primaryImages,
       price: Number(newProductForm.price?.value),
-      pricePromotion: Number(newProductForm.promotionPrice?.value),
+      pricePromotion: Number(newProductForm.pricePromotion?.value),
+      box: {
+        price: Number(newProductForm.priceOfBox?.value),
+        numberOfPieces: Number(newProductForm.numberOfBoxPieces?.value),
+        pricePromotion:
+          Number(newProductForm.pricePromotion?.value) *
+          Number(newProductForm.numberOfBoxPieces?.value),
+      },
       mark: "",
       markName: newProductForm.brand?.value,
       dimensions: {
@@ -204,16 +214,22 @@ export default function NewProductPopup({
       console.log("is done ?");
       setSelectColors((prev) => ({
         ...prev,
-        data: fullColorsData.data,
-        id: fullColorsData.id,
+        data: fullColorsData?.data,
+        id: fullColorsData?.id,
       }));
     });
   };
 
   function toPrimaryValues() {
     setDefaultValues(primaryValues);
-    setSelectCategory((prev) => ({ ...prev, value: primaryValues?.category }));
-    setSelectColors((prev) => ({ ...prev, value: primaryValues?.colors }));
+    setSelectCategory((prev) => ({
+      ...prev,
+      value: primaryValues?.category || "",
+    }));
+    setSelectColors((prev) => ({
+      ...prev,
+      value: primaryValues?.colors || [],
+    }));
   }
 
   useLayoutEffect(() => {
@@ -298,7 +314,7 @@ export default function NewProductPopup({
           </div>
           <div className="input half">
             <NumberInput
-              placeholder="Price in DZD"
+              placeholder="Price in DA"
               label="Price"
               min={0}
               name="price"
@@ -307,15 +323,39 @@ export default function NewProductPopup({
             />
           </div>
           <div className="input half">
+            <Group noWrap>
+              <NumberInput
+                placeholder="Price in DA"
+                label="Price of box"
+                min={0}
+                name="priceOfBox"
+                defaultValue={primaryValues?.box?.price}
+              />
+
+              <NumberInput
+                placeholder="Number of pieces"
+                label="Box pieces"
+                min={0}
+                name="numberOfBoxPieces"
+                defaultValue={primaryValues?.box?.numberOfPieces}
+              />
+            </Group>
+          </div>
+          <div className="input half">
             <NumberInput
-              placeholder="Price in DZD"
+              placeholder="Price in DA"
               label="Promotion Price"
               min={0}
-              name="promotionPrice"
+              name="pricePromotion"
               defaultValue={primaryValues?.pricePromotion}
             />
           </div>
-          <div className="input half ">
+          <div className=" half ">
+            <MultiSelectColors
+              data={selectColors.data}
+              colors={selectColors}
+              setColors={setSelectColors}
+            />
             {/* <MultiSelect
               placeholder="Pick all you like"
               label="Colors"
@@ -329,31 +369,33 @@ export default function NewProductPopup({
               ref={selectRef}
               onChange={(event) => {
                 console.log("this is colors event", event);
-                setSelectColors((prev) => {
-                  return {
-                    ...prev,
-                    value:
-                      event[event.length - 1] === "+ ADD NEW COLOR"
-                        ? [...prev.value]
-                        : [...event],
-                  };
-                });
-                addNewCategory(
-                  event[event.length - 1],
-                  "+ ADD NEW COLOR",
-                  setSelectColors
-                );
+                if (event[event.length - 1] === "+ ADD NEW COLOR")
+                  addNewCategory(
+                    event[event.length - 1],
+                    "+ ADD NEW COLOR",
+                    setSelectColors
+                  );
               }}
               valueComponent={(props) => {
                 const { label, value, onRemove, ref, ...others } = props;
+                if (value !== "+ ADD NEW COLOR")
+                  if (
+                    selectColors.value.find(
+                      (colorNames) =>
+                        colorNames?.value?.colorName !== value?.colorName
+                    )
+                  )
+                    setSelectColors((prev) => {
+                      return { ...prev, value: [...prev.value, { value }] };
+                    });
                 console.log("check tose others : ", others);
                 return (
                   <div className="color-label">
                     <span
                       className="color-shower"
-                      style={{ backgroundColor: value?.value || value }}
+                      style={{ backgroundColor: value?.colorRef }}
                     ></span>
-                    <span>{label}</span>
+                    <span>{value?.colorName}</span>
                     <CloseButton
                       variant="transparent"
                       size={"xs"}
@@ -373,48 +415,15 @@ export default function NewProductPopup({
                   >
                     <span
                       className="color-shower"
-                      style={{ backgroundColor: value?.value || value }}
+                      style={{ backgroundColor: value?.colorRef }}
                     ></span>
-                    <span>{label}</span>
+                    <span>{value?.colorName}</span>
                   </div>
                 );
               }}
               nothingFound="No options"
               data={selectColors.data}
-              value={selectColors.value}
             /> */}
-            <MultiSelect
-              placeholder="Pick all you like"
-              label="Colors"
-              radius="none"
-              size="md"
-              name="colors"
-              className="multi-select"
-              searchable
-              style={{ marginBottom: "20px" }}
-              ref={selectRef}
-              nothingFound="No options"
-              data={[
-                {
-                  value: { colorName: "truck", colorRref: "522235" },
-                  label: "truck",
-                  image: "nike",
-                },
-                {
-                  value: { colorName: "basket", colorRref: "9996655" },
-                  label: "basket",
-                  image: "lask",
-                },
-              ]}
-              defaultValue={primaryValues?.colors}
-              onChange={(event) => {
-                console.log("this is onchange : ", event);
-              }}
-              valueComponent={(event) => {
-                console.log("here is the event : ", event);
-                return <span>{event.value.colorRref}</span>;
-              }}
-            />
           </div>
           <div className="input half new-product-dimension">
             <NumberInput

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { BiCartAlt, BiHeart, BiShowAlt, BiX } from "react-icons/bi";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 
@@ -55,6 +55,8 @@ export function Actions({ currentProduct }) {
     toggleToFavorite,
     addToFavorite,
     isFavorite,
+    currentUserData,
+    setOpenAuthDrawer,
   } = useContext(GlobalContext);
 
   let isSaved = isFavorite(currentProduct, favoriteProducts);
@@ -66,7 +68,9 @@ export function Actions({ currentProduct }) {
           size={"md"}
           style={{ flex: 1, backgroundColor: "#d96b52" }}
           onClick={() => {
-            addToFavorite(currentProduct, cardProducts, setCardProducts);
+            currentUserData
+              ? addToFavorite(currentProduct, cardProducts, setCardProducts)
+              : setOpenAuthDrawer(true);
           }}
         >
           Add to card
@@ -76,11 +80,13 @@ export function Actions({ currentProduct }) {
           size={42}
           radius={"none"}
           onClick={() => {
-            toggleToFavorite(
-              currentProduct,
-              favoriteProducts,
-              setFavoriteProducts
-            );
+            currentUserData
+              ? toggleToFavorite(
+                  currentProduct,
+                  favoriteProducts,
+                  setFavoriteProducts
+                )
+              : setOpenAuthDrawer(true);
           }}
         >
           {" "}
@@ -325,43 +331,67 @@ export function UniqueCard({ Product, setTrigger }) {
   );
 }
 
-export function DashUniqueCard({ Product, setTrigger }) {
+export function DashUniqueCard({ Product, setIsChanged, cardProductsClone }) {
   const [quantityValue, setQuantityValue] = useState(
     Product?.numberOfProduct || 1
   );
   const {
     cardProducts,
-    removeFromFavorite,
+    removeFromCard,
     setCardProducts,
     setSubTotal,
     calcSubTotal,
   } = useContext(GlobalContext);
+  const handlers = useRef();
 
   function defaultNumberAndTotal() {
     Product.totalProductPrice = 0;
     Product.numberOfProduct = 1;
   }
 
+  function setChanged(not = true) {
+    not ? setIsChanged(true) : setIsChanged(false);
+  }
+
+  useEffect(() => {
+    setQuantityValue(Product?.numberOfProduct);
+  }, [Product]);
+
+  useEffect(() => {
+    setChanged();
+  }, [quantityValue]);
+
   useEffect(() => {
     if (quantityValue > 0) {
       Product.numberOfProduct = quantityValue;
       Product.totalProductPrice = ~~Product?.price * quantityValue;
-      setSubTotal(calcSubTotal());
+      setSubTotal(calcSubTotal(cardProductsClone));
     } else if (quantityValue < 1) {
       setQuantityValue(1);
     }
   }, [quantityValue]);
 
+  console.log("product is here : ", Product);
+
   return (
     <div className="unique_card product-info invoice-product-info">
       <div className="img_name ">
         <img
-          src={Product?.img[0].url}
+          src={Product?.img[0]?.url}
           alt={Product?.name}
           className="product_image invoice-img"
         />
         <div className="product_title ">
-          <h5>{Product?.name}</h5>
+          <h5>
+            {Product?.name}{" "}
+            <div
+              className="color-shower"
+              style={{
+                backgroundColor: Product?.selectedColor?.colorRef,
+                display: "inline-block",
+              }}
+            ></div>
+          </h5>
           <h4>{Product?.price} DZD</h4>
         </div>
       </div>
@@ -370,10 +400,47 @@ export function DashUniqueCard({ Product, setTrigger }) {
         Qty:&nbsp;
         <Group spacing={5}>
           <ActionIcon
+            radius={"none"}
+            size={36}
+            variant="default"
+            onClick={() => handlers.current.increment()}
+          >
+            +
+          </ActionIcon>
+
+          <NumberInput
+            size="sm"
+            radius={"none"}
+            name="quantity"
+            id="quantity"
+            hideControls
+            value={quantityValue}
+            onChange={(val) => {
+              setQuantityValue(val);
+            }}
+            min={1}
+            step={1}
+            handlersRef={handlers}
+            styles={{ input: { width: 50, textAlign: "center" } }}
+          />
+
+          <ActionIcon
+            radius={"none"}
+            size={36}
+            variant="default"
+            onClick={() => handlers.current.decrement()}
+          >
+            -
+          </ActionIcon>
+        </Group>
+        {/* <Group spacing={5}>
+          <ActionIcon
             variant="default"
             size={36}
             radius={"none"}
-            onClick={() => setQuantityValue((prev) => prev + 1)}
+            onClick={() => {
+              setQuantityValue((prev) => prev + 1);
+            }}
           >
             +
           </ActionIcon>
@@ -394,18 +461,21 @@ export function DashUniqueCard({ Product, setTrigger }) {
             variant="default"
             size={36}
             radius={"none"}
-            onClick={() => setQuantityValue((prev) => prev - 1)}
+            onClick={() => {
+              setIsChanged(true);
+              setQuantityValue((prev) => prev - 1);
+            }}
           >
             -
           </ActionIcon>
-        </Group>
+        </Group> */}
       </label>
       <CloseButton
         size={"lg"}
         radius={"none"}
         color={"red"}
         onClick={() => {
-          removeFromFavorite(Product, cardProducts, setCardProducts);
+          removeFromCard(Product, cardProducts, setCardProducts);
           defaultNumberAndTotal();
           setSubTotal(calcSubTotal());
         }}

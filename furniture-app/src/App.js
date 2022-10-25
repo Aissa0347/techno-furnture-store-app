@@ -170,6 +170,8 @@ function App() {
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [cardProducts, setCardProducts] = useState([]);
   const [searchFilter, setSearchFilter] = useState([]);
+  const [openAuthDrawer, setOpenAuthDrawer] = useState(true);
+  const [userRef, setUserRef] = useState("");
   const [filters, setFilters] = useState({
     category: [],
     markName: [],
@@ -178,6 +180,7 @@ function App() {
   const [subTotal, setSubTotal] = useState(0);
   const [userUID, setUserUID] = useState("");
   const [currentUserData, setCurrentUserData] = useState("");
+  const [isUser, setIsUser] = useState(true);
   const [orderData, setOrderData] = useState({
     userId: "",
     willaya: "",
@@ -197,8 +200,8 @@ function App() {
   }, []);
 
   console.log(ProductsCatalog);
-  function calcSubTotal() {
-    return cardProducts.reduce(
+  function calcSubTotal(ProductList = cardProducts) {
+    return ProductList.reduce(
       (prev, current) => prev + current.totalProductPrice,
       0
     );
@@ -209,35 +212,46 @@ function App() {
   const getUserData = async (userUID) => {
     const usersRef = collection(db, "Users");
     const userQuery = query(usersRef, where("id", "==", userUID));
-    onSnapshot(
-      userQuery,
-      (user) => {
+    getDocs(userQuery)
+      .then((user) => {
         console.log("this is user on snapshot", user);
         console.log("this is user data ", user.docs[0] == 1);
         let data = user.docs[0].data();
-        setCurrentUserData(data);
-      },
-      undefined,
-      (error) => {
+        setCurrentUserData({ ...data, docId: user.docs[0].id });
+      })
+      .catch((error) => {
         console.log("its error ", error.code, error.message);
-      }
-    );
+      });
   };
 
   console.log("this is current user data", currentUserData);
 
   onAuthStateChanged(auth, async (user) => {
-    console.log("this is the true uid : ", user?.uid);
-    console.log("this is the top uid : ", userUID);
+    let adminsUID = ["dGnlVOf16zUFWWgEtYH6E4s8mEf2"];
+
+    // console.log("this is the top uid : ", userUID);
+    if (adminsUID.some((uid) => uid === user?.uid)) setIsUser(false);
     if (userUID !== user?.uid) setUserUID(user?.uid);
     if (user?.uid && !currentUserData) await getUserData(user?.uid);
     if (!user?.uid) setCurrentUserData("");
   });
-
   useCallback(() => {
     console.log("samir");
     getUserData(userUID);
   }, [userUID]);
+
+  console.log("is user : ", isUser);
+  useEffect(() => {
+    if (currentUserData) {
+      setUserRef(doc(db, "Users", currentUserData.docId));
+      setCardProducts(getProductsFromLocal(currentUserData?.productsInCart));
+      setFavoriteProducts(currentUserData?.favoriteProducts);
+    } else {
+      setIsUser(true);
+      setCardProducts([]);
+      setFavoriteProducts([]);
+    }
+  }, [currentUserData]);
 
   //* -------------------------------- Get Data -------------------------------- */
 
@@ -259,6 +273,29 @@ function App() {
     getData();
   }
 
+  function getProductsFromLocal(productsInCard) {
+    let cardProducts = [];
+    for (let i = 0; i < productsInCard.length; i++) {
+      let currentProduct = productsInCard[i];
+      let foundProduct = ProductsCatalog.find(
+        (product) =>
+          product.docId === currentProduct.docId &&
+          product?.colors.find(
+            (color) =>
+              color?.colorRef === currentProduct?.selectedColor?.colorRef
+          )
+      );
+      if (foundProduct)
+        cardProducts.push({
+          ...foundProduct,
+          selectedColor: currentProduct?.selectedColor,
+          numberOfProduct: currentProduct?.quantity,
+        });
+    }
+    console.log("check this first : ", cardProducts);
+    return cardProducts;
+  }
+
   useEffect(() => {
     getData();
     console.log(ProductsCatalog);
@@ -271,12 +308,65 @@ function App() {
     favoriteProducts,
     setFavoriteProducts
   ) {
+    console.log("here is the current in card : ", currentProduct);
     let isSavedToFavorite = false;
     favoriteProducts.forEach((favProduct) => {
       if (favProduct.id === currentProduct.id) isSavedToFavorite = true;
     });
     if (!isSavedToFavorite)
-      setFavoriteProducts((lastProducts) => [...lastProducts, currentProduct]);
+      setFavoriteProducts((lastFavorites) => {
+        updateDoc(userRef, {
+          favoriteProducts: [...lastFavorites, currentProduct],
+        });
+        return [...lastFavorites, currentProduct];
+      });
+  }
+
+  function addToCard(currentProduct, favoriteProducts, setFavoriteProducts) {
+    let isSavedToFavorite = false;
+    let isSavedSameVariant = false;
+
+    favoriteProducts.forEach((favProduct, index) => {
+      if (favProduct.id === currentProduct.id) {
+        isSavedToFavorite = true;
+
+        if (
+          favProduct?.selectedColor?.colorRef ===
+          currentProduct?.selectedColor?.colorRef
+        ) {
+          favoriteProducts[index] = currentProduct;
+          setFavoriteProducts(favoriteProducts);
+          isSavedSameVariant = true;
+        }
+      }
+    });
+
+    let updatedCard = favoriteProducts.map((product) => ({
+      docId: product.docId,
+      selectedColor: product?.selectedColor,
+      quantity: currentProduct?.numberOfProduct,
+    }));
+
+    if (isSavedToFavorite) {
+      setFavoriteProducts(favoriteProducts);
+
+      updateDoc(userRef, { productsInCart: updatedCard });
+    }
+
+    if (!isSavedSameVariant)
+      setFavoriteProducts((lastProducts) => {
+        updateDoc(userRef, {
+          productsInCart: [
+            ...updatedCard,
+            {
+              docId: currentProduct.docId,
+              selectedColor: currentProduct?.selectedColor,
+              quantity: currentProduct?.numberOfProduct,
+            },
+          ],
+        });
+        return [...lastProducts, currentProduct];
+      });
   }
   function isFavorite(currentProduct, favoriteProducts) {
     let isSaved = false;
@@ -286,6 +376,30 @@ function App() {
     });
     return isSaved;
   }
+
+  function removeFromCard(
+    currentProduct,
+    favoriteProducts,
+    setFavoriteProducts
+  ) {
+    let newFav = favoriteProducts.filter((favProduct) => {
+      return favProduct.id !== currentProduct.id
+        ? true
+        : favProduct?.selectedColor?.colorRef !==
+            currentProduct?.selectedColor?.colorRef;
+    });
+
+    let updatedCard = newFav.map((fav) => ({
+      docId: fav.docId,
+      selectedColor: fav?.selectedColor,
+      quantity: fav?.numberOfProduct,
+    }));
+
+    updateDoc(userRef, { productsInCart: updatedCard }).then((res) =>
+      setFavoriteProducts(newFav)
+    );
+  }
+
   function removeFromFavorite(
     currentProduct,
     favoriteProducts,
@@ -294,8 +408,11 @@ function App() {
     let newFav = favoriteProducts.filter((favProduct) => {
       return favProduct.id !== currentProduct.id;
     });
-    setFavoriteProducts(newFav);
+    updateDoc(userRef, { favoriteProducts: newFav }).then((res) =>
+      setFavoriteProducts(newFav)
+    );
   }
+
   function toggleToFavorite(
     currentProduct,
     favoriteProducts,
@@ -306,6 +423,16 @@ function App() {
     else
       removeFromFavorite(currentProduct, favoriteProducts, setFavoriteProducts);
   }
+
+  const updateCard = (updatedCard) => {
+    setCardProducts(updatedCard);
+    let updateFormat = updatedCard.map((product) => ({
+      docId: product?.docId,
+      quantity: product?.numberOfProduct,
+      selectedColor: product?.selectedColor,
+    }));
+    updateDoc(userRef, { productsInCart: updateFormat });
+  };
 
   //* ------------------------------- Send Order ------------------------------- */
 
@@ -380,7 +507,9 @@ function App() {
         findCurrentProduct,
         isFavorite,
         addToFavorite,
+        addToCard,
         removeFromFavorite,
+        removeFromCard,
         toggleToFavorite,
         setFavoriteProducts,
         favoriteProducts,
@@ -394,22 +523,31 @@ function App() {
         orderData,
         setOrderData,
         sendOrder,
+        updateCard,
+        isUser,
+        openAuthDrawer,
+        setOpenAuthDrawer,
       }}
     >
       {" "}
       {isDataLoaded ? (
         <div className="main">
           <Routes>
-            <Route
-              path="/auth/"
-              element={<Auth setUserUID={setUserUID} />}
-            ></Route>
-            <Route path="/dashboard/" element={<Dashboard />}>
-              <Route index element={<Main />}></Route>
-              <Route path="customers" element={<Customers />}></Route>
-              <Route path="products" element={<Products />}></Route>
-              <Route path="invoices" element={<Invoices />}></Route>
-            </Route>
+            {!currentUserData && (
+              <Route
+                path="/auth/"
+                element={<Auth setUserUID={setUserUID} />}
+              ></Route>
+            )}
+            {!isUser && (
+              <Route path="/dashboard/" element={<Dashboard />}>
+                <Route index element={<Main />}></Route>
+                <Route path="customers" element={<Customers />}></Route>
+                <Route path="products" element={<Products />}></Route>
+                <Route path="invoices" element={<Invoices />}></Route>
+              </Route>
+            )}
+
             <Route
               path="/"
               element={

@@ -87,27 +87,27 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
     });
   });
 
-  console.log(valueInput);
+  console.log(colorRef);
   return (
     <div className="new-category mini-popup">
       <Stack mb={10}>
         <ColorPicker
           format="rgb"
           swatches={[
-            "#25262b",
-            "#868e96",
-            "#fa5252",
-            "#e64980",
-            "#be4bdb",
-            "#7950f2",
-            "#4c6ef5",
-            "#228be6",
-            "#15aabf",
-            "#12b886",
-            "#40c057",
-            "#82c91e",
-            "#fab005",
-            "#fd7e14",
+            "rgb(37, 38, 43)",
+            "rgb(134, 142, 150)",
+            "rgb(250, 82, 82)",
+            "rgb(230, 73, 128)",
+            "rgb(190, 75, 219)",
+            "rgb(121, 80, 242)",
+            "rgb(76, 110, 245)",
+            "rgb(34, 139, 230)",
+            "rgb(21, 170, 191)",
+            "rgb(18, 184, 134)",
+            "rgb(64, 192, 87)",
+            "rgb(130, 201, 30)",
+            "rgb(250, 176, 5)",
+            "rgb(253, 126, 20)",
           ]}
           size="md"
           value={colorRef}
@@ -116,7 +116,6 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
         <TextInput
           label="Add color name"
           placeholder="color name"
-          defaultValue={"hops"}
           ref={valueInput}
           radius="none"
           size="md"
@@ -155,11 +154,8 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
             updateDoc(colorsRef, {
               colors: [
                 {
-                  label: valueInput.current.value,
-                  value: {
-                    label: valueInput.current.value,
-                    value: colorRef,
-                  },
+                  colorName: valueInput.current.value,
+                  colorRef: colorRef,
                 },
                 ...submitAndState.data,
               ],
@@ -167,16 +163,19 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
             setSubmitAndState((prev) => {
               return {
                 ...prev,
-                value: valueInput.current.value,
+                value: [],
                 data: (() => {
                   prev.data.forEach((val) => {
                     console.log(val);
-                    if (val.label === valueInput.current.value)
+                    if (val.colorName === valueInput.current.value)
                       isDuplicate = true;
                   });
                   return isDuplicate === false
                     ? [
-                        { label: valueInput.current.value, value: colorRef },
+                        {
+                          colorName: valueInput.current.value,
+                          colorRef,
+                        },
                         ...prev.data,
                       ]
                     : [...prev.data];
