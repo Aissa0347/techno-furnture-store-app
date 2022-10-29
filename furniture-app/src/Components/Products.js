@@ -17,6 +17,10 @@ import "swiper/scss/pagination";
 import "swiper/scss/free-mode";
 import "swiper/scss/thumbs";
 import "swiper/scss/navigation";
+import "swiper/scss";
+import "swiper/scss/effect-cards";
+
+// import required modules
 
 // import required modules
 import {
@@ -27,11 +31,16 @@ import {
   Navigation,
   Autoplay,
   Scrollbar,
-  Mousewheel,
+  EffectCards,
 } from "swiper";
 
 // import data
-import { CategoryP, FeautreP, Products_Catalog } from "../Website-Assets";
+import {
+  CategoryP,
+  FeautreP,
+  Products_Catalog,
+  technoImages,
+} from "../Website-Assets";
 import { ProductsCard, SmallCard } from "./Card";
 import { useParams } from "react-router-dom";
 
@@ -253,5 +262,36 @@ export function ShoppingCartList() {
         );
       })}
     </Swiper>
+  );
+}
+
+//* -------------------- Store Images on Google map embed -------------------- */
+
+export function TechnoImages() {
+  return (
+    <>
+      <Swiper
+        effect={"cards"}
+        grabCursor={true}
+        modules={[EffectCards]}
+        className="mySwiper"
+      >
+        <SwiperSlide>
+          <img src={technoImages.img1} alt="Techno cheraga image" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src={technoImages.img2} alt="Techno cheraga image" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src={technoImages.img3} alt="Techno cheraga image" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src={technoImages.img4} alt="Techno cheraga image" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img src={technoImages.img5} alt="Techno cheraga image" />
+        </SwiperSlide>
+      </Swiper>
+    </>
   );
 }

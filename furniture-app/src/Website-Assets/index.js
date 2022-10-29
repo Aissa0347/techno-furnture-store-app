@@ -487,3 +487,13 @@ export const semiCategory = [
 
 //? Import Logo
 export const LOGO = require("./logo.png");
+
+//? Techno Images
+
+export const technoImages = {
+  img1: require("../Website-Assets/techno.webp"),
+  img2: require("../Website-Assets/techno1.webp"),
+  img3: require("../Website-Assets/techno2.webp"),
+  img4: require("../Website-Assets/techno3.webp"),
+  img5: require("../Website-Assets/techno4.webp"),
+};

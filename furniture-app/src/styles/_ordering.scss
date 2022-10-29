@@ -242,6 +242,12 @@
   }
 }
 
+.product_price {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
 .cardProducts-drawer {
   display: flex;
   flex-direction: column;

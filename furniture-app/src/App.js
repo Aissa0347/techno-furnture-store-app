@@ -464,6 +464,8 @@ function App() {
             invoices: arrayUnion(newOrderData.orderId),
             numberOfOrders: ~~data.numberOfOrders + 1,
             amountSpent: ~~data.amountSpent + ~~newOrderData.totalCost,
+            lastOrderAt: newOrderData?.orderDate,
+            address: newOrderData?.willaya + ", " + newOrderData?.address,
             phoneNumber: newOrderData.phoneNumber,
           }).then((res) => console.log("thanks its fullfilled : ", res));
         });

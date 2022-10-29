@@ -28,6 +28,8 @@ function Dashboard() {
   const [primaryCustomers, setPrimaryCustomers] = useState([]);
   const [primaryProducts, setPrimaryProducts] = useState([]);
   const [primaryInvoices, setPrimaryInvoices] = useState([]);
+  const [lastInvoicesData, setLastInvoicesData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   console.log("TODAT IS : ", moment().format("MMMM, YYYY"));
   console.log("TODAT IS : ", moment().format("DD-MM"));
@@ -43,10 +45,15 @@ function Dashboard() {
     const idOfCollection = moment().format("MMMM, YYYY");
     const nameOfDayObject = moment().format("DD-MM");
     const monthDocRef = doc(db, "AnalyticsData", idOfCollection);
+    console.log("inside of get analytics : ");
     getDoc(monthDocRef)
       .then((res) => {
         let arrayOfValues = Object.values(res.data());
-        setAnalyticsData(arrayOfValues);
+        setAnalyticsData(
+          arrayOfValues.sort(
+            (prev, next) => next.date.seconds - prev.date.seconds
+          )
+        );
       })
       .catch((error) => console.log(error.message, error.code));
   }
@@ -58,13 +65,19 @@ function Dashboard() {
   );
   useEffect(() => {
     getAnalytics();
-  }, []);
+    setRefresh(false);
+  }, [refresh]);
 
   //* ---------------------------- get data function --------------------------- */
 
-  function getData(colName, setPrimaryValues, orderedBy = "name") {
+  function getData(
+    colName,
+    setPrimaryValues,
+    orderedBy = "name",
+    limitNumber = 5000
+  ) {
     const col = collection(db, colName);
-    const theQuery = query(col, orderBy(orderedBy));
+    const theQuery = query(col, orderBy(orderedBy, "desc"), limit(limitNumber));
     let finalList = [];
     getDocs(theQuery)
       .then((res) => {
@@ -124,7 +137,10 @@ function Dashboard() {
         setPrimaryCustomers,
         setPrimaryProducts,
         setPrimaryInvoices,
+        lastInvoicesData,
+        setLastInvoicesData,
         getData,
+        setRefresh,
       }}
     >
       <div className="dashboard">

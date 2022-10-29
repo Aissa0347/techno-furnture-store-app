@@ -16,6 +16,7 @@ import {
   ActionIcon,
   NumberInput,
   CloseButton,
+  Stack,
 } from "@mantine/core";
 
 //  Import Component Nedeed
@@ -198,6 +199,7 @@ export function ProductsCard({
   img,
   name,
   price,
+  pricePromotion,
   id,
   currentProduct,
   markName,
@@ -218,27 +220,53 @@ export function ProductsCard({
             {name}
           </Text>
         </div>
-        <div>
-          <Text
-            component="span"
-            style={{ color: "#d96b52" }}
-            mr={5}
-            size="xl"
-            weight={700}
-            sx={{ lineHeight: 1 }}
-          >
-            {price}0,00
-          </Text>
-          <Text
-            component="span"
-            size="sm"
-            color="dimmed"
-            weight={500}
-            sx={{ lineHeight: "1px" }}
-          >
-            DA
-          </Text>
-        </div>
+        <Stack align={"center"} spacing={2}>
+          {pricePromotion && (
+            <div>
+              <Text
+                component="span"
+                color={"gray"}
+                mr={5}
+                size="md"
+                weight={500}
+                sx={{ lineHeight: 1 }}
+                strikethrough
+              >
+                {price}0,00
+              </Text>
+              <Text
+                component="span"
+                size="xs"
+                color="dimmed"
+                weight={300}
+                sx={{ lineHeight: "1px" }}
+              >
+                DA
+              </Text>
+            </div>
+          )}
+          <div>
+            <Text
+              component="span"
+              style={{ color: "#d96b52" }}
+              mr={5}
+              size="xl"
+              weight={700}
+              sx={{ lineHeight: 1 }}
+            >
+              {pricePromotion || price}0,00
+            </Text>
+            <Text
+              component="span"
+              size="sm"
+              style={{ color: "#d96b52" }}
+              weight={500}
+              sx={{ lineHeight: "1px" }}
+            >
+              DA
+            </Text>
+          </div>
+        </Stack>
       </Group>
 
       <Card.Section className={classes.section} p="xs">
@@ -364,7 +392,8 @@ export function DashUniqueCard({ Product, setIsChanged, cardProductsClone }) {
   useEffect(() => {
     if (quantityValue > 0) {
       Product.numberOfProduct = quantityValue;
-      Product.totalProductPrice = ~~Product?.price * quantityValue;
+      Product.totalProductPrice =
+        (~~Product?.pricePromotion || ~~Product?.price) * quantityValue;
       setSubTotal(calcSubTotal(cardProductsClone));
     } else if (quantityValue < 1) {
       setQuantityValue(1);
@@ -382,8 +411,8 @@ export function DashUniqueCard({ Product, setIsChanged, cardProductsClone }) {
           className="product_image invoice-img"
         />
         <div className="product_title ">
-          <h5>
-            {Product?.name}{" "}
+          <h5 className="color-label">
+            {Product?.name}
             <div
               className="color-shower"
               style={{
@@ -392,7 +421,16 @@ export function DashUniqueCard({ Product, setIsChanged, cardProductsClone }) {
               }}
             ></div>
           </h5>
-          <h4>{Product?.price} DZD</h4>
+          <Group align={"flex-end"} spacing={5}>
+            <Text color={"red"} size={18} weight={500}>
+              {Product?.pricePromotion || Product?.price} DA
+            </Text>
+            {Product?.pricePromotion && (
+              <Text color={"gray"} size={16} weight={400} strikethrough>
+                {Product?.price} DA
+              </Text>
+            )}
+          </Group>
         </div>
       </div>
       <label htmlFor="Qty-input" className="quantity-controls">
@@ -512,7 +550,16 @@ export function FavUniqueCard({ Product, setTrigger }) {
         />
         <div className="product_title ">
           <h5>{Product?.name}</h5>
-          <h4>{Product?.price} DZD</h4>
+          <Group align={"flex-end"} spacing={5}>
+            <Text color={"red"} size={18} weight={500}>
+              {Product?.pricePromotion || Product?.price} DA
+            </Text>
+            {Product?.pricePromotion && (
+              <Text color={"gray"} size={16} weight={400} strikethrough>
+                {Product?.price} DA
+              </Text>
+            )}
+          </Group>
         </div>
       </div>
       <Group

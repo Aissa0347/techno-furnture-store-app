@@ -96,6 +96,13 @@ h1.dash-title {
   cursor: default;
 }
 
+.MuiTableHead-root {
+  white-space: nowrap;
+}
+.MuiTableBody-root {
+  white-space: nowrap;
+}
+
 //* -------------------------------------------------------------------------- */
 //*                                Media Query's                               */
 //* -------------------------------------------------------------------------- */

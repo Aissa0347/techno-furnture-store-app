@@ -28,6 +28,7 @@ import { GlobalContext } from "../../../App";
 import ListFilter from "../../components/filtering/listFilter";
 import { DashboardContext } from "../../Dashboard";
 import { db } from "../../../firebase/firebaseConfig";
+import { BiRefresh } from "react-icons/bi";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -97,10 +98,6 @@ const headCells = [
     label: "Actions",
     isNotSorted: true,
   },
-  {
-    label: "",
-    isNotSorted: true,
-  },
 ];
 
 function createData(
@@ -142,6 +139,7 @@ function Products() {
     state: false,
     currentProduct: defaultProduct,
   });
+  const [refresh, setRefresh] = useState(false);
 
   console.log("check those lists : ", rows);
 
@@ -182,8 +180,10 @@ function Products() {
   }
 
   useEffect(() => {
-    if (primaryProducts.length < 1) getData("ProductsList", setPrimaryProducts);
-  }, []);
+    if (primaryProducts.length < 1 || refresh)
+      getData("ProductsList", setPrimaryProducts);
+    setRefresh(false);
+  }, [refresh]);
 
   useEffect(() => {
     wrapProducts(
@@ -210,7 +210,18 @@ function Products() {
   return (
     <>
       <section className="dash-products in-dash-container">
-        <h1 className="dash-title">Products</h1>
+        <Group position="apart">
+          <h1 className="dash-title">Products</h1>
+          <Button
+            variant="filled"
+            radius={"none"}
+            size={"sm"}
+            rightIcon={<BiRefresh size={24} />}
+            onClick={() => setRefresh(true)}
+          >
+            Refresh
+          </Button>
+        </Group>
         <Widgets />
         <Tabs
           defaultValue={"all"}

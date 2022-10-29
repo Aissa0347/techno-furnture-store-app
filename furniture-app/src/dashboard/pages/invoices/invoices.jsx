@@ -9,7 +9,8 @@ import { db } from "../../../firebase/firebaseConfig";
 import { useState } from "react";
 import ListFilter from "../../components/filtering/listFilter";
 import { DashboardContext } from "../../Dashboard";
-import { Tabs } from "@mantine/core";
+import { Button, Group, Tabs } from "@mantine/core";
+import { BiRefresh } from "react-icons/bi";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
@@ -58,7 +59,7 @@ export const headCells = [
     label: "Order Id",
   },
   {
-    id: "address",
+    id: "orderAddress",
     numeric: false,
     disablePadding: false,
     label: "Address",
@@ -94,10 +95,9 @@ export const headCells = [
     label: "Status",
   },
   { label: "Actions", isNotSorted: true },
-  { label: "", isNotSorted: true },
 ];
 
-function createData(
+export function createData(
   id,
   avatarImg,
   name,
@@ -133,6 +133,7 @@ function Invoices() {
   const [filteredInvoices, setFilteredInvoices] = useState([]);
   const [generalStatus, setGeneralStatus] = useState("all");
   const [trigger, setTrigger] = useState(true);
+  const [refresh, setRefresh] = useState(false);
 
   // const invoicesRef = collection(db, "Orders");
   // const getInvoicesList = () => {
@@ -184,9 +185,10 @@ function Invoices() {
   }
 
   useEffect(() => {
-    if (primaryInvoices.length < 1)
+    if (primaryInvoices.length < 1 || refresh)
       getData("Orders", setPrimaryInvoices, "orderDate");
-  }, []);
+    setRefresh(false);
+  }, [refresh]);
 
   useEffect(() => {
     wrapInvoices(
@@ -198,7 +200,18 @@ function Invoices() {
 
   return (
     <section className="dash-products in-dash-container">
-      <h1 className="dash-title">Products</h1>
+      <Group position="apart">
+        <h1 className="dash-title">Products</h1>
+        <Button
+          variant="filled"
+          radius={"none"}
+          size={"sm"}
+          rightIcon={<BiRefresh size={24} />}
+          onClick={() => setRefresh(true)}
+        >
+          Refresh
+        </Button>
+      </Group>
       <Widgets />
       <Tabs
         defaultValue={"all"}

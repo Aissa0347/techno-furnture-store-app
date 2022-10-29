@@ -138,14 +138,17 @@ body {
 //* ---------------------------------- Hero ---------------------------------- */
 
 .Hero {
-  background: url("../Website-Assets/Hero.webp") no-repeat right center;
-  // position: relative;
-  // left: 0%;
-  display: flex;
-  align-items: center;
-  height: 80vh;
-  width: 100vw;
-  background-size: cover;
+  background-image: linear-gradient(
+      250deg,
+      rgba(130, 201, 30, 0) 0%,
+      #062343 70%
+    ),
+    url("../Website-Assets/Hero.webp");
+  // display: flex;
+  // align-items: center;
+  // height: 80vh;
+  // width: 100vw;
+  // background-size: cover;
 }
 
 .BigTitle {
@@ -372,6 +375,33 @@ body {
   }
   .sbtn:hover {
     color: $hoverBtn;
+  }
+}
+
+//* ------------------------------- Contact Us ------------------------------- */
+
+.contactUs {
+  max-width: 1000px;
+  text-align: left;
+}
+
+.store-images-wrapper {
+  position: absolute;
+  top: 20%;
+  right: 0%;
+  width: 700px;
+  max-width: 90%;
+  height: fit-content;
+  padding: 1rem;
+  padding-right: 3rem;
+  background-color: #060e53;
+  .swiper-slide {
+    height: 400px;
+    img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+    }
   }
 }
 

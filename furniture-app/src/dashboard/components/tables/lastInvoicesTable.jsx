@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -18,11 +18,19 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { Dashboard, download, show } from "../icons";
+import { show, download, edit, editMenu } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
 import moment from "moment";
 import { headCells } from "../../pages/invoices/invoices";
+import { CloseButton, Group, Modal, NativeSelect, Select } from "@mantine/core";
+import InvoiceView from "../detailsView/invoiceView";
+import { collection, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase/firebaseConfig";
+import { useEffect } from "react";
+import { setStaticValue } from "../../../App";
+import MainPDF from "../../../invoicePDF/mainPDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -55,12 +63,17 @@ function stableSort(array, comparator) {
 }
 
 export default function EnhancedTable({ rows }) {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
+  const [order, setOrder] = React.useState("");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
+  const [showInvoice, setShowInvoice] = React.useState({
+    state: false,
+    data: {},
+    id: "",
+  });
 
   console.log(orderBy);
   function EnhancedTableHead(props) {
@@ -83,11 +96,27 @@ export default function EnhancedTable({ rows }) {
             <TableCell
               key={headCell.id}
               align="left"
-              style={{ minWidth: "max-content" }}
               padding={headCell.disablePadding ? "none" : "normal"}
               sortDirection={orderBy === headCell.id ? order : false}
             >
-              <span className="not-sorted-head">{headCell.label}</span>
+              {headCell.isNotSorted ? (
+                <span className="not-sorted-head">{headCell.label}</span>
+              ) : (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : "asc"}
+                  onClick={createSortHandler(headCell.id)}
+                >
+                  {headCell.label}
+                  {orderBy === headCell.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === "desc"
+                        ? "sorted descending"
+                        : "sorted ascending"}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              )}
             </TableCell>
           ))}
         </TableRow>
@@ -102,60 +131,6 @@ export default function EnhancedTable({ rows }) {
     order: PropTypes.oneOf(["asc", "desc"]).isRequired,
     orderBy: PropTypes.string.isRequired,
     rowCount: PropTypes.number.isRequired,
-  };
-
-  const EnhancedTableToolbar = (props) => {
-    const { numSelected } = props;
-
-    return (
-      <Toolbar
-        sx={{
-          pl: { sm: 2 },
-          pr: { xs: 1, sm: 1 },
-          ...(numSelected > 0 && {
-            bgcolor: (theme) =>
-              alpha(
-                theme.palette.primary.main,
-                theme.palette.action.activatedOpacity
-              ),
-          }),
-        }}
-      >
-        {numSelected > 0 ? (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-          >
-            {numSelected} selected
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ flex: "1 1 100%" }}
-            variant="h6"
-            id="tableTitle"
-            component="div"
-          >
-            Last Invoices
-          </Typography>
-        )}
-
-        {numSelected > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton></IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Filter list">
-            <IconButton></IconButton>
-          </Tooltip>
-        )}
-      </Toolbar>
-    );
-  };
-
-  EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
   };
 
   const handleRequestSort = (event, property) => {
@@ -212,76 +187,170 @@ export default function EnhancedTable({ rows }) {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  //* ---------------------------- Status Component ---------------------------- */
+
+  function SelectStatus({ row }) {
+    const [currentStatus, setCurrentStatus] = useState(row.orderStatus);
+
+    function updateStatus(currentObj, newStatus) {
+      const orderRef = doc(db, "Orders", currentObj.id);
+      updateDoc(orderRef, { status: newStatus }).then((res) => {
+        console.log("the current :", currentStatus);
+        console.log("the new one : ", currentObj);
+        setStaticValue("ordersStatus", 1, newStatus, currentStatus);
+        row.orderStatus = newStatus;
+        setCurrentStatus(newStatus);
+        if (newStatus === "completed") {
+          setStaticValue("sales", currentObj.orderCost);
+        } else if (currentStatus === "completed") {
+          setStaticValue("sales", -currentObj.orderCost);
+        }
+      });
+    }
+
+    useEffect(() => {
+      console.log(currentStatus);
+    }, [currentStatus]);
+
+    return (
+      <Select
+        variant="unstyled"
+        rightSection={<span></span>}
+        rightSectionWidth={0}
+        size={"sm"}
+        radius={"none"}
+        data={["pending", "ongoing", "returned", "completed", "cancelled"]}
+        value={currentStatus}
+        onChange={(selectedValue) => updateStatus(row, selectedValue)}
+        className={"status " + currentStatus}
+      />
+    );
+  }
+
   return (
-    <Box sx={{ width: "100%" }}>
-      <EnhancedTableToolbar numSelected={selected.length} />
-      <TableContainer>
-        <Table
-          sx={{ minWidth: 750 }}
-          aria-labelledby="tableTitle"
-          size={dense ? "small" : "medium"}
-        >
-          <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={rows.length}
-          />
-          <TableBody>
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+    <>
+      <Box sx={{ width: "100%", height: "100%" }}>
+        <TableContainer style={{ minHeight: "95%" }}>
+          <Table
+            sx={{ minWidth: 750 }}
+            aria-labelledby="tableTitle"
+            size={dense ? "small" : "medium"}
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
+            />
+            <TableBody>
+              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
                  rows.slice().sort(getComparator(order, orderBy)) */}
-            {stableSort(rows, getComparator(order, orderBy))
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => {
-                const isItemSelected = isSelected(row.orderId);
-                const labelId = `enhanced-table-checkbox-${index}`;
-                let createdAtMoment = moment.unix(row.inDate?.seconds);
-                let createdAt = moment(createdAtMoment).format("MMM DD, y");
-                return (
-                  <TableRow
-                    hover
-                    tabIndex={-1}
-                    key={row.orderId}
-                    className="customers-table invoices-table"
-                  >
-                    <TableCell>
-                      <span className="customer-avatar">
-                        <img loading="lazy" src={row.avatarImg} alt="" />
-                        {row.name}
-                      </span>
-                    </TableCell>
-                    <TableCell align="left">{row.orderId}</TableCell>
-                    <TableCell align="left">{row.orderAddress}</TableCell>
-                    <TableCell align="left">{row.phoneNumber}</TableCell>
-                    <TableCell align="left">{createdAt}</TableCell>
-                    <TableCell align="left">{row.orderQuantity}</TableCell>
-                    <TableCell align="left">{row.orderCost} DZD</TableCell>
-                    <TableCell align="left">
-                      <span className={row.orderStatus}>{row.orderStatus}</span>
-                    </TableCell>
-                    <TableCell align="left">
-                      <div className="invoices-actions dash-actions">
-                        <span className="action">{show}</span>
-                        <span className="action">{download}</span>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: (dense ? 33 : 53) * emptyRows,
-                }}
-              >
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+              {stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row, index) => {
+                  const isItemSelected = isSelected(row.orderId);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+                  console.log("this is the row : ", row);
+                  let createdAtMoment = moment.unix(row.inDate?.seconds);
+                  let createdAt = moment(createdAtMoment).format("MMM DD, y");
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.id}
+                      selected={isItemSelected}
+                      className="customers-table invoices-table"
+                    >
+                      <TableCell>
+                        <span className="customer-avatar">
+                          <img loading="lazy" src={row.avatarImg} />
+                          {row.name}
+                        </span>
+                      </TableCell>
+                      <TableCell align="left">{row.orderId}</TableCell>
+                      <TableCell align="left">{row.orderAddress}</TableCell>
+                      <TableCell align="left">{row.phoneNumber}</TableCell>
+                      <TableCell align="left">{createdAt}</TableCell>
+                      <TableCell align="left">{row.orderQuantity}</TableCell>
+                      <TableCell align="left">{row.orderCost} DZD</TableCell>
+                      <TableCell align="left">
+                        <SelectStatus row={row} />
+                      </TableCell>
+                      <TableCell align="left">
+                        <div className="invoices-actions dash-actions">
+                          <span
+                            className="action"
+                            onClick={() =>
+                              setShowInvoice({
+                                state: true,
+                                data: { ...row.order },
+                                id: row.id,
+                              })
+                            }
+                          >
+                            {show}
+                          </span>
+                          <span className="action">
+                            <PDFDownloadLink
+                              fileName="InvoiceSir"
+                              document={<MainPDF data={row.order.orderList} />}
+                            >
+                              {download}
+                            </PDFDownloadLink>
+                          </span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: (dense ? 33 : 53) * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[15, 25, 50]}
+          component="div"
+          count={rows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+        <FormControlLabel
+          control={<Switch checked={dense} onChange={handleChangeDense} />}
+          label="Dense padding"
+        />
+      </Box>
+
+      <Modal
+        size="80%"
+        radius="none"
+        title={<h3>Invoice detail</h3>}
+        withCloseButton={false}
+        onClose={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
+        opened={showInvoice.state}
+        // centered
+      >
+        <CloseButton
+          size={"lg"}
+          style={{ position: "absolute", top: "0px", right: "0px" }}
+          color="red"
+          onClick={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
+        />
+        <InvoiceView data={showInvoice.data} id={showInvoice.id} />
+      </Modal>
+    </>
   );
 }

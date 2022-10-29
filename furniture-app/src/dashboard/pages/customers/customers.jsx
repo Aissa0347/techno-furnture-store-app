@@ -7,8 +7,8 @@ import { db } from "../../../firebase/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect } from "react";
 import { useCallback } from "react";
-import { ActionIcon, Chip, TextInput } from "@mantine/core";
-import { BiRightArrowAlt } from "react-icons/bi";
+import { Button, Group } from "@mantine/core";
+import { BiRefresh, BiRightArrowAlt } from "react-icons/bi";
 import { Key } from "@mui/icons-material";
 import { capitalizeSentence } from "../../../App";
 import ListFilter from "../../components/filtering/listFilter";
@@ -51,7 +51,6 @@ const headCells = [
     label: "Actions",
     isNotSorted: true,
   },
-  { label: "", isNotSorted: true },
 ];
 
 function createData(
@@ -92,6 +91,7 @@ function Customer() {
   const { setPrimaryCustomers, primaryCustomers, getData } =
     useContext(DashboardContext);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   //* --------------------------- Get Users List Data -------------------------- */
 
@@ -137,13 +137,25 @@ function Customer() {
   );
 
   useEffect(() => {
-    if (primaryCustomers.length < 1)
+    if (primaryCustomers.length < 1 || refresh)
       getData("Users", setPrimaryCustomers, "createdAt");
-  }, []);
+    setRefresh(false);
+  }, [refresh]);
 
   return (
     <section className="in-dash-container">
-      <h1 className="dash-title">Customers</h1>
+      <Group position="apart">
+        <h1 className="dash-title">Customers</h1>
+        <Button
+          variant="filled"
+          radius={"none"}
+          size={"sm"}
+          rightIcon={<BiRefresh size={24} />}
+          onClick={() => setRefresh((prev) => !prev)}
+        >
+          Refresh
+        </Button>
+      </Group>
       <ListFilter
         primaryValues={primaryCustomers}
         setFilteredValues={setFilteredCustomers}

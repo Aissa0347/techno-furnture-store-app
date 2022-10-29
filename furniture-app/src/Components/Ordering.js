@@ -175,8 +175,12 @@ function ShoppingCart() {
         orderList: cardProducts.map((product) => ({
           productId: product.id,
           quantity: product.numberOfProduct,
-          productTotal: ~~product.numberOfProduct * ~~product.price,
+          productTotal:
+            ~~product.numberOfProduct *
+            (~~product?.pricePromotion || ~~product.price),
           currentPrice: ~~product.price,
+          promotionPrice: ~~product?.pricePromotion,
+          selectedColor: product?.selectedColor,
           productName: product.name,
         })),
         totalCost,

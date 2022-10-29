@@ -13,6 +13,7 @@ import { DashboardContext } from "../../Dashboard";
 
 function Visits() {
   const { analyticsData } = useContext(DashboardContext);
+  console.log("analytics data : ", analyticsData);
   let data = analyticsData.map((day) => {
     let createdAtMoment = moment.unix(day.date?.seconds);
     let theDay = moment(createdAtMoment).format("DD MMM");

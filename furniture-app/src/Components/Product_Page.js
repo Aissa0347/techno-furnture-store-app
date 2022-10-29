@@ -12,14 +12,16 @@ import { Products_Catalog, defaultProduct } from "../Website-Assets";
 
 // import Styles
 import "../styles/index.scss";
-import { BiChevronLeft, BiHeart } from "react-icons/bi";
+import { BiChevronLeft, BiErrorCircle, BiHeart } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 import {
   ActionIcon,
+  Alert,
   ColorPicker,
   Group,
   NumberInput,
+  Text,
   TypographyStylesProvider,
 } from "@mantine/core";
 import { color } from "@mui/system";
@@ -82,6 +84,7 @@ function ProductInfo({
   id,
   description,
   dimensions,
+  pricePromotion,
   details,
   colors,
   currentProduct,
@@ -100,8 +103,30 @@ function ProductInfo({
   } = useContext(GlobalContext);
   const [colorPicked, setColorPicked] = useState("");
   const [quantityValue, setQuantityValue] = useState(1);
+  const [error, setError] = useState(false);
   const handlers = useRef();
   let isSaved = isFavorite(currentProduct, favoriteProducts);
+
+  useEffect(() => {
+    setQuantityValue(1);
+    setColorPicked("");
+    setError(false);
+  }, [currentProduct]);
+
+  function validatedProduct() {
+    if (colors?.length) {
+      if (colorPicked) {
+        setError(false);
+        return true;
+      } else {
+        setError(true);
+        return false;
+      }
+    } else {
+      return true;
+    }
+  }
+
   return (
     <>
       <ul>
@@ -116,41 +141,52 @@ function ProductInfo({
           {/*  <img loading="lazy" src={mark} alt="" /> */}
           <p>{markName}</p>
         </li>
-        <li className="product_dimensions info">
-          <h4>Dimensions:</h4>
-          <table>
-            <thead>
-              <tr>
-                <th>
-                  {" "}
-                  <small>Width-</small>&nbsp;{dimensions?.width}&nbsp;cm
-                </th>
-                <th>
-                  <small>Height-</small>&nbsp;{dimensions?.height}&nbsp;cm
-                </th>
-                <th>
-                  {" "}
-                  <small>Depth-</small>&nbsp;{dimensions?.depth}&nbsp;cm
-                </th>
-              </tr>
-            </thead>
-          </table>
-        </li>
+        {(dimensions?.width || dimensions?.height || dimensions?.depth) && (
+          <li className="product_dimensions info">
+            <h4>Dimensions:</h4>
+            <table>
+              <thead>
+                <tr>
+                  {dimensions?.width && (
+                    <th>
+                      {" "}
+                      <small>Width-</small>&nbsp;{dimensions?.width}&nbsp;cm
+                    </th>
+                  )}
+                  {dimensions?.height && (
+                    <th>
+                      <small>Height-</small>&nbsp;{dimensions?.height}&nbsp;cm
+                    </th>
+                  )}
+                  {dimensions?.depth && (
+                    <th>
+                      {" "}
+                      <small>Depth-</small>&nbsp;{dimensions?.depth}&nbsp;cm
+                    </th>
+                  )}
+                </tr>
+              </thead>
+            </table>
+          </li>
+        )}
         <li className="product_description ">
           <p>
             This product is really nice one I would to inform you that our
             product ranked with top 10 of the world
           </p>
         </li>
-        <li className="product_colors">
-          <h4>Colors:</h4>
-          <SelectProductColor
-            colors={colors}
-            colorPicked={colorPicked}
-            setColorPicked={setColorPicked}
-          />
-          {colorPicked?.colorName}
-        </li>
+        {colors?.length && (
+          <li className="product_colors">
+            <h4>Colors:</h4>
+            <SelectProductColor
+              setError={setError}
+              colors={colors}
+              colorPicked={colorPicked}
+              setColorPicked={setColorPicked}
+            />
+            {colorPicked?.colorName}
+          </li>
+        )}
         <li className="product_quantity">
           <label htmlFor="quantity">Qty:</label>
           <Group spacing={5}>
@@ -188,13 +224,31 @@ function ProductInfo({
           </Group>
         </li>
         <li className="product_price">
-          <h3> {price} DZD</h3>
+          <Text size={32} color="red" weight={500}>
+            {pricePromotion || price} DA
+          </Text>
+          {pricePromotion && (
+            <Text strikethrough size={20} color="gray" weight={"normal"}>
+              {price} DA
+            </Text>
+          )}
+        </li>
+        <li>
+          {error && (
+            <Alert
+              icon={<BiErrorCircle size={16} />}
+              title="Bummer!"
+              color="orange"
+            >
+              Please select a color !
+            </Alert>
+          )}
         </li>
         <div className="product_btns btns">
           <button
             className="btn CTA"
             onClick={() => {
-              currentUserData
+              currentUserData && validatedProduct()
                 ? addToCard(
                     {
                       ...currentProduct,
@@ -233,7 +287,7 @@ function ProductInfo({
   );
 }
 
-function SelectProductColor({ colorPicked, setColorPicked, colors }) {
+function SelectProductColor({ colorPicked, setColorPicked, colors, setError }) {
   console.log("colors value : ", colors);
   return (
     <div className="select-product-color">
@@ -245,7 +299,10 @@ function SelectProductColor({ colorPicked, setColorPicked, colors }) {
               : "product-color"
           }
           style={{ backgroundColor: color.colorRef }}
-          onClick={() => setColorPicked({ ...color, index: index })}
+          onClick={() => {
+            setError(false);
+            setColorPicked({ ...color, index: index });
+          }}
         ></div>
       ))}
     </div>

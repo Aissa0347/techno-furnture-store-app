@@ -19,7 +19,11 @@
   height: 100%;
   img {
     border-radius: 50%;
+    height: 45px;
+    width: 45px;
     max-height: 45px;
+    max-width: 45px;
+    object-fit: cover;
     margin-right: 10px;
   }
 }

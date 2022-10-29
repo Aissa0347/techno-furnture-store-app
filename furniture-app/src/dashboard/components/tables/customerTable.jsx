@@ -57,8 +57,8 @@ function stableSort(array, comparator) {
 }
 
 export default function EnhancedTable({ rows, headCells }) {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
+  const [order, setOrder] = React.useState("");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -88,7 +88,7 @@ export default function EnhancedTable({ rows, headCells }) {
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
+          {/* <TableCell padding="checkbox">
             <Checkbox
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -98,7 +98,7 @@ export default function EnhancedTable({ rows, headCells }) {
                 "aria-label": "select all desserts",
               }}
             />
-          </TableCell>
+          </TableCell> */}
           {headCells.map((headCell) => (
             <TableCell
               key={headCell.id}
@@ -289,7 +289,7 @@ export default function EnhancedTable({ rows, headCells }) {
                         selected={isItemSelected}
                         className="customers-table"
                       >
-                        <TableCell padding="checkbox">
+                        {/* <TableCell padding="checkbox">
                           <Checkbox
                             color="primary"
                             onClick={(event) => handleClick(event, row.id)}
@@ -298,7 +298,7 @@ export default function EnhancedTable({ rows, headCells }) {
                               "aria-labelledby": labelId,
                             }}
                           />
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell>
                           <span className="customer-avatar">
                             <img
@@ -330,23 +330,6 @@ export default function EnhancedTable({ rows, headCells }) {
                               {show}
                             </span>
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <Menu shadow="md" width={100}>
-                            <Menu.Target>
-                              <div className="edit-menu dash-actions">
-                                <span className="action">{editMenu}</span>
-                              </div>
-                            </Menu.Target>
-                            <Menu.Dropdown>
-                              <Menu.Item
-                                icon={edit}
-                                className="table-item-icon"
-                              >
-                                <div className="table-icon">{edit} edit</div>{" "}
-                              </Menu.Item>
-                            </Menu.Dropdown>
-                          </Menu>{" "}
                         </TableCell>
                       </TableRow>
                     );

@@ -5,6 +5,7 @@ import {
   CloseButton,
   Group,
   NumberInput,
+  Text,
 } from "@mantine/core";
 import {
   collection,
@@ -56,12 +57,16 @@ function EditInvoice({
   // }, []);
 
   useMemo(() => {
-    let filteredProducts = orderedProductsList.filter((productFromList) =>
-      orderedProducts.find(
-        (productFromOrdered) =>
-          productFromList?.id === productFromOrdered?.productId
-      )
+    let filteredProducts = [];
+    orderedProducts.forEach((productFromOrdered) =>
+      orderedProductsList.find((productFromList) => {
+        if (productFromList?.id === productFromOrdered?.productId) {
+          filteredProducts.push(productFromList);
+        }
+        return productFromList?.id === productFromOrdered?.productId;
+      })
     );
+    console.log("filtered products : ", filteredProducts);
     setFilteredProductsList(filteredProducts);
   }, [orderedProducts]);
 
@@ -93,15 +98,19 @@ function DashUniqueCard({
   setOrderedProducts,
 }) {
   const [quantityValue, setQuantityValue] = useState(orderProduct?.quantity);
+
   // useEffect(() => {
   //   setQuantityValue(orderProduct.quantity);
   // }, []);
+
+  console.log("this is product example : ", orderProduct);
 
   useEffect(() => {
     if (quantityValue > 0) {
       orderProduct.quantity = quantityValue;
       orderProduct.productTotal =
-        (~~orderProduct?.currentPrice || ~~Product?.price) * quantityValue;
+        (~~orderProduct?.promotionPrice || ~~Product?.currentPrice) *
+        quantityValue;
       setOrderedProducts([...orderedProducts]);
     } else if (quantityValue < 1) {
       setQuantityValue(1);
@@ -117,8 +126,27 @@ function DashUniqueCard({
           className="product_image invoice-img"
         />
         <div className="product_title ">
-          <h5>{Product?.name}</h5>
-          <h4>{Product?.price} DZD</h4>
+          <h5>
+            {Product?.name}
+            <div
+              className="color-shower"
+              style={{
+                backgroundColor: orderProduct?.selectedColor?.colorRef,
+                display: "inline-block",
+                marginLeft: "5px",
+              }}
+            ></div>
+          </h5>
+          <Group align={"flex-end"} spacing={5}>
+            <Text color={"red"} size={18} weight={500}>
+              {orderProduct?.promotionPrice || orderProduct?.currentPrice} DA
+            </Text>
+            {orderProduct?.promotionPrice && (
+              <Text color={"gray"} size={16} weight={400} strikethrough>
+                {orderProduct?.currentPrice} DA
+              </Text>
+            )}
+          </Group>
         </div>
       </div>
       <label htmlFor="Qty-input" className="quantity-controls">
@@ -163,7 +191,9 @@ function DashUniqueCard({
           setOrderedProducts((prev) =>
             prev.filter(
               (lastOrderProduct) =>
-                lastOrderProduct.productId !== orderProduct.productId
+                lastOrderProduct?.productId !== orderProduct?.productId ||
+                lastOrderProduct?.selectedColor?.colorRef !==
+                  orderProduct?.selectedColor?.colorRef
             )
           )
         }

@@ -66,7 +66,7 @@ function Notification() {
     const unsub = onSnapshot(
       doc(db, "Notifications", "Orders-Notifications"),
       async (res) => {
-        if (notificationsList.length < 1 || res?.metadata.hasPendingWrites()) {
+        if (notificationsList.length < 1 || res?.metadata.hasPendingWrites) {
           let lastCheckingTime;
           await getDoc(doc(db, "Notifications", "Checking-Notifications"))
             .then((reponse) => {

@@ -8,6 +8,8 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { useEffect } from "react";
 import { DashboardContext } from "../../Dashboard";
+import { Button, Group } from "@mantine/core";
+import { BiRefresh } from "react-icons/bi";
 
 //* --------------------------- Duration Component --------------------------- */
 
@@ -120,6 +122,7 @@ function Widgets() {
 
 //* ----------------------------- Main Component ----------------------------- */
 function Main() {
+  const { setRefresh } = useContext(DashboardContext);
   // useEffect(() => {
   //   let smallObj = [];
   //   const docRef = doc(db, "Testing", "Max");
@@ -136,7 +139,18 @@ function Main() {
 
   return (
     <section className="main in-dash-container">
-      <h1 className="dash-title">Dashboard</h1>
+      <Group position="apart">
+        <h1 className="dash-title">Dashboard</h1>
+        <Button
+          variant="filled"
+          radius={"none"}
+          size={"sm"}
+          rightIcon={<BiRefresh size={24} />}
+          onClick={() => setRefresh(true)}
+        >
+          Refresh
+        </Button>
+      </Group>
       <Widgets />
       <Statics />
     </section>

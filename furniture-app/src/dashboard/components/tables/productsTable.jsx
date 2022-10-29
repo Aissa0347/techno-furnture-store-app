@@ -64,8 +64,8 @@ export default function EnhancedTable({
   setProductView,
   setEditProductPopup,
 }) {
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("name");
+  const [order, setOrder] = React.useState("");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -88,7 +88,7 @@ export default function EnhancedTable({
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
+          {/* <TableCell padding="checkbox">
             <Checkbox
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -98,7 +98,7 @@ export default function EnhancedTable({
                 "aria-label": "select all desserts",
               }}
             />
-          </TableCell>
+          </TableCell> */}
           {headCells.map((headCell) => (
             <TableCell
               key={headCell.id}
@@ -321,7 +321,7 @@ export default function EnhancedTable({
                       selected={isItemSelected}
                       className="customers-table product-table"
                     >
-                      <TableCell padding="checkbox">
+                      {/* <TableCell padding="checkbox">
                         <Checkbox
                           color="primary"
                           onClick={(event) => handleClick(event, row.id)}
@@ -330,7 +330,7 @@ export default function EnhancedTable({
                             "aria-labelledby": labelId,
                           }}
                         />
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell>
                         <span className="customer-avatar">
                           <img loading="lazy" src={row?.productImg} alt="" />
@@ -368,11 +368,6 @@ export default function EnhancedTable({
                             {edit}
                           </span>
                           <span className="action">{stop}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="edit-menu dash-actions">
-                          <span className="action">{editMenu}</span>
                         </div>
                       </TableCell>
                     </TableRow>
