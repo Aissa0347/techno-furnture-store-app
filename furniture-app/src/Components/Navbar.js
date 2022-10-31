@@ -133,17 +133,21 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
               <h5>{`${subTotal}`} DZD</h5>
             </li>
           </div>
-          <Button
-            size="md"
-            radius={"none"}
-            fullWidth
-            color={"red"}
-            uppercase
-            className="checkout"
-            onClick={() => setShowCardProducts(false)}
-          >
-            <Link to={"/ordering"}>Check Out</Link>
-          </Button>
+
+          <Link to={"/ordering"}>
+            {" "}
+            <Button
+              size="md"
+              radius={"none"}
+              fullWidth
+              color={"red"}
+              uppercase
+              className="checkout"
+              onClick={() => setShowCardProducts(false)}
+            >
+              Check Out{" "}
+            </Button>
+          </Link>
         </Stack>
       </Stack>
     </Drawer>

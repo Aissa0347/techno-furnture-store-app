@@ -33,6 +33,7 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: 2%;
+  row-gap: 15px;
   .input {
     color: $primaryColor;
     input:focus {
@@ -50,7 +51,6 @@
     border: $border;
     border-radius: 0px;
     padding: 0 0.5rem;
-    margin-bottom: 15px;
     &:focus {
       outline: 1px solid $thirdColor;
     }

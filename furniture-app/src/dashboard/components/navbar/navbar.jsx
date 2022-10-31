@@ -4,7 +4,7 @@
 import { Bell, Dashboard, menu, Store } from "../icons";
 import { Link } from "react-router-dom";
 import { ActionIcon, Avatar, Indicator, Menu, Text } from "@mantine/core";
-import { BiBell } from "react-icons/bi";
+import { BiBell, BiMessageCheck } from "react-icons/bi";
 import {
   collection,
   doc,
@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { useEffect, useState } from "react";
+import { showNotification } from "@mantine/notifications";
 
 const logo = require("../../../Website-Assets/logo.png");
 const adminImg = require("../../../Website-Assets/Admin.png");
@@ -78,11 +79,35 @@ function Notification() {
           console.log("notifications here : ", lastCheckingTime);
 
           // if (notificationsArray.length < 1) unsub();
-          let slicedNotifications = notificationsArray?.slice(-30);
+          let slicedNotifications = notificationsArray
+            ?.sort((prev, next) => next?.time - prev?.time)
+            ?.slice(-30);
           let notifications = slicedNotifications.map((notify) => {
-            return notify.time > lastCheckingTime.seconds
-              ? { ...notify, status: "new" }
-              : notify;
+            if (notify.time > lastCheckingTime.seconds) {
+              showNotification({
+                autoClose: 5000,
+                title: "New Order Has Been Added",
+                message: (
+                  <div>
+                    {" "}
+                    Please Check{" "}
+                    <Link to={"invoices"} color="blue">
+                      Invoices
+                    </Link>{" "}
+                    Section
+                  </div>
+                ),
+                color: "blue",
+                icon: <BiMessageCheck size={32} />,
+                className: "my-notification-class",
+                style: { backgroundColor: "white" },
+                sx: { backgroundColor: "red" },
+                loading: false,
+              });
+              return { ...notify, status: "new" };
+            } else {
+              return notify;
+            }
           });
           console.log("notifications is there : ", notificationsArray);
           setNotificationsList(
@@ -124,11 +149,9 @@ function Notification() {
           <ActionIcon variant="transparent" size={"lg"} radius={"none"}>
             <Indicator
               label={count}
-              showZero={true}
               dot={false}
+              showZero={true}
               radius={"xl"}
-              style={{ width: "15px", height: "15px" }}
-              inline
               overflowCount={999}
               size={"sm"}
               color={"red"}

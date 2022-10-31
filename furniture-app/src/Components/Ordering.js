@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import Icons
 import {
+  BiCheckCircle,
   BiChevronDown,
   BiChevronLeft,
   BiChevronUp,
@@ -29,8 +30,10 @@ import {
   ActionIcon,
   Button,
   Group,
+  Modal,
   SimpleGrid,
   Stack,
+  Text,
   TextInput,
 } from "@mantine/core";
 import { auth } from "../firebase/firebaseConfig";
@@ -47,6 +50,20 @@ function ShippingInfo() {
       willaya: "",
       address: "",
       phoneNumber: "",
+    },
+    validate: {
+      fullName: (name) =>
+        /^([a-zA-Z0-9]* ?)+$/.test(name) ? null : "Please enter a valid name ",
+      willaya: (willaya) =>
+        /^([a-zA-Z]* ?)+$/.test(willaya)
+          ? null
+          : "Please enter a valid willaya ",
+      address: (address) =>
+        /^[\w\d ,\.]+$/.test(address) ? null : "Please enter a valid address ",
+      phoneNumber: (phoneNumber) =>
+        /^[0-9]*$/.test(phoneNumber)
+          ? null
+          : "Please enter a valid phone number ",
     },
   });
 
@@ -81,52 +98,53 @@ function ShippingInfo() {
       >
         <div className=" info_form">
           <TextInput
+            fullwidth
             label="Full name"
             type={"text"}
             size={"md"}
-            className=" input half"
+            className=" input "
             placeholder="Enter your full name"
             withAsterisk
             {...orderForm.getInputProps("fullName")}
-            required
           />
           <TextInput
+            fullwidth
             label="Country"
             type={"text"}
             size={"md"}
-            className=" input half"
+            className=" input "
             value={"Algeria"}
             disabled
           />
           <TextInput
+            fullwidth
             label="Willaya"
             type={"text"}
             size={"md"}
-            className=" input half"
+            className=" input "
             placeholder="Enter your current willaya"
             withAsterisk
             {...orderForm.getInputProps("willaya")}
-            required
           />
           <TextInput
+            fullwidth
             label="Address"
             type={"text"}
             size={"md"}
-            className=" input half"
+            className=" input "
             placeholder="Enter your exact address"
             withAsterisk
             {...orderForm.getInputProps("address")}
-            required
           />
           <TextInput
+            fullwidth
             label="Phone Number"
             type={"number"}
             size={"md"}
-            className=" input half"
+            className=" input "
             placeholder="Enter your exact address"
             withAsterisk
             {...orderForm.getInputProps("phoneNumber")}
-            required
           />
         </div>
         <div className="btns">
@@ -271,6 +289,7 @@ function ShoppingCart() {
 //* ------------------------------- Order Page ------------------------------- */
 
 function Ordering() {
+  const { isOrderSuccess, setIsOrderSuccess } = useContext(GlobalContext);
   return (
     <div className="order_page page container">
       <nav className="destination">
@@ -284,6 +303,20 @@ function Ordering() {
         <ShoppingCart />
       </div>
       {/* <ShoppingBag /> */}
+      <Modal
+        opened={isOrderSuccess}
+        onClose={() => setIsOrderSuccess(false)}
+        centered
+        withCloseButton={false}
+        padding="xl"
+      >
+        <Stack align={"center"}>
+          <BiCheckCircle fill="green" size={64} />
+          <Text align="center" size={"xl"} color="black">
+            ORDER DONE SUCCESSFULLY
+          </Text>
+        </Stack>
+      </Modal>
       <NewsLetter />
     </div>
   );

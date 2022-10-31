@@ -49,6 +49,13 @@ import { useLayoutEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { ref } from "firebase/storage";
 import moment from "moment";
+import { showNotification, updateNotification } from "@mantine/notifications";
+import {
+  BiCheckCircle,
+  BiErrorAlt,
+  BiHeartCircle,
+  BiXCircle,
+} from "react-icons/bi";
 
 //* ---------------------------- Main App Function --------------------------- */
 
@@ -181,6 +188,7 @@ function App() {
   const [userUID, setUserUID] = useState("");
   const [currentUserData, setCurrentUserData] = useState("");
   const [isUser, setIsUser] = useState(true);
+  const [isOrderSuccess, setIsOrderSuccess] = useState(false);
   const [orderData, setOrderData] = useState({
     userId: "",
     willaya: "",
@@ -317,7 +325,48 @@ function App() {
       setFavoriteProducts((lastFavorites) => {
         updateDoc(userRef, {
           favoriteProducts: [...lastFavorites, currentProduct],
-        });
+        })
+          .then((res) =>
+            showNotification({
+              autoClose: 5000,
+              title: "Item Added To Favorite Successfully",
+              message: (
+                <div>
+                  {" "}
+                  You can go to{" "}
+                  <Link to="/ordering" style={{ color: "blue" }}>
+                    chekout
+                  </Link>{" "}
+                  to finish process
+                </div>
+              ),
+              color: "red",
+              icon: <BiHeartCircle size={32} />,
+              className: "my-notification-class",
+              style: { backgroundColor: "white" },
+              sx: { backgroundColor: "red" },
+              loading: false,
+            })
+          )
+          .catch((error) =>
+            showNotification({
+              autoClose: 5000,
+              title: "Error, Item Doesn't Added To Favorite",
+              message: (
+                <div>
+                  {" "}
+                  Please Check You Internet Connexion Or Refresh The Page Then
+                  Try Again
+                </div>
+              ),
+              color: "red",
+              icon: <BiErrorAlt size={32} />,
+              className: "my-notification-class",
+              style: { backgroundColor: "white" },
+              sx: { backgroundColor: "red" },
+              loading: false,
+            })
+          );
         return [...lastFavorites, currentProduct];
       });
   }
@@ -344,16 +393,10 @@ function App() {
     let updatedCard = favoriteProducts.map((product) => ({
       docId: product.docId,
       selectedColor: product?.selectedColor,
-      quantity: currentProduct?.numberOfProduct,
+      quantity: product?.numberOfProduct,
     }));
 
-    if (isSavedToFavorite) {
-      setFavoriteProducts(favoriteProducts);
-
-      updateDoc(userRef, { productsInCart: updatedCard });
-    }
-
-    if (!isSavedSameVariant)
+    if (!isSavedSameVariant) {
       setFavoriteProducts((lastProducts) => {
         updateDoc(userRef, {
           productsInCart: [
@@ -364,9 +407,100 @@ function App() {
               quantity: currentProduct?.numberOfProduct,
             },
           ],
-        });
+        })
+          .then((res) =>
+            showNotification({
+              autoClose: 5000,
+              title: "Added To Card Successfully",
+              message: (
+                <div>
+                  {" "}
+                  You can go to{" "}
+                  <Link to="/ordering" style={{ color: "blue" }}>
+                    chekout
+                  </Link>{" "}
+                  to finish process
+                </div>
+              ),
+              color: "green",
+              icon: <BiCheckCircle size={32} />,
+              className: "my-notification-class",
+              style: { backgroundColor: "white" },
+              sx: { backgroundColor: "red" },
+              loading: false,
+            })
+          )
+          .catch((error) =>
+            showNotification({
+              autoClose: 5000,
+              title: "Error, Quantity Doesn't Updated",
+              message: (
+                <div>
+                  {" "}
+                  Please Check You Internet Connexion Or Refresh The Page Then
+                  Try Again
+                </div>
+              ),
+              color: "red",
+              icon: <BiErrorAlt size={32} />,
+              className: "my-notification-class",
+              style: { backgroundColor: "white" },
+              sx: { backgroundColor: "red" },
+              loading: false,
+            })
+          );
         return [...lastProducts, currentProduct];
       });
+      return;
+    }
+
+    if (isSavedToFavorite) {
+      setFavoriteProducts(favoriteProducts);
+
+      updateDoc(userRef, { productsInCart: updatedCard })
+        .then(
+          showNotification({
+            autoClose: 5000,
+            title: "Quantity Updated Successfully",
+            message: (
+              <div>
+                {" "}
+                You can go to{" "}
+                <Link to="/ordering" style={{ color: "blue" }}>
+                  chekout
+                </Link>{" "}
+                to finish process
+              </div>
+            ),
+            color: "green",
+            icon: <BiCheckCircle size={32} />,
+            className: "my-notification-class",
+            style: { backgroundColor: "white" },
+            sx: { backgroundColor: "red" },
+            loading: false,
+          })
+        )
+        .catch((error) =>
+          showNotification({
+            autoClose: 5000,
+            title: "Error, Product Doesn't Added To Your Card",
+            message: (
+              <div>
+                {" "}
+                Please Check You Internet Connexion Or Refresh The Page Then Try
+                Again
+              </div>
+            ),
+            color: "red",
+            icon: <BiErrorAlt size={32} />,
+            className: "my-notification-class",
+            style: { backgroundColor: "white" },
+            sx: { backgroundColor: "red" },
+            loading: false,
+          })
+        );
+    }
+    return;
   }
   function isFavorite(currentProduct, favoriteProducts) {
     let isSaved = false;
@@ -395,9 +529,30 @@ function App() {
       quantity: fav?.numberOfProduct,
     }));
 
-    updateDoc(userRef, { productsInCart: updatedCard }).then((res) =>
-      setFavoriteProducts(newFav)
-    );
+    updateDoc(userRef, { productsInCart: updatedCard })
+      .then((res) => setFavoriteProducts(newFav))
+      .then((res) =>
+        showNotification({
+          autoClose: 5000,
+          title: "Item Removed From Cart",
+          message: (
+            <div>
+              {" "}
+              You can go to{" "}
+              <Link to="/ordering" style={{ color: "blue" }}>
+                chekout
+              </Link>{" "}
+              to finish process
+            </div>
+          ),
+          color: "red",
+          icon: <BiXCircle size={32} />,
+          className: "my-notification-class",
+          style: { backgroundColor: "white" },
+          sx: { backgroundColor: "red" },
+          loading: false,
+        })
+      );
   }
 
   function removeFromFavorite(
@@ -408,9 +563,49 @@ function App() {
     let newFav = favoriteProducts.filter((favProduct) => {
       return favProduct.id !== currentProduct.id;
     });
-    updateDoc(userRef, { favoriteProducts: newFav }).then((res) =>
-      setFavoriteProducts(newFav)
-    );
+    updateDoc(userRef, { favoriteProducts: newFav })
+      .then((res) => setFavoriteProducts(newFav))
+      .then((res) =>
+        showNotification({
+          autoClose: 5000,
+          title: "Item Removed From Favorite",
+          message: (
+            <div>
+              {" "}
+              You can go to{" "}
+              <Link to="/ordering" style={{ color: "blue" }}>
+                chekout
+              </Link>{" "}
+              to finish process
+            </div>
+          ),
+          color: "red",
+          icon: <BiXCircle size={32} />,
+          className: "my-notification-class",
+          style: { backgroundColor: "white" },
+          sx: { backgroundColor: "red" },
+          loading: false,
+        })
+      )
+      .catch((error) =>
+        showNotification({
+          autoClose: 5000,
+          title: "Error, Item Doesn't Removed From Favorite",
+          message: (
+            <div>
+              {" "}
+              Please Check You Internet Connexion Or Refresh The Page Then Try
+              Again
+            </div>
+          ),
+          color: "red",
+          icon: <BiErrorAlt size={32} />,
+          className: "my-notification-class",
+          style: { backgroundColor: "white" },
+          sx: { backgroundColor: "red" },
+          loading: false,
+        })
+      );
   }
 
   function toggleToFavorite(
@@ -442,6 +637,14 @@ function App() {
   };
 
   function sendOrder(userInfo) {
+    showNotification({
+      id: "sending-order",
+      loading: true,
+      title: "Already Sending Order",
+      message: "Please Wait Till Order Done Successfully",
+      autoClose: false,
+      disallowClose: true,
+    });
     const ordersInfosRef = doc(db, "GeneralInfos", "ORDERS-GENERAL-INFOS");
     const orderRef = collection(db, "Orders");
     const userRef = query(collection(db, "Users"), where("id", "==", userUID));
@@ -465,9 +668,30 @@ function App() {
             numberOfOrders: ~~data.numberOfOrders + 1,
             amountSpent: ~~data.amountSpent + ~~newOrderData.totalCost,
             lastOrderAt: newOrderData?.orderDate,
-            address: newOrderData?.willaya + ", " + newOrderData?.address,
+            address: newOrderData?.address,
+            willaya: newOrderData?.willaya,
             phoneNumber: newOrderData.phoneNumber,
-          }).then((res) => console.log("thanks its fullfilled : ", res));
+          })
+            .then((res) => {
+              updateNotification({ id: "sending-order", autoClose: 0 });
+              setIsOrderSuccess(true);
+            })
+            .catch((error) =>
+              updateNotification({
+                id: "sending-order",
+                autoClose: 4000,
+                title: "Item Removed From Cart",
+                message: (
+                  <div>Please Check Your Internet Connexion Then Try Again</div>
+                ),
+                color: "red",
+                icon: <BiXCircle size={32} />,
+                className: "my-notification-class",
+                style: { backgroundColor: "white" },
+                sx: { backgroundColor: "red" },
+                loading: false,
+              })
+            );
         });
         getDoc(notificationsRef)
           .then((res) => {
@@ -495,6 +719,7 @@ function App() {
       });
 
     console.log("this is what we send : ", orderData);
+    return;
   }
 
   console.log("those are our favorite", favoriteProducts);
@@ -528,6 +753,8 @@ function App() {
         updateCard,
         isUser,
         openAuthDrawer,
+        isOrderSuccess,
+        setIsOrderSuccess,
         setOpenAuthDrawer,
       }}
     >
