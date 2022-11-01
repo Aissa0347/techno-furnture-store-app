@@ -671,6 +671,8 @@ function App() {
             address: newOrderData?.address,
             willaya: newOrderData?.willaya,
             phoneNumber: newOrderData.phoneNumber,
+            firstName: newOrderData?.firstName,
+            lastName: newOrderData?.lastName,
           })
             .then((res) => {
               updateNotification({ id: "sending-order", autoClose: 0 });

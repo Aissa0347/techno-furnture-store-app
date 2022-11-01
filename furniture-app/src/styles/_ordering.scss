@@ -36,6 +36,7 @@
   row-gap: 15px;
   .input {
     color: $primaryColor;
+    width: 100%;
     input:focus {
       border: $border;
     }

@@ -59,7 +59,7 @@ export function ProductDetailShow(props) {
           </summary>
 
           <div className="col">
-            <TypographyStylesProvider>
+            <TypographyStylesProvider style={{ width: "100%" }}>
               <div
                 dangerouslySetInnerHTML={{
                   __html: currentProduct?.description,

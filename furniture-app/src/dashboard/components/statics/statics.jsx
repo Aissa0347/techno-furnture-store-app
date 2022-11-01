@@ -32,7 +32,9 @@ function Statics() {
       createData(
         order?.id,
         order?.avatarImg,
-        order?.fullName,
+        order?.firstName
+          ? order?.firstName + " " + order?.lastName
+          : order?.fullName,
         order?.phoneNumber,
         order?.orderId,
         order?.willaya + ", " + order?.address,

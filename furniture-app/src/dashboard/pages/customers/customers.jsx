@@ -121,7 +121,9 @@ function Customer() {
         createData(
           customer.id,
           customer.avatarImg,
-          customer.name,
+          customer?.firstName
+            ? `${customer.firstName} ${customer.lastName}`
+            : customer?.name,
           customer.phoneNumber,
           customer.createdAt,
           customer.numberOfOrders,

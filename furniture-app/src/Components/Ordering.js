@@ -16,7 +16,7 @@ import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
 // import Components needed
 import { NewsLetter } from "./Home";
 import { ShoppingCartList } from "./Products";
-import { GlobalContext } from "../App";
+import { capitalizeSentence, GlobalContext } from "../App";
 import { DashUniqueCard } from "./Card";
 
 // import DATA
@@ -42,26 +42,36 @@ import { serverTimestamp } from "firebase/firestore";
 //* ------------------------------ Shipping Info ----------------------------- */
 
 function ShippingInfo() {
-  const { setOrderData, orderData, sendOrder } = useContext(GlobalContext);
+  const { setOrderData, currentUserData, sendOrder } =
+    useContext(GlobalContext);
 
   const orderForm = useForm({
     initialValues: {
-      fullName: "",
-      willaya: "",
-      address: "",
-      phoneNumber: "",
+      firstName: currentUserData?.firstName,
+      lastName: currentUserData?.lastName,
+      willaya: currentUserData?.willaya,
+      address: currentUserData?.address,
+      phoneNumber: currentUserData?.phoneNumber,
     },
     validate: {
-      fullName: (name) =>
-        /^([a-zA-Z0-9]* ?)+$/.test(name) ? null : "Please enter a valid name ",
+      firstName: (name) =>
+        /^([a-zA-Z0-9]+ ?)+$/.test(name) && name
+          ? null
+          : "Please enter a valid name ",
+      lastName: (name) =>
+        /^([a-zA-Z0-9]+ ?)+$/.test(name) && name
+          ? null
+          : "Please enter a valid name ",
       willaya: (willaya) =>
-        /^([a-zA-Z]* ?)+$/.test(willaya)
+        /^([a-zA-Z]+ ?)+$/.test(willaya) && willaya
           ? null
           : "Please enter a valid willaya ",
       address: (address) =>
-        /^[\w\d ,\.]+$/.test(address) ? null : "Please enter a valid address ",
+        /^[\w\d ,\.]+$/.test(address) && address
+          ? null
+          : "Please enter a valid address ",
       phoneNumber: (phoneNumber) =>
-        /^[0-9]*$/.test(phoneNumber)
+        /^[0-9]{9,14}$/.test(phoneNumber) && phoneNumber
           ? null
           : "Please enter a valid phone number ",
     },
@@ -72,22 +82,33 @@ function ShippingInfo() {
       <h3 className="title">Shipping Information</h3>
       <form
         onSubmit={orderForm.onSubmit((formValues) => {
+          formValues.firstName = capitalizeSentence(
+            formValues.firstName,
+            "string"
+          );
+          formValues.lastName = capitalizeSentence(
+            formValues.lastName,
+            "string"
+          );
+          formValues.willaya = capitalizeSentence(formValues.willaya, "string");
+          formValues.address = capitalizeSentence(formValues.address, "string");
           if (auth.currentUser) {
             setOrderData(
               (lastData) => ({
                 ...lastData,
                 userId: auth.currentUser.uid,
-                fullName: formValues.fullName,
+                firstName: formValues.firstName,
+                lastName: formValues.lastName,
                 willaya: formValues.willaya,
                 address: formValues.address,
-                phoneNumber: formValues.phoneNumber,
+                phoneNumber: Number(formValues.phoneNumber),
               }),
               sendOrder({
                 userId: auth.currentUser.uid,
-                fullName: formValues.fullName,
+                fullName: formValues.firstName + " " + formValues.lastName,
                 willaya: formValues.willaya,
                 address: formValues.address,
-                phoneNumber: formValues.phoneNumber,
+                phoneNumber: Number(formValues.phoneNumber),
                 orderDate: serverTimestamp(),
               })
             );
@@ -98,17 +119,29 @@ function ShippingInfo() {
       >
         <div className=" info_form">
           <TextInput
-            fullwidth
-            label="Full name"
+            required
+            label="First Name"
             type={"text"}
             size={"md"}
-            className=" input "
-            placeholder="Enter your full name"
+            className=" input half"
+            placeholder="Enter your First Name"
+            disabled={currentUserData?.firstName && true}
             withAsterisk
-            {...orderForm.getInputProps("fullName")}
+            {...orderForm.getInputProps("firstName")}
           />
           <TextInput
-            fullwidth
+            required
+            label="Last Name"
+            type={"text"}
+            size={"md"}
+            className=" input half "
+            disabled={currentUserData?.lastName && true}
+            placeholder="Enter your Last Name"
+            withAsterisk
+            {...orderForm.getInputProps("lastName")}
+          />
+          <TextInput
+            required
             label="Country"
             type={"text"}
             size={"md"}
@@ -117,27 +150,29 @@ function ShippingInfo() {
             disabled
           />
           <TextInput
-            fullwidth
+            required
             label="Willaya"
             type={"text"}
             size={"md"}
             className=" input "
             placeholder="Enter your current willaya"
+            autoCapitalize
             withAsterisk
             {...orderForm.getInputProps("willaya")}
           />
           <TextInput
-            fullwidth
+            required
             label="Address"
             type={"text"}
             size={"md"}
+            autoCapitalize
             className=" input "
             placeholder="Enter your exact address"
             withAsterisk
             {...orderForm.getInputProps("address")}
           />
           <TextInput
-            fullwidth
+            required
             label="Phone Number"
             type={"number"}
             size={"md"}

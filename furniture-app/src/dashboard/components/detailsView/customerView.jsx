@@ -64,7 +64,7 @@ function CustomerView({ data, id }) {
             className="user-info-avatar"
             src={data.avatarImg}
           />
-          <h5>{data?.name}</h5>
+          <h5>{data?.firstName + " " + data?.lastName}</h5>
           <p>{data?.email}</p>
           <p>{data?.phoneNumber}</p>
           <p>

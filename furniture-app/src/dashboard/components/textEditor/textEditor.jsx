@@ -15,6 +15,7 @@ function TextEditor({ descriptionTextContent, setDescriptionTextContent }) {
           ["alignLeft", "alignCenter", "alignRight"],
         ]}
         className="editor"
+        id="rte"
       />
       {/* <TypographyStylesProvider>
         <div dangerouslySetInnerHTML={{ __html: descriptionTextContent }}></div>

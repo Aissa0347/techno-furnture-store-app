@@ -8,6 +8,7 @@ import {
   MultiSelect,
   CloseButton,
   Group,
+  Text,
 } from "@mantine/core";
 import { AddCategoriesPopup, AddColorsPopup } from "./addPopup";
 // Import React Lib
@@ -58,7 +59,7 @@ export default function NewProductPopup({
   const [newImageList, setNewImageList] = useState([]);
   const [primaryImages, setPrimaryImages] = useState([]);
   const [descriptionTextContent, setDescriptionTextContent] = useState("");
-
+  const [failedValidation, setFailedValidation] = useState(false);
   const [isImagesUploaded, setIsImagesUploaded] = useState(
     typeOfForm == "edit" ? true : false
   );
@@ -77,8 +78,27 @@ export default function NewProductPopup({
   });
 
   const [defaultValues, setDefaultValues] = useState(defaultProduct);
-
   const selectRef = useRef();
+  const productNameRef = useRef();
+  const categoryRef = useRef();
+  const priceRef = useRef();
+  const brandRef = useRef();
+
+  const validate = () => {
+    const newProductForm = document.querySelector(".new-product-form");
+    if (
+      newProductForm.productName?.value &&
+      newProductForm.category?.value &&
+      newProductForm.price?.value &&
+      newProductForm.brand?.value &&
+      (newImageList[0] || primaryImages[0])
+    ) {
+      setFailedValidation(false);
+      return true;
+    }
+    setFailedValidation(true);
+    return false;
+  };
 
   const addNewCategory = (value, textOfAdd, setState) => {
     if (value !== textOfAdd) return;
@@ -256,12 +276,19 @@ export default function NewProductPopup({
         <form className="info_form new-product-form">
           <div className="input half">
             <TextInput
-              placeholder="Product name"
-              label="Product name"
+              placeholder="Product Name"
+              label="Product Name"
               radius="none"
               size="md"
               name="productName"
+              ref={productNameRef}
+              onChange={() => setFailedValidation(false)}
               defaultValue={primaryValues?.name}
+              error={
+                failedValidation && !productNameRef.current?.value
+                  ? "Please enter a valid Name"
+                  : null
+              }
               withAsterisk
             />
           </div>
@@ -273,7 +300,13 @@ export default function NewProductPopup({
               clearable
               name="category"
               ref={selectRef}
+              error={
+                failedValidation && !selectRef.current?.value
+                  ? "Please enter a valid Name"
+                  : null
+              }
               onChange={(event) => {
+                setFailedValidation(false);
                 setSelectCategory((prev) => {
                   return { ...prev, value: event };
                 });
@@ -293,6 +326,13 @@ export default function NewProductPopup({
               radius="none"
               size="md"
               name="brand"
+              ref={brandRef}
+              onChange={() => setFailedValidation(false)}
+              error={
+                failedValidation && !brandRef.current?.value
+                  ? "Please enter a valid Name"
+                  : null
+              }
               defaultValue={primaryValues?.markName}
               withAsterisk
             />
@@ -307,7 +347,7 @@ export default function NewProductPopup({
                 { value: "inStock", label: "IN STOCK" },
                 { value: "outStock", label: "OUT OF STOCK" },
               ]}
-              defaultValue={primaryValues?.productStatus}
+              defaultValue={primaryValues?.productStatus || "inStock"}
               name="status"
               withAsterisk
             />
@@ -318,6 +358,13 @@ export default function NewProductPopup({
               label="Price"
               min={0}
               name="price"
+              ref={priceRef}
+              onChange={() => setFailedValidation(false)}
+              error={
+                failedValidation && !priceRef.current?.value
+                  ? "Please enter a valid Name"
+                  : null
+              }
               defaultValue={primaryValues?.price}
               withAsterisk
             />
@@ -452,12 +499,6 @@ export default function NewProductPopup({
             <label htmlFor="description" className="popup-label">
               description
             </label>
-            {/* <TextArea
-              id="description"
-              value={primaryValues?.description}
-              name="description"
-              className="description"
-            ></TextArea> */}
             <TextEditor
               descriptionTextContent={descriptionTextContent}
               setDescriptionTextContent={setDescriptionTextContent}
@@ -473,6 +514,12 @@ export default function NewProductPopup({
               multiple
               onChange={(e) => submitImages([...e.target.files])}
             /> */}
+            {failedValidation &&
+            !(primaryImages?.length || newImageList?.length) ? (
+              <Text color={"red"} size="md">
+                Please Pick Some Images
+              </Text>
+            ) : null}
             <ImageDropzone
               submitImages={submitImages}
               isImagesUploaded={isImagesUploaded}
@@ -508,16 +555,20 @@ export default function NewProductPopup({
                 size="md"
                 onClick={() => {
                   console.log(newImageList);
-                  updateDoc(
-                    doc(db, "ProductsList", primaryValues.id),
-                    assignedProduct()
-                  ).then((res) => {
-                    updateData();
-                    setClose(false);
-                    console.log("last chance of new image list", newImageList);
-                    if (newImageList[0])
-                      deleteImages(filterNotUploaded(), setPrimaryImages);
-                  });
+                  if (validate())
+                    updateDoc(
+                      doc(db, "ProductsList", primaryValues.id),
+                      assignedProduct()
+                    ).then((res) => {
+                      updateData();
+                      setClose(false);
+                      console.log(
+                        "last chance of new image list",
+                        newImageList
+                      );
+                      if (newImageList[0])
+                        deleteImages(filterNotUploaded(), setPrimaryImages);
+                    });
                 }}
               >
                 Update
@@ -546,12 +597,15 @@ export default function NewProductPopup({
                 size="md"
                 onClick={() => {
                   console.log(newImageList);
-                  isUploaded
-                    ? addDoc(colProductList, assignedProduct()).then((res) => {
-                        updateData();
-                        setClose(false);
-                      })
-                    : console.log("please wait till uploading finished");
+                  if (validate())
+                    isUploaded
+                      ? addDoc(colProductList, assignedProduct()).then(
+                          (res) => {
+                            updateData();
+                            setClose(false);
+                          }
+                        )
+                      : console.log("please wait till uploading finished");
                 }}
               >
                 Submit
