@@ -64,7 +64,7 @@ function Notification() {
   const [opened, setOpened] = useState(false);
   const [notificationsList, setNotificationsList] = useState([]);
   useEffect(() => {
-    const unsub = onSnapshot(
+    onSnapshot(
       doc(db, "Notifications", "Orders-Notifications"),
       async (res) => {
         if (notificationsList.length < 1 || res?.metadata.hasPendingWrites) {

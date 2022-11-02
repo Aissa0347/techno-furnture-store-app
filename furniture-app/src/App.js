@@ -235,7 +235,10 @@ function App() {
   console.log("this is current user data", currentUserData);
 
   onAuthStateChanged(auth, async (user) => {
-    let adminsUID = ["dGnlVOf16zUFWWgEtYH6E4s8mEf2"];
+    let adminsUID = [
+      "dGnlVOf16zUFWWgEtYH6E4s8mEf2",
+      "TONSoS6eVVXWkW6aUMdAULMMks02",
+    ];
 
     // console.log("this is the top uid : ", userUID);
     if (adminsUID.some((uid) => uid === user?.uid)) setIsUser(false);
@@ -657,7 +660,7 @@ function App() {
           ...userInfo,
           orderId: generateOrderId(currentValue + 1),
         };
-        console.log(newOrderData);
+        console.log("newOrderData", newOrderData);
         addDoc(orderRef, newOrderData);
         updateDoc(ordersInfosRef, { ordersCount: ~~currentValue + 1 });
         setStaticValue("orders", 1);
@@ -671,8 +674,8 @@ function App() {
             address: newOrderData?.address,
             willaya: newOrderData?.willaya,
             phoneNumber: newOrderData.phoneNumber,
-            firstName: newOrderData?.firstName,
-            lastName: newOrderData?.lastName,
+            firstName: userInfo?.firstName || null,
+            lastName: userInfo?.lastName || null,
           })
             .then((res) => {
               updateNotification({ id: "sending-order", autoClose: 0 });

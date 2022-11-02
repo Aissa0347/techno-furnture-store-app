@@ -57,6 +57,7 @@ export default function NewProductPopup({
   const { updateData } = useContext(GlobalContext);
   const [isUploaded, setIsUploaded] = useState(false);
   const [newImageList, setNewImageList] = useState([]);
+  const [updatedImageList, setUpdatedImageList] = useState([]);
   const [primaryImages, setPrimaryImages] = useState([]);
   const [descriptionTextContent, setDescriptionTextContent] = useState("");
   const [failedValidation, setFailedValidation] = useState(false);
@@ -80,7 +81,6 @@ export default function NewProductPopup({
   const [defaultValues, setDefaultValues] = useState(defaultProduct);
   const selectRef = useRef();
   const productNameRef = useRef();
-  const categoryRef = useRef();
   const priceRef = useRef();
   const brandRef = useRef();
 
@@ -107,7 +107,12 @@ export default function NewProductPopup({
     });
   };
 
-  console.log("this is image list : ", newImageList);
+  console.log(
+    "this is image list : ",
+    newImageList,
+    primaryImages,
+    updatedImageList
+  );
 
   useEffect(() => {
     document.querySelectorAll(".ql-blank").value = show;
@@ -122,7 +127,10 @@ export default function NewProductPopup({
     if (files.length < 1) {
       return;
     }
+    setUpdatedImageList([]);
+    setNewImageList([]);
     let imgList = [];
+    let newImgList = [];
 
     setIsUploadImagesLoading(true);
     setIsUploaded(false);
@@ -130,16 +138,14 @@ export default function NewProductPopup({
     let fileNotUploaded = files.length;
     console.log("primary Images : ", primaryImages);
     files.map(async (file) => {
-      if (
-        !primaryImages?.some((primaryImg) => file?.url === primaryImg.url) ||
-        operation === "update"
-      ) {
+      if (!primaryImages?.some((primaryImg) => file?.url === primaryImg.url)) {
         const imageRef = ref(storage, `Product Images/${file.name + uuidv4()}`);
 
         await uploadBytes(imageRef, file)
           .then(async (reponse) => {
             await getDownloadURL(reponse.ref).then((url) => {
               imgList.push({ url: url, path: reponse.ref.fullPath });
+              newImgList.push({ url: url, path: reponse.ref.fullPath });
               console.log("check this", reponse);
 
               fileNotUploaded--;
@@ -154,7 +160,8 @@ export default function NewProductPopup({
       }
       if (fileNotUploaded == 0) {
         setIsImagesUploaded(true);
-        setNewImageList((prev) => [...prev, ...imgList]);
+        setNewImageList((prev) => [...prev, ...newImgList]);
+        setUpdatedImageList((prev) => [...prev, ...imgList]);
         setIsUploaded(true);
         setIsUploadImagesLoading(false);
         console.log(typeof newImageList, newImageList);
@@ -179,10 +186,10 @@ export default function NewProductPopup({
     let productTemplate;
 
     return {
-      name: newProductForm.productName?.value,
+      name: newProductForm.productName?.value.toUpperCase(),
       category: newProductForm.category?.value,
       colors: selectColors?.value,
-      img: newImageList[0] ? newImageList : primaryImages,
+      img: updatedImageList[0] ? updatedImageList : primaryImages,
       price: Number(newProductForm.price?.value),
       pricePromotion: Number(newProductForm.pricePromotion?.value),
       box: {
@@ -193,7 +200,7 @@ export default function NewProductPopup({
           Number(newProductForm.numberOfBoxPieces?.value),
       },
       mark: "",
-      markName: newProductForm.brand?.value,
+      markName: newProductForm.brand?.value.toUpperCase(),
       dimensions: {
         height: Number(newProductForm?.height?.value),
         width: Number(newProductForm?.width?.value),
@@ -566,8 +573,8 @@ export default function NewProductPopup({
                         "last chance of new image list",
                         newImageList
                       );
-                      if (newImageList[0])
-                        deleteImages(filterNotUploaded(), setPrimaryImages);
+                      // if (newImageList.length)
+                      //   deleteImages(filterNotUploaded(), setPrimaryImages);
                     });
                 }}
               >

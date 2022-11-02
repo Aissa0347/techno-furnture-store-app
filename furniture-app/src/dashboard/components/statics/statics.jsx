@@ -23,6 +23,7 @@ function Statics() {
 
   useEffect(() => {
     if (lastInvoicesData.length < 1 || refresh) getLastData();
+    getLastData();
     setRefresh(false);
   }, [refresh]);
 

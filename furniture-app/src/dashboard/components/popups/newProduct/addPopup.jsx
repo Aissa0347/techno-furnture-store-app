@@ -47,7 +47,10 @@ export function AddCategoriesPopup({ setSubmitAndState, submitAndState }) {
           size="md"
           onClick={() => {
             updateDoc(categoriesRef, {
-              categories: [valueInput.current.value, ...submitAndState.data],
+              categories: [
+                valueInput.current.value.toUpperCase(),
+                ...submitAndState.data,
+              ],
             });
             setSubmitAndState((prev) => {
               return {
@@ -56,10 +59,11 @@ export function AddCategoriesPopup({ setSubmitAndState, submitAndState }) {
                 data: (() => {
                   prev.data.forEach((val) => {
                     console.log(val);
-                    if (val === valueInput.current.value) isDuplicate = true;
+                    if (val === valueInput.current.value.toUpperCase())
+                      isDuplicate = true;
                   });
                   return isDuplicate === false
-                    ? [valueInput.current.value, ...prev.data]
+                    ? [valueInput.current.value.toUpperCase(), ...prev.data]
                     : [...prev.data];
                 })(),
                 state: false,
