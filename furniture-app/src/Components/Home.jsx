@@ -225,57 +225,25 @@ function ProductsM() {
   let { pickRandomProducts, ProductsCatalog } = useContext(GlobalContext);
   let ourProducts = pickRandomProducts(ProductsCatalog, 8);
 
-  function checkIsSmaller() {
-    if (window.innerWidth > 767) {
-      setSmaller(false);
-    } else {
-      setSmaller(true);
-    }
-  }
-
-  let i = 0;
-
-  useEffect(() => {
-    const resize = function () {
-      checkIsSmaller();
-      var Height = document.querySelector(".bx").offsetHeight;
-      if (document.querySelector(".swiper-products")) {
-        document.querySelector(".swiper-products").style.height =
-          2 * Height + 60 + "px";
-      }
-    };
-    window.addEventListener("resize", resize);
-    checkIsSmaller();
-    return () => document.removeEventListener("resize", resize);
-  });
-
   return (
     <div className="ProductsM section ">
       <h2>Our Products</h2>
       {/* <Control /> */}
-      {(() => {
-        if (false) {
-          return <Products ourProducts={ourProducts} />;
-        } else {
-          return (
-            <SimpleGrid
-              cols={5}
-              breakpoints={[
-                { maxWidth: 1400, cols: 4, spacing: "md" },
-                { maxWidth: 981, cols: 3, spacing: "sm" },
-                { maxWidth: 768, cols: 2, spacing: "sm" },
-                { maxWidth: 400, cols: 1, spacing: "xs" },
-              ]}
-            >
-              {ourProducts.map((card) => {
-                return (
-                  <ProductsCard {...card} currentProduct={card} key={card.id} />
-                );
-              })}
-            </SimpleGrid>
-          );
-        }
-      })()}
+
+      <SimpleGrid
+        cols={5}
+        breakpoints={[
+          { maxWidth: 1400, cols: 4, spacing: "md" },
+          { maxWidth: 981, cols: 3, spacing: "sm" },
+          { maxWidth: 768, cols: 2, spacing: "sm" },
+          { maxWidth: 400, cols: 1, spacing: "xs" },
+        ]}
+      >
+        {ourProducts.map((card) => {
+          return <ProductsCard {...card} currentProduct={card} key={card.id} />;
+        })}
+      </SimpleGrid>
+
       <div className="btns">
         <Link
           to="/catalog"
@@ -331,12 +299,14 @@ export function GeoInfo() {
           padding: "3rem",
         }}
       >
-        <h2>Title</h2>
-        <div className="store-images-wrapper">
-          <TechnoImages />
-          <Text align="left" color={"white"} size="lg" mt={10}>
-            Techno Chéraga Lot n1 Amara، 02 Rte de Ouled Fayet, شراقة 16000
-          </Text>
+        <h2>TITLE LABIN</h2>
+        <div className="slider-images">
+          <div className="store-images-wrapper">
+            <TechnoImages />
+            <Text align="left" color={"white"} size="lg" mt={10}>
+              Techno Chéraga Lot n1 Amara، 02 Rte de Ouled Fayet, شراقة 16000
+            </Text>
+          </div>
         </div>
         <div
           className="gmap_canvas"

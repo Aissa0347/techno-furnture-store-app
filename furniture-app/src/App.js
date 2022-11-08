@@ -237,7 +237,7 @@ function App() {
   onAuthStateChanged(auth, async (user) => {
     let adminsUID = [
       "dGnlVOf16zUFWWgEtYH6E4s8mEf2",
-      "TONSoS6eVVXWkW6aUMdAULMMks02",
+      "5F2owTlKwjPwZNNjcKOuKRKDSpC2",
     ];
 
     // console.log("this is the top uid : ", userUID);

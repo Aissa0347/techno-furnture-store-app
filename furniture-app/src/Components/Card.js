@@ -64,22 +64,17 @@ export function Actions({ currentProduct }) {
   return (
     <>
       <Group style={{ gap: "8px" }}>
-        <Button
-          radius={"none"}
-          size={"md"}
-          style={{ flex: 1, backgroundColor: "#d96b52" }}
-          onClick={() => {
-            currentUserData
-              ? addToFavorite(currentProduct, cardProducts, setCardProducts)
-              : setOpenAuthDrawer(true);
-          }}
-        >
-          Add to card
-        </Button>
+        <Link to={`/catalog/${currentProduct.id}`} style={{ flex: 1 }}>
+          <Button radius={"none"} size={"md"} color={"red"} fullWidth>
+            View more
+            <BiShowAlt style={{ marginLeft: "5px" }} size={24} />
+          </Button>
+        </Link>
         <ActionIcon
           variant="outline"
           size={42}
           radius={"none"}
+          style={{ width: "100%" }}
           onClick={() => {
             currentUserData
               ? toggleToFavorite(
@@ -213,61 +208,62 @@ export function ProductsCard({
           <Image src={img[0].url} alt={name} height={200} fit={"contain"} />
         </Card.Section>
       </Link>
-
-      <Group position="center" className={classes.productName} my="xs">
-        <div>
-          <Text weight={500} component="h3" transform="uppercase">
-            {name}
-          </Text>
-        </div>
-        <Stack align={"center"} spacing={2}>
-          {pricePromotion && (
+      <Link to={`/catalog/${id}`}>
+        <Group position="center" className={classes.productName} my="xs">
+          <div>
+            <Text weight={500} component="h3" transform="uppercase">
+              {name}
+            </Text>
+          </div>
+          <Stack align={"center"} spacing={2}>
+            {pricePromotion && (
+              <div>
+                <Text
+                  component="span"
+                  color={"gray"}
+                  mr={5}
+                  size="md"
+                  weight={500}
+                  sx={{ lineHeight: 1 }}
+                  strikethrough
+                >
+                  {price}0,00
+                </Text>
+                <Text
+                  component="span"
+                  size="xs"
+                  color="dimmed"
+                  weight={300}
+                  sx={{ lineHeight: "1px" }}
+                >
+                  DA
+                </Text>
+              </div>
+            )}
             <div>
               <Text
                 component="span"
-                color={"gray"}
+                style={{ color: "#d96b52" }}
                 mr={5}
-                size="md"
-                weight={500}
+                size="xl"
+                weight={700}
                 sx={{ lineHeight: 1 }}
-                strikethrough
               >
-                {price}0,00
+                {pricePromotion || price}0,00
               </Text>
               <Text
                 component="span"
-                size="xs"
-                color="dimmed"
-                weight={300}
+                size="sm"
+                style={{ color: "#d96b52" }}
+                weight={500}
                 sx={{ lineHeight: "1px" }}
               >
                 DA
               </Text>
             </div>
-          )}
-          <div>
-            <Text
-              component="span"
-              style={{ color: "#d96b52" }}
-              mr={5}
-              size="xl"
-              weight={700}
-              sx={{ lineHeight: 1 }}
-            >
-              {pricePromotion || price}0,00
-            </Text>
-            <Text
-              component="span"
-              size="sm"
-              style={{ color: "#d96b52" }}
-              weight={500}
-              sx={{ lineHeight: "1px" }}
-            >
-              DA
-            </Text>
-          </div>
-        </Stack>
-      </Group>
+          </Stack>
+        </Group>
+      </Link>
 
       <Card.Section className={classes.section} p="xs">
         <Actions currentProduct={currentProduct} />

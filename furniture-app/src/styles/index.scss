@@ -378,31 +378,46 @@ body {
   }
 }
 
+/*
+  GeoLocation Info
+  ================
+*/
+.mapouter {
+  h2 {
+    text-align: center;
+  }
+  .slider-images {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .store-images-wrapper {
+      position: absolute;
+      top: 20%;
+      right: 0%;
+      width: 700px;
+      max-width: 90%;
+      height: fit-content;
+      padding: 1rem;
+      padding-right: 3rem;
+      background-color: #060e53;
+      .swiper-slide {
+        height: 400px;
+        img {
+          width: 100%;
+          height: 400px;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+}
+
 //* ------------------------------- Contact Us ------------------------------- */
 
 .contactUs {
   max-width: 1000px;
   text-align: left;
-}
-
-.store-images-wrapper {
-  position: absolute;
-  top: 20%;
-  right: 0%;
-  width: 700px;
-  max-width: 90%;
-  height: fit-content;
-  padding: 1rem;
-  padding-right: 3rem;
-  background-color: #060e53;
-  .swiper-slide {
-    height: 400px;
-    img {
-      width: 100%;
-      height: 400px;
-      object-fit: cover;
-    }
-  }
 }
 
 //* ------------------------------- NewsLetter ------------------------------- */
