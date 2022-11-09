@@ -255,8 +255,12 @@ function App() {
   useEffect(() => {
     if (currentUserData) {
       setUserRef(doc(db, "Users", currentUserData.docId));
-      setCardProducts(getProductsFromLocal(currentUserData?.productsInCart));
-      setFavoriteProducts(currentUserData?.favoriteProducts);
+      setCardProducts(
+        getCardProductsFromLocal(currentUserData?.productsInCart)
+      );
+      setFavoriteProducts(
+        getFavoriteProductsFromLocal(currentUserData?.favoriteProducts)
+      );
     } else {
       setIsUser(true);
       setCardProducts([]);
@@ -284,7 +288,7 @@ function App() {
     getData();
   }
 
-  function getProductsFromLocal(productsInCard) {
+  function getCardProductsFromLocal(productsInCard) {
     let cardProducts = [];
     for (let i = 0; i < productsInCard.length; i++) {
       let currentProduct = productsInCard[i];
@@ -307,6 +311,18 @@ function App() {
     return cardProducts;
   }
 
+  function getFavoriteProductsFromLocal(productsInFavorite) {
+    let favFromLocal = [];
+    for (let i = 0; i < productsInFavorite.length; i++) {
+      let favProduct = ProductsCatalog.find(
+        (product) => product.id === productsInFavorite[i]
+      );
+      if (favProduct) favFromLocal.push(favProduct);
+    }
+    console.log("favorite from local : ", favFromLocal, productsInFavorite);
+    return favFromLocal;
+  }
+
   useEffect(() => {
     getData();
     console.log(ProductsCatalog);
@@ -325,53 +341,54 @@ function App() {
       if (favProduct.id === currentProduct.id) isSavedToFavorite = true;
     });
     if (!isSavedToFavorite)
-      setFavoriteProducts((lastFavorites) => {
-        updateDoc(userRef, {
-          favoriteProducts: [...lastFavorites, currentProduct],
+      updateDoc(userRef, {
+        favoriteProducts: arrayUnion(currentProduct.id),
+      })
+        .then((res) => {
+          setFavoriteProducts((lastFavorites) => {
+            return [...lastFavorites, currentProduct];
+          });
+
+          showNotification({
+            autoClose: 5000,
+            title: "Item Added To Favorite Successfully",
+            message: (
+              <div>
+                {" "}
+                You can go to{" "}
+                <Link to="/ordering" style={{ color: "blue" }}>
+                  chekout
+                </Link>{" "}
+                to finish process
+              </div>
+            ),
+            color: "red",
+            icon: <BiHeartCircle size={32} />,
+            className: "my-notification-class",
+            style: { backgroundColor: "white" },
+            sx: { backgroundColor: "red" },
+            loading: false,
+          });
         })
-          .then((res) =>
-            showNotification({
-              autoClose: 5000,
-              title: "Item Added To Favorite Successfully",
-              message: (
-                <div>
-                  {" "}
-                  You can go to{" "}
-                  <Link to="/ordering" style={{ color: "blue" }}>
-                    chekout
-                  </Link>{" "}
-                  to finish process
-                </div>
-              ),
-              color: "red",
-              icon: <BiHeartCircle size={32} />,
-              className: "my-notification-class",
-              style: { backgroundColor: "white" },
-              sx: { backgroundColor: "red" },
-              loading: false,
-            })
-          )
-          .catch((error) =>
-            showNotification({
-              autoClose: 5000,
-              title: "Error, Item Doesn't Added To Favorite",
-              message: (
-                <div>
-                  {" "}
-                  Please Check You Internet Connexion Or Refresh The Page Then
-                  Try Again
-                </div>
-              ),
-              color: "red",
-              icon: <BiErrorAlt size={32} />,
-              className: "my-notification-class",
-              style: { backgroundColor: "white" },
-              sx: { backgroundColor: "red" },
-              loading: false,
-            })
-          );
-        return [...lastFavorites, currentProduct];
-      });
+        .catch((error) =>
+          showNotification({
+            autoClose: 5000,
+            title: "Error, Item Doesn't Added To Favorite",
+            message: (
+              <div>
+                {" "}
+                Please Check You Internet Connexion Or Refresh The Page Then Try
+                Again
+              </div>
+            ),
+            color: "red",
+            icon: <BiErrorAlt size={32} />,
+            className: "my-notification-class",
+            style: { backgroundColor: "white" },
+            sx: { backgroundColor: "red" },
+            loading: false,
+          })
+        );
   }
 
   function addToCard(currentProduct, favoriteProducts, setFavoriteProducts) {
@@ -566,7 +583,8 @@ function App() {
     let newFav = favoriteProducts.filter((favProduct) => {
       return favProduct.id !== currentProduct.id;
     });
-    updateDoc(userRef, { favoriteProducts: newFav })
+    let newFavIds = newFav.map((fav) => fav.id);
+    updateDoc(userRef, { favoriteProducts: newFavIds })
       .then((res) => setFavoriteProducts(newFav))
       .then((res) =>
         showNotification({

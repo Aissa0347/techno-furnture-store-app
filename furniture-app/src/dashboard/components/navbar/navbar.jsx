@@ -63,11 +63,14 @@ function Notification() {
   const [count, setCount] = useState(0);
   const [opened, setOpened] = useState(false);
   const [notificationsList, setNotificationsList] = useState([]);
+  let unsub;
   useEffect(() => {
-    onSnapshot(
+    // if (unsub) console.log("unsub ", unsub);
+
+    unsub = onSnapshot(
       doc(db, "Notifications", "Orders-Notifications"),
       async (res) => {
-        if (notificationsList.length < 1 || res?.metadata.hasPendingWrites) {
+        if (notificationsList.length < 1 || res?.metadata?.hasPendingWrites) {
           let lastCheckingTime;
           await getDoc(doc(db, "Notifications", "Checking-Notifications"))
             .then((reponse) => {
@@ -81,6 +84,7 @@ function Notification() {
           // if (notificationsArray.length < 1) unsub();
           let slicedNotifications = notificationsArray
             ?.sort((prev, next) => next?.time - prev?.time)
+            ?.reverse()
             ?.slice(-30);
           let notifications = slicedNotifications.map((notify) => {
             if (notify.time > lastCheckingTime.seconds) {
@@ -122,7 +126,8 @@ function Notification() {
         }
       }
     );
-  });
+    console.log("notifications render");
+  }, []);
 
   useEffect(() => {
     let count = 0;
@@ -139,6 +144,7 @@ function Notification() {
       updateDoc(doc(db, "Notifications", "Checking-Notifications"), {
         lastTime: serverTimestamp(),
       });
+      setCount(0);
     }
   });
 
@@ -150,11 +156,12 @@ function Notification() {
             <Indicator
               label={count}
               dot={false}
-              showZero={true}
-              radius={"xl"}
-              overflowCount={999}
-              size={"sm"}
+              showZero={false}
+              radius={"lg"}
+              overflowCount={99}
+              size={"xs"}
               color={"red"}
+              className="notification"
             >
               <BiBell size={32} />
             </Indicator>

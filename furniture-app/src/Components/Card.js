@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { BiCartAlt, BiHeart, BiShowAlt, BiX } from "react-icons/bi";
+import { BiCartAlt, BiHeart, BiShow, BiShowAlt, BiX } from "react-icons/bi";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 
 //  Import from Libraries
@@ -51,10 +51,7 @@ export function Actions({ currentProduct }) {
   const {
     favoriteProducts,
     setFavoriteProducts,
-    cardProducts,
-    setCardProducts,
     toggleToFavorite,
-    addToFavorite,
     isFavorite,
     currentUserData,
     setOpenAuthDrawer,
@@ -64,8 +61,11 @@ export function Actions({ currentProduct }) {
   return (
     <>
       <Group style={{ gap: "8px" }}>
-        <Link to={`/catalog/${currentProduct.id}`} style={{ flex: 1 }}>
-          <Button radius={"none"} size={"md"} color={"red"} fullWidth>
+        <Link
+          to={`/catalog/${currentProduct.id}`}
+          style={{ flex: 1, width: "100%" }}
+        >
+          <Button radius={"none"} px={0} size={"md"} color={"red"} fullWidth>
             View more
             <BiShowAlt style={{ marginLeft: "5px" }} size={24} />
           </Button>
@@ -74,7 +74,6 @@ export function Actions({ currentProduct }) {
           variant="outline"
           size={42}
           radius={"none"}
-          style={{ width: "100%" }}
           onClick={() => {
             currentUserData
               ? toggleToFavorite(
@@ -145,6 +144,8 @@ const useStyles = createStyles((theme) => ({
   card: {
     display: "flex",
     flexDirection: "column",
+    minWidth: "250px",
+    maxWidth: "350px",
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
   },
@@ -519,7 +520,7 @@ export function DashUniqueCard({ Product, setIsChanged, cardProductsClone }) {
   );
 }
 
-export function FavUniqueCard({ Product, setTrigger }) {
+export function FavUniqueCard({ Product, setClose }) {
   const [quantityValue, setQuantityValue] = useState(
     Product?.numberOfProduct || 1
   );
@@ -532,9 +533,9 @@ export function FavUniqueCard({ Product, setTrigger }) {
     setFavoriteProducts,
   } = useContext(GlobalContext);
 
-  useEffect(() => {
-    quantityValue < 1 && setQuantityValue(1);
-  });
+  // useEffect(() => {
+  //   quantityValue < 1 && setQuantityValue(1);
+  // });
 
   return (
     <div className="unique_card product-info invoice-product-info">
@@ -558,7 +559,7 @@ export function FavUniqueCard({ Product, setTrigger }) {
           </Group>
         </div>
       </div>
-      <Group
+      {/* <Group
         position="apart"
         align={"center"}
         mt={"0.5rem"}
@@ -599,20 +600,18 @@ export function FavUniqueCard({ Product, setTrigger }) {
             </ActionIcon>
           </Group>
         </label>
-        <ActionIcon
-          variant="filled"
-          size={"lg"}
+      </Group> */}
+      <Link to={`catalog/${Product.id}`} onClick={() => setClose(false)}>
+        <Button
+          variant="light"
+          size={"md"}
           radius={"none"}
-          color="red"
-          onClick={() => {
-            addToFavorite(Product, cardProducts, setCardProducts);
-            Product.numberOfProduct = quantityValue;
-            setQuantityValue(1);
-          }}
+          color="blue"
+          rightIcon={<BiShow size={18} />}
         >
-          <BiCartAlt size={24} />
-        </ActionIcon>
-      </Group>
+          show
+        </Button>
+      </Link>
       <CloseButton
         size={"lg"}
         radius={"none"}

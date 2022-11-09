@@ -179,7 +179,12 @@ function FavoriteProducts({
       ) : (
         <SimpleGrid cols={1}>
           {favoriteProducts.map((Product) => {
-            return <FavUniqueCard Product={Product} />;
+            return (
+              <FavUniqueCard
+                Product={Product}
+                setClose={setShowFavoriteProducts}
+              />
+            );
           })}
         </SimpleGrid>
       )}

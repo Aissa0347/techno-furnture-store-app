@@ -49,12 +49,13 @@ function Statics() {
   });
 
   useEffect(() => {
-    onSnapshot(doc(db, "Notifications", "Orders-Notifications"), (res) => {
-      console.log("other snapshot ");
-      if (res?.metadata?.hasPendingWrites) {
+    const unsub = onSnapshot(
+      doc(db, "Notifications", "Orders-Notifications"),
+      (res) => {
+        console.log("other snapshot ");
         getLastData();
       }
-    });
+    );
   }, []);
 
   return (

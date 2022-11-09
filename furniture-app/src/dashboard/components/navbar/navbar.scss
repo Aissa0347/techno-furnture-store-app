@@ -71,6 +71,8 @@
 }
 
 .notification-dropmenu {
+  max-height: 500px;
+  overflow-y: auto;
   width: 250px;
   &-item {
     height: 60px;

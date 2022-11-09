@@ -114,6 +114,10 @@ body {
     }
   }
 }
+
+.notification {
+}
+
 .onTop {
   position: fixed;
   height: 70px;
@@ -630,6 +634,7 @@ body {
       right: 0.5rem;
     }
   }
+
   .main-Products {
     grid-template-columns: repeat(3, auto);
     gap: 1rem;

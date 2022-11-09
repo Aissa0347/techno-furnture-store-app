@@ -22,7 +22,7 @@ import {
   NumberInput,
   Pagination,
   RangeSlider,
-  SimpleGrid,
+  Flex,
 } from "@mantine/core";
 import { max } from "moment";
 import { useRef } from "react";
@@ -115,21 +115,21 @@ function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
   // }
   return (
     <div className="products-catalog btns">
-      <SimpleGrid
-        cols={5}
-        breakpoints={[
-          { maxWidth: 1400, cols: 4, spacing: "md" },
-          { maxWidth: 981, cols: 3, spacing: "sm" },
-          { maxWidth: 768, cols: 2, spacing: "sm" },
-          { maxWidth: 400, cols: 1, spacing: "xs" },
-        ]}
+      <Flex
+      // cols={5}
+      // breakpoints={[
+      //   { maxWidth: 1400, cols: 4, spacing: "md" },
+      //   { maxWidth: 981, cols: 3, spacing: "sm" },
+      //   { maxWidth: 768, cols: 2, spacing: "sm" },
+      //   { maxWidth: 400, cols: 1, spacing: "xs" },
+      // ]}
       >
         {pageData.map((card, index) => {
           if (index < productPerPage) {
             return <ProductsCard currentProduct={card} {...card} key={index} />;
           }
         })}
-      </SimpleGrid>
+      </Flex>
       {productsList?.length > 0 ? (
         <Group
           align={"center"}
