@@ -11,8 +11,8 @@
 .search-bar {
   // position: sticky;
   width: 100%;
-  height: 60px;
-  padding: 0 1rem;
+  height: 50px;
+  padding: 0 0.8rem;
   // box-shadow: $shadow;
   border: $border;
   background-color: $whiteColor;
@@ -68,37 +68,15 @@ label {
 }
 
 .search-type {
-  height: 70%;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
 
-  .search-type-input {
-    height: 100%;
-    width: 30vw;
-    padding: 0 10px;
-    font-size: 1.3rem;
-    background-color: $secondColor;
-    border: $border;
-  }
-  .search-type-input:focus {
+.search-type-input {
+  width: min(650px, 95%);
+  &:focus {
     background-color: $whiteColor;
-  }
-
-  button {
-    height: 100%;
-    width: 50px;
-    vertical-align: bottom;
-    border-radius: 0%;
-    border: $border;
-    background-color: $whiteColor;
-    cursor: pointer;
-
-    > * {
-      vertical-align: middle;
-      width: 25px;
-      height: 25px;
-    }
-  }
-  button:active {
-    background-color: $secondColor;
   }
 }
 
@@ -126,6 +104,13 @@ label {
     margin: 2rem auto;
   }
 }
+
+.products-catalog-wrapper {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
 .products {
   display: grid;
   gap: 1rem;
@@ -214,6 +199,12 @@ details {
       padding-left: 5px;
     }
   }
+  .price-range {
+    flex-direction: column;
+  }
+  .mantine-Slider-root {
+    width: 100%;
+  }
 }
 
 .catalog-pagination {
@@ -260,17 +251,6 @@ details {
       right: 0%;
     }
   }
-  .search-bar {
-    margin: 1rem 0;
-    .filter button {
-      box-shadow: $shadow;
-    }
-  }
-  .search-type {
-    .search-type-input {
-      width: 38vw;
-    }
-  }
 
   .search-bar {
     label {
@@ -288,12 +268,7 @@ details {
 
 @media only screen and (max-width: 567px) {
   .search-bar {
-    padding: 0 0.5rem;
-    .search-type {
-      .search-type-input {
-        width: 30vw;
-      }
-    }
+    padding: 0 0.8rem;
 
     .filter-wrapper {
       height: 100%;

@@ -1,7 +1,14 @@
 import React, { useContext, useEffect, useState, lazy, Suspense } from "react";
 
 // import Icons
-import { BiFilter, BiSearchAlt, BiChevronLeft, BiX } from "react-icons/bi";
+import {
+  BiFilter,
+  BiSearchAlt,
+  BiChevronLeft,
+  BiX,
+  BiRightArrowAlt,
+  BiFilterAlt,
+} from "react-icons/bi";
 
 // import SVG's
 import NOT_FOUND from "../Website-Assets/SVG/NOT_FOUND.svg";
@@ -17,12 +24,14 @@ import { Products_Catalog } from "../Website-Assets";
 import "../styles/index.scss";
 import { GlobalContext } from "../App";
 import {
+  ActionIcon,
   Button,
   Group,
   NumberInput,
   Pagination,
   RangeSlider,
-  Flex,
+  SimpleGrid,
+  TextInput,
 } from "@mantine/core";
 import { max } from "moment";
 import { useRef } from "react";
@@ -60,36 +69,44 @@ function SearchBar({
 
   return (
     <div className="search-bar onTop" id="search-bar">
-      <div className="filter">
-        <button onClick={() => setIsFilterBarActive(!isFilterBarAcitve)}>
-          <BiFilter className="filter-icon" id="filter-icon" />
-          <label>Filter</label>
-        </button>
-      </div>
-      <div className="search-type" ref={searchWrapperRef}>
-        <button
-          className=""
-          ref={submitRef}
-          onClick={() => {
-            setSearchFilter(searchFilterText);
-            window.scrollTo(0, 270);
-          }}
-        >
-          <BiSearchAlt />
-        </button>
-        <input
+      <ActionIcon
+        size={"xl"}
+        id="filter-icon"
+        variant="filled"
+        color="gray"
+        radius="none"
+        onClick={() => setIsFilterBarActive(!isFilterBarAcitve)}
+      >
+        <BiFilterAlt size={24} />
+      </ActionIcon>
+
+      <div className="search-type">
+        <TextInput
+          icon={<BiSearchAlt size={24} stroke={1.5} />}
+          radius="none"
+          size="lg"
+          ref={searchWrapperRef}
           className="search-type-input"
-          placeholder="Search by product name or category"
+          rightSection={
+            <ActionIcon
+              className="search-type"
+              ref={submitRef}
+              onClick={() => {
+                setSearchFilter(searchFilterText);
+                window.scrollTo(0, 270);
+              }}
+              size="lg"
+              radius="none"
+              mr={7}
+              variant="filled"
+            >
+              <BiRightArrowAlt size={18} stroke={1.5} />
+            </ActionIcon>
+          }
           onChange={(e) => setSearchFilterText(e.target.value.toLowerCase())}
+          placeholder="Search questions"
+          rightSectionWidth={42}
         />
-      </div>
-      <div className="sort">
-        <label htmlFor="sorting">Sort by: </label>
-        <select name="sorting" id="sorting" defaultValue="recommended">
-          <option value="popular">Popular</option>
-          <option value="newest">Newest</option>
-          <option value="recommended">Recommended</option>
-        </select>
       </div>
     </div>
   );
@@ -115,21 +132,13 @@ function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
   // }
   return (
     <div className="products-catalog btns">
-      <Flex
-      // cols={5}
-      // breakpoints={[
-      //   { maxWidth: 1400, cols: 4, spacing: "md" },
-      //   { maxWidth: 981, cols: 3, spacing: "sm" },
-      //   { maxWidth: 768, cols: 2, spacing: "sm" },
-      //   { maxWidth: 400, cols: 1, spacing: "xs" },
-      // ]}
-      >
+      <div className="products-catalog-wrapper">
         {pageData.map((card, index) => {
           if (index < productPerPage) {
             return <ProductsCard currentProduct={card} {...card} key={index} />;
           }
         })}
-      </Flex>
+      </div>
       {productsList?.length > 0 ? (
         <Group
           align={"center"}
@@ -281,7 +290,7 @@ function FilterBar({
             <summary>
               Price range <BiChevronLeft className="chevron" />
             </summary>
-            <div className="col">
+            <div className="col price-range">
               <PriceRange
                 toggleSubFilter={toggleSubFilter}
                 removeSubFilter={removeSubFilter}

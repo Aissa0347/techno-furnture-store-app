@@ -144,8 +144,6 @@ const useStyles = createStyles((theme) => ({
   card: {
     display: "flex",
     flexDirection: "column",
-    minWidth: "250px",
-    maxWidth: "350px",
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
   },
@@ -203,7 +201,7 @@ export function ProductsCard({
   const { classes } = useStyles();
 
   return (
-    <Card withBorder radius={"none"} className={classes.card}>
+    <Card withBorder radius={"none"} className={classes.card + " product-card"}>
       <Link to={`/catalog/${id}`}>
         <Card.Section className={classes.imageSection} p="xs" mt={-16}>
           <Image src={img[0].url} alt={name} height={200} fit={"contain"} />
