@@ -30,8 +30,6 @@ import {
   Thumbs,
   Navigation,
   Autoplay,
-  Scrollbar,
-  EffectCards,
 } from "swiper";
 
 // import data
@@ -188,17 +186,21 @@ export function SuggestedProducts() {
           spaceBetween={20}
           slidesPerGroup={1}
           breakpoints={{
-            767: {
+            1280: {
               slidesPerView: 4,
               slidesPerGroup: 4,
             },
-            567: {
+            767: {
               slidesPerView: 3,
               slidesPerGroup: 3,
             },
-            380: {
+            567: {
               slidesPerView: 2,
               slidesPerGroup: 2,
+            },
+            380: {
+              slidesPerView: 1,
+              slidesPerGroup: 1,
             },
           }}
           modules={[Pagination, Navigation]}
@@ -269,12 +271,16 @@ export function ShoppingCartList() {
 
 export function TechnoImages() {
   return (
-    <>
+    <div>
       <Swiper
-        effect={"cards"}
         grabCursor={true}
-        modules={[EffectCards]}
-        className="mySwiper"
+        loop={true}
+        height={250}
+        pagination={{
+          clickable: true,
+        }}
+        modules={[Pagination]}
+        className="store-images"
       >
         <SwiperSlide>
           <img src={technoImages.img1} alt="Techno cheraga image" />
@@ -292,6 +298,6 @@ export function TechnoImages() {
           <img src={technoImages.img5} alt="Techno cheraga image" />
         </SwiperSlide>
       </Swiper>
-    </>
+    </div>
   );
 }

@@ -375,15 +375,6 @@ function Navbar({ favoriteProducts, cardProducts }) {
             <RiMenuFill />
           </div>
         </div>
-        <Drawer
-          opened={!currentUserData && openAuthDrawer}
-          onClose={() => setOpenAuthDrawer(false)}
-          withCloseButton={false}
-          size={"75%"}
-          padding={0}
-        >
-          <Auth />{" "}
-        </Drawer>
       </div>
       <Outlet />
       <Footer />

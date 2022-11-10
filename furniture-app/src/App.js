@@ -56,6 +56,7 @@ import {
   BiHeartCircle,
   BiXCircle,
 } from "react-icons/bi";
+import { Drawer } from "@mantine/core";
 
 //* ---------------------------- Main App Function --------------------------- */
 
@@ -391,33 +392,33 @@ function App() {
         );
   }
 
-  function addToCard(currentProduct, favoriteProducts, setFavoriteProducts) {
+  function addToCard(currentProduct, cardProducts, setCardProducts) {
     let isSavedToFavorite = false;
     let isSavedSameVariant = false;
 
-    favoriteProducts.forEach((favProduct, index) => {
-      if (favProduct.id === currentProduct.id) {
+    cardProducts.forEach((cardProduct, index) => {
+      if (cardProduct.id === currentProduct.id) {
         isSavedToFavorite = true;
 
         if (
-          favProduct?.selectedColor?.colorRef ===
+          cardProduct?.selectedColor?.colorRef ===
           currentProduct?.selectedColor?.colorRef
         ) {
           favoriteProducts[index] = currentProduct;
-          setFavoriteProducts(favoriteProducts);
+          setCardProducts(favoriteProducts);
           isSavedSameVariant = true;
         }
       }
     });
 
-    let updatedCard = favoriteProducts.map((product) => ({
+    let updatedCard = cardProducts.map((product) => ({
       docId: product.docId,
       selectedColor: product?.selectedColor,
       quantity: product?.numberOfProduct,
     }));
 
     if (!isSavedSameVariant) {
-      setFavoriteProducts((lastProducts) => {
+      setCardProducts((lastProducts) => {
         updateDoc(userRef, {
           productsInCart: [
             ...updatedCard,
@@ -475,7 +476,7 @@ function App() {
     }
 
     if (isSavedToFavorite) {
-      setFavoriteProducts(favoriteProducts);
+      setCardProducts(cardProducts);
 
       updateDoc(userRef, { productsInCart: updatedCard })
         .then(
@@ -522,21 +523,18 @@ function App() {
     }
     return;
   }
-  function isFavorite(currentProduct, favoriteProducts) {
+
+  function isFavorite(currentProduct, cardProducts) {
     let isSaved = false;
-    favoriteProducts.forEach((favProduct) => {
+    cardProducts.forEach((cardProduct) => {
       console.log(currentProduct);
-      if (favProduct.id === currentProduct.id) isSaved = true;
+      if (cardProduct.id === currentProduct.id) isSaved = true;
     });
     return isSaved;
   }
 
-  function removeFromCard(
-    currentProduct,
-    favoriteProducts,
-    setFavoriteProducts
-  ) {
-    let newFav = favoriteProducts.filter((favProduct) => {
+  function removeFromCard(currentProduct, cardProducts, setCardProducts) {
+    let newFav = cardProducts.filter((favProduct) => {
       return favProduct.id !== currentProduct.id
         ? true
         : favProduct?.selectedColor?.colorRef !==
@@ -550,7 +548,7 @@ function App() {
     }));
 
     updateDoc(userRef, { productsInCart: updatedCard })
-      .then((res) => setFavoriteProducts(newFav))
+      .then((res) => setCardProducts(newFav))
       .then((res) =>
         showNotification({
           autoClose: 5000,
@@ -788,7 +786,12 @@ function App() {
             {!currentUserData && (
               <Route
                 path="/auth/"
-                element={<Auth setUserUID={setUserUID} />}
+                element={
+                  <Auth
+                    setUserUID={setUserUID}
+                    setOpenAuthDrawer={setOpenAuthDrawer}
+                  />
+                }
               ></Route>
             )}
             {!isUser && (
@@ -829,6 +832,18 @@ function App() {
               <Route path="/ordering" element={<Ordering />}></Route>
             </Route>
           </Routes>
+          <Drawer
+            opened={!currentUserData && openAuthDrawer}
+            onClose={() => setOpenAuthDrawer(false)}
+            withCloseButton={false}
+            size={"75%"}
+            padding={0}
+          >
+            <Auth
+              setUserUID={setUserUID}
+              setOpenAuthDrawer={setOpenAuthDrawer}
+            />{" "}
+          </Drawer>
         </div>
       ) : (
         <div>

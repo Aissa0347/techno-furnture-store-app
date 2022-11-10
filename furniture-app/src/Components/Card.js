@@ -143,6 +143,7 @@ export const Cards = ({ img, name, price, id, currentProduct, markName }) => {
 const useStyles = createStyles((theme) => ({
   card: {
     display: "flex",
+    height: "100%",
     flexDirection: "column",
     backgroundColor:
       theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
@@ -156,6 +157,13 @@ const useStyles = createStyles((theme) => ({
     borderBottom: `1px solid ${
       theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[3]
     }`,
+  },
+
+  img: {
+    height: "200px",
+    maxHeight: "200px",
+    width: "100%",
+    objectFit: "contain",
   },
 
   label: {
@@ -183,9 +191,11 @@ const useStyles = createStyles((theme) => ({
   },
 
   productName: {
+    justifyContent: "space-between",
     flex: 1,
     flexDirection: "column",
     gap: "8px",
+    height: "100%",
   },
 }));
 
@@ -204,11 +214,11 @@ export function ProductsCard({
     <Card withBorder radius={"none"} className={classes.card + " product-card"}>
       <Link to={`/catalog/${id}`}>
         <Card.Section className={classes.imageSection} p="xs" mt={-16}>
-          <Image src={img[0].url} alt={name} height={200} fit={"contain"} />
+          <img src={img[0].url} alt={name} className={classes.img} />
         </Card.Section>
       </Link>
       <Link to={`/catalog/${id}`}>
-        <Group position="center" className={classes.productName} my="xs">
+        <Group position="center" className={classes.productName} py="xs">
           <div>
             <Text weight={500} component="h3" transform="uppercase">
               {name}

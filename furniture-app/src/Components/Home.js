@@ -14,7 +14,13 @@ import { scrollToTop } from "../App";
 //* ---------------------------------- Api's --------------------------------- */
 
 //* -------------------------------- Libraries ------------------------------- */
-import { BiChevronLeftCircle, BiChevronRightCircle } from "react-icons/bi";
+import {
+  BiChevronLeftCircle,
+  BiChevronRightCircle,
+  BiMailSend,
+  BiMapAlt,
+  BiPhoneCall,
+} from "react-icons/bi";
 import { Link } from "react-router-dom";
 import {
   RiFacebookFill,
@@ -22,7 +28,7 @@ import {
   RiWhatsappLine,
 } from "react-icons/ri";
 import uniqid from "uniqid";
-import { SimpleGrid } from "@mantine/core";
+import { Paper, SimpleGrid } from "@mantine/core";
 import { createStyles, Container, Title, Text, Button } from "@mantine/core";
 import { TextInput, Textarea, Group, ActionIcon } from "@mantine/core";
 import {
@@ -321,29 +327,22 @@ export function GeoInfo() {
       <section
         className="mapouter"
         style={{
-          backgroundColor: "#004079",
           position: "relative",
+          display: "flex",
+          gap: "1rem",
           textAlign: "right",
           marginLeft: "auto",
           marginRight: "auto",
           overflow: "hidden",
-          border: "1px solid blue",
-          padding: "3rem",
+          padding: "1rem",
         }}
       >
-        <h2>Title</h2>
-        <div className="store-images-wrapper">
-          <TechnoImages />
-          <Text align="left" color={"white"} size="lg" mt={10}>
-            Techno Chéraga Lot n1 Amara، 02 Rte de Ouled Fayet, شراقة 16000
-          </Text>
-        </div>
         <div
           className="gmap_canvas"
           style={{
             overflow: "hidden",
             background: "none !important",
-            height: "70vh",
+            height: "500px",
             width: "100%",
           }}
         >
@@ -357,250 +356,52 @@ export function GeoInfo() {
             marginwidth="0"
           ></iframe>
         </div>
+        <Paper shadow="lg" radius="none" className="store-images-wrapper">
+          <ContactUs />
+          <TechnoImages />
+          {/* <Text align="left" color={"white"} size="lg" mt={10}>
+            Techno Chéraga Lot n1 Amara، 02 Rte de Ouled Fayet, شراقة 16000
+          </Text> */}
+        </Paper>
       </section>
     </>
   );
 }
 
-//* ------------------------------- Contact Us Icons ------------------------------- */
-
-const iconsListStyles = createStyles((theme, { variant }) => ({
-  wrapper: {
-    display: "flex",
-    alignItems: "center",
-    color: theme.white,
+//* ------------------------------- Contact Us ------------------------------- */
+const contactIcons = [
+  {
+    title: "Email",
+    icon: <BiMailSend size={32} />,
+    content: "technocheraga@techno-dz.com",
   },
-
-  icon: {
-    marginRight: theme.spacing.md,
-    backgroundImage:
-      variant === "gradient"
-        ? `linear-gradient(135deg, ${theme.colors[theme.primaryColor][4]} 0%, ${
-            theme.colors[theme.primaryColor][6]
-          } 100%)`
-        : "none",
-    backgroundColor: "transparent",
+  {
+    title: "Telephone",
+    icon: <BiPhoneCall size={32} />,
+    content: `+213 ${55095914857}`,
   },
-
-  title: {
-    color:
-      variant === "gradient"
-        ? theme.colors.gray[6]
-        : theme.colors[theme.primaryColor][0],
+  {
+    title: "Address",
+    icon: <BiMapAlt size={32} />,
+    content: "Route d'Ouled Fayet Lot n2 Amara-Chéraga",
   },
-
-  description: {
-    color: variant === "gradient" ? theme.black : theme.white,
-  },
-}));
-
-function ContactIcon({
-  icon: Icon,
-  title,
-  description,
-  variant = "gradient",
-  className,
-  ...others
-}) {
-  const { classes, cx } = iconsListStyles({ variant });
-  return (
-    <div className={cx(classes.wrapper, className)} {...others}>
-      {variant === "gradient" ? (
-        <ThemeIcon size={40} radius="md" className={classes.icon}>
-          <Icon size={24} />
-        </ThemeIcon>
-      ) : (
-        <Box mr="md">
-          <Icon size={24} />
-        </Box>
-      )}
-
-      <div>
-        <Text size="xs" className={classes.title}>
-          {title}
-        </Text>
-        <Text className={classes.description}>{description}</Text>
-      </div>
-    </div>
-  );
-}
-
-const MOCKDATA = [
-  { title: "Email", description: "hello@mantine.dev", icon: IconAt },
-  { title: "Phone", description: "+49 (800) 335 35 35", icon: IconPhone },
-  { title: "Address", description: "844 Morris Park avenue", icon: IconMapPin },
-  { title: "Working hours", description: "8 a.m. – 11 p.m.", icon: IconSun },
 ];
 
-export function ContactIconsList({ data = MOCKDATA, variant }) {
-  const items = data.map((item, index) => (
-    <ContactIcon key={index} variant={variant} {...item} />
-  ));
-  return <Stack>{items}</Stack>;
-}
-
-export function ContactIcons() {
+function ContactUs() {
   return (
-    <SimpleGrid cols={2} breakpoints={[{ maxWidth: 755, cols: 1 }]}>
-      <Box
-        sx={(theme) => ({
-          padding: theme.spacing.xl,
-          borderRadius: theme.radius.md,
-          backgroundColor: theme.white,
-        })}
-      >
-        <ContactIconsList />
-      </Box>
-
-      <Box
-        sx={(theme) => ({
-          padding: theme.spacing.xl,
-          borderRadius: theme.radius.md,
-          backgroundImage: `linear-gradient(135deg, ${
-            theme.colors[theme.primaryColor][6]
-          } 0%, ${theme.colors[theme.primaryColor][4]} 100%)`,
-        })}
-      >
-        <ContactIconsList variant="white" />
-      </Box>
-    </SimpleGrid>
-  );
-}
-
-//* ------------------------------- Contact Us ------------------------------- */
-
-const contactStyles = createStyles((theme) => ({
-  wrapper: {
-    minHeight: 400,
-    boxSizing: "border-box",
-    backgroundImage: `linear-gradient(-60deg, ${
-      theme.colors[theme.primaryColor][4]
-    } 0%, ${theme.colors[theme.primaryColor][7]} 100%)`,
-    borderRadius: "none",
-    padding: theme.spacing.xl * 2.5,
-
-    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-      padding: theme.spacing.xl * 1.5,
-    },
-  },
-
-  title: {
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    color: theme.white,
-    lineHeight: 1,
-  },
-
-  description: {
-    color: theme.colors[theme.primaryColor][0],
-    maxWidth: 300,
-
-    [`@media (max-width: ${theme.breakpoints.sm}px)`]: {
-      maxWidth: "100%",
-    },
-  },
-
-  form: {
-    backgroundColor: theme.white,
-    padding: theme.spacing.xl,
-    borderRadius: "none",
-    boxShadow: theme.shadows.lg,
-  },
-
-  social: {
-    color: theme.white,
-
-    "&:hover": {
-      color: theme.colors[theme.primaryColor][1],
-    },
-  },
-
-  input: {
-    backgroundColor: theme.white,
-    borderColor: theme.colors.gray[4],
-    color: theme.black,
-
-    "&::placeholder": {
-      color: theme.colors.gray[5],
-    },
-  },
-
-  inputLabel: {
-    color: theme.black,
-  },
-
-  control: {
-    backgroundColor: theme.colors[theme.primaryColor][6],
-  },
-}));
-
-const social = [IconBrandTwitter, IconBrandYoutube, IconBrandInstagram];
-
-export function ContactUs() {
-  const { classes } = contactStyles();
-
-  const icons = social.map((Icon, index) => (
-    <ActionIcon
-      key={index}
-      size={28}
-      className={classes.social}
-      variant="transparent"
-    >
-      <Icon size={22} stroke={1.5} />
-    </ActionIcon>
-  ));
-
-  return (
-    <section className="section contactUs">
-      <div className={classes.wrapper}>
-        <SimpleGrid
-          cols={2}
-          spacing={30}
-          breakpoints={[{ maxWidth: "sm", cols: 1 }]}
-        >
-          <div>
-            <Title className={classes.title}>Contact us</Title>
-            <Text className={classes.description} mt="sm" mb={30}>
-              Leave your email and we will get back to you within 24 hours
-            </Text>
-
-            <ContactIconsList variant="white" />
-
-            <Group mt="xl">{icons}</Group>
+    <div className="contact-wrapper">
+      {contactIcons.map((contact) => {
+        return (
+          <div className="contact">
+            <div className="contact-icon">{contact.icon}</div>
+            <div className="contact-data">
+              <h4>{contact.title}</h4>
+              <p>{contact.content}</p>
+            </div>
           </div>
-          <div className={classes.form}>
-            <TextInput
-              label="Email"
-              placeholder="your@email.com"
-              required
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-              radius="none"
-            />
-            <TextInput
-              label="Name"
-              placeholder="John Doe"
-              mt="md"
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-              radius="none"
-            />
-            <Textarea
-              required
-              label="Your message"
-              placeholder="I want to order your goods"
-              minRows={4}
-              mt="md"
-              classNames={{ input: classes.input, label: classes.inputLabel }}
-              radius="none"
-            />
-
-            <Group position="right" mt="md">
-              <Button className={classes.control} radius="none">
-                Send message
-              </Button>
-            </Group>
-          </div>
-        </SimpleGrid>
-      </div>
-    </section>
+        );
+      })}
+    </div>
   );
 }
 
@@ -670,7 +471,6 @@ function Home() {
         <ProductsM />
       </div>
       <GeoInfo />
-      <ContactUs />
       <NewsLetter />
     </>
   );

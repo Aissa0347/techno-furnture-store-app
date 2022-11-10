@@ -387,41 +387,44 @@ body {
   ================
 */
 .mapouter {
+  background-color: $primaryColor;
   h2 {
     text-align: center;
   }
-  .slider-images {
-    position: relative;
-    width: 100%;
-    height: 100%;
+}
 
-    .store-images-wrapper {
-      position: absolute;
-      top: 20%;
-      right: 0%;
-      width: 700px;
-      max-width: 90%;
-      height: fit-content;
-      padding: 1rem;
-      padding-right: 3rem;
-      background-color: #060e53;
-      .swiper-slide {
-        height: 400px;
-        img {
-          width: 100%;
-          height: 400px;
-          object-fit: cover;
-        }
-      }
+.store-images-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 576px;
+  background-color: $whiteColor;
+  padding: 1rem;
+  gap: 1rem;
+  overflow: hidden;
+  .swiper-slide {
+    img {
+      height: 250px;
+      width: 100%;
+      object-fit: cover;
     }
   }
 }
 
 //* ------------------------------- Contact Us ------------------------------- */
 
-.contactUs {
-  max-width: 1000px;
-  text-align: left;
+.contact-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-top: 1rem;
+  .contact {
+    display: flex;
+    flex: 1;
+    gap: 1rem;
+    color: $primaryColor;
+    text-align: left;
+  }
 }
 
 //* ------------------------------- NewsLetter ------------------------------- */
@@ -560,6 +563,31 @@ body {
 
   .cards .card h3 {
     font-size: 1.5rem;
+  }
+
+  .mapouter {
+    flex-direction: column-reverse;
+    gap: 1rem !important;
+    .store-images-wrapper {
+      flex-direction: column-reverse;
+      width: 100%;
+    }
+    .contact-wrapper {
+      height: auto;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: 0;
+    }
+    .contact {
+      flex: auto;
+    }
+    .store-images {
+      img {
+        // max-width: 100%;
+      }
+    }
   }
 
   .footer .wrapper {

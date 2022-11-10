@@ -10,11 +10,9 @@
 }
 
 .auth .container {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  display: grid;
+  place-items: center;
   min-height: 100vh;
-  padding-top: 10vh;
   // backdrop-filter: blur(20px);
 
   & > hr {
@@ -50,70 +48,12 @@
   }
 }
 
-.signIn,
-.signUp {
-  width: 50%;
-  max-width: 550px;
-  min-width: 320px;
-  height: fit-content;
-  padding: 1rem;
-  margin-bottom: 2rem;
-  background-color: $secondColor;
-  border: $border;
-}
-
 .auth-form {
-  margin: 2rem 0 1rem;
-  width: 100%;
-  .full {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-}
-
-.auth-links {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  .auth-btn {
-    position: relative;
-  }
-  .hr {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    width: 100%;
-    margin: 1rem 0%;
-    hr {
-      height: 1px;
-      width: 100%;
-    }
-  }
-}
-
-.auth-error {
-  margin-bottom: 1rem;
-}
-.auth-icon {
-  vertical-align: middle;
-  display: inline-block;
-  width: 16px;
-  margin-right: 5px;
-}
-
-.auth-anchor {
-  width: 100%;
-  color: $primaryColor;
-}
-.auth-btn {
-  // height: 3rem;
-  border-radius: 0%;
-  background-color: $thirdColor;
-  transition: 0.2s ease;
-  &:hover {
-    background-color: $thirdColor;
+  width: min(95%, 500px);
+  padding: 2rem 1.5rem;
+  // height: min(95%, 600px);
+  & * {
+    border-radius: 0px !important;
   }
 }
 
@@ -128,6 +68,7 @@
 }
 
 .google-btn {
+  border: 1px solid $greyColor;
   background-color: $whiteColor;
   color: $primaryColor;
   &:hover {
@@ -137,24 +78,13 @@
   }
 }
 .fb-btn {
+  min-height: 42px;
+  border: 1px solid $greyColor;
   background-color: rgb(59, 89, 152);
   &:hover {
     background-color: darken($color: rgb(59, 89, 152), $amount: 5);
   }
   .btn-icon {
     fill: $whiteColor;
-  }
-}
-
-.auth-CTA {
-  margin-top: 1rem;
-}
-
-.auth-toggle-btn {
-  color: $primaryColor;
-  border-radius: 0%;
-  // height: 3rem;
-  &:hover {
-    background-color: $whiteColor;
   }
 }

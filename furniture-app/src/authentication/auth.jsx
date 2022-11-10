@@ -4,26 +4,28 @@ import {
   Group,
   Input,
   MantineProvider,
+  Paper,
+  PasswordInput,
   Text,
   TextInput,
 } from "@mantine/core";
+import { useToggle } from "@mantine/hooks";
+import { Divider, Stack } from "@mantine/core";
+
 import { useForm } from "@mantine/form";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { error, Facebook, Google } from "../dashboard/components/icons";
-import { auth, db, storage } from "../firebase/firebaseConfig";
+import { auth, db } from "../firebase/firebaseConfig";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
   updateProfile,
   sendPasswordResetEmail,
   signInWithPopup,
   GoogleAuthProvider,
   FacebookAuthProvider,
 } from "firebase/auth";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   addDoc,
   collection,
@@ -34,17 +36,19 @@ import {
 } from "firebase/firestore";
 import { defaultUser } from "../Website-Assets";
 
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { BiCheckCircle } from "react-icons/bi";
 //* -------------------------------------------------------------------------- */
 //*                               Auth Component                               */
 //* -------------------------------------------------------------------------- */
 
-function Auth({ setUserUID }) {
-  const [toggleLogin, setToggleLogin] = useState(true);
-  const [isLoginError, setIsLoginError] = useState(false);
-  const [isSignupError, setIsSignupError] = useState(false);
-  const [resetPassword, setResetPassword] = useState(false);
-  const [emailSended, setEmailSended] = useState(false);
+function Auth(props) {
+  const { setUserUID, setOpenAuthDrawer } = props;
+  console.log("here is props ", props);
+  const [type, toggle] = useToggle(["login", "register"]);
+  const [isReset, toggleReset] = useToggle(["login", "reset"]);
+  const [isEmailSended, setIsEmailSended] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const authForm = useForm({
     initialValues: {
@@ -57,6 +61,17 @@ function Auth({ setUserUID }) {
         email.length < 6 ? "Please insert a valid email" : null,
       password: (pass) =>
         pass.length < 6 ? "Your password is too short" : null,
+    },
+  });
+
+  const resetForm = useForm({
+    initialValues: {
+      email: "",
+    },
+
+    validate: {
+      email: (email) =>
+        email.length < 6 ? "Please insert a valid email" : null,
     },
   });
 
@@ -75,8 +90,10 @@ function Auth({ setUserUID }) {
 
   const colUsers = collection(db, "Users");
 
+  const location = useLocation();
   const navigate = useNavigate();
 
+  console.log("we are here ", location);
   async function createNewUser(methodName, values) {
     console.log("is it running");
     let signupMethod;
@@ -92,12 +109,10 @@ function Auth({ setUserUID }) {
         values.password
       );
     }
-
-    console.log(signupMethod);
-
-    await signupMethod
+    signupMethod
       .then(async (userCred) => {
         if (!userCred) {
+          setIsError("Invalid email or password, Please try again");
           console.log("failed bruh");
           return;
         }
@@ -108,10 +123,9 @@ function Auth({ setUserUID }) {
         const userAvatarImg = userInfo.photoURL || defaultUser.avatarImg;
         const userUID = `${userInfo.uid}`;
         const userEmail = userInfo.email;
-        setIsSignupError(false);
         console.log("mid ");
-        await getDocs(query(colUsers, where("id", "==", userUID))).then(
-          async (res) => {
+        await getDocs(query(colUsers, where("id", "==", userUID)))
+          .then(async (res) => {
             console.log(res);
             if (res.docs.length < 1)
               await updateProfile(auth.currentUser, {
@@ -127,293 +141,232 @@ function Auth({ setUserUID }) {
                   createdAt: serverTimestamp(),
                 });
               });
-          }
-        );
+          })
+
+          .catch((error) =>
+            setIsError("Invalid email or password, Please try again")
+          );
         console.log("end");
-        setUserUID(userUID);
-        navigate("/");
+        setUserUID(userCred.user.uid);
+        setIsError(false);
+        setOpenAuthDrawer(false);
+        if (location.pathname === "/auth") navigate(-1);
         console.log("signed successfully");
         authForm.reset();
       })
-      .catch((error) => setIsSignupError(true));
+      .catch((error) =>
+        setIsError("Invalid email or password, Please try again")
+      );
   }
 
-  //prettier-ignore
+  //* ------------------------------ Handle Submit ----------------------------- */
+
+  const handleSubmit = (values) => {
+    if (type === "login") {
+      signInWithEmailAndPassword(auth, values.email, values.password)
+        .then((res) => {
+          setUserUID(res.user.uid);
+          if (location.pathname === "/auth") navigate(-1);
+          authForm.reset();
+        })
+        .catch((error) => {
+          setIsError("Invalid email or password, Please try again");
+          console.log(error.message);
+          console.log(error.code);
+        });
+    } else {
+      console.log("here is user data :", values);
+      createNewUser("Email", values);
+    }
+  };
+
+  useEffect(() => {
+    setIsError(false);
+  }, [isReset, type, isEmailSended, authForm.values]);
+
+  //* ------------------------------ Handle Reset ------------------------------ */
+
+  const handleReset = (values) => {
+    if (!isEmailSended) {
+      console.log("inside submit values ");
+
+      sendPasswordResetEmail(auth, values.email)
+        .then((res) => {
+          console.log(res);
+          setIsEmailSended(true);
+        })
+        .catch((error) => {
+          resetForm.setFieldError("email", "Please enter a valid email");
+        });
+    } else {
+      toggleReset();
+      console.log("toggle reset");
+    }
+  };
+
   return (
     <MantineProvider>
-      <section className="auth ">
+      <div className="auth">
         <div className="container">
-          <h1 className="auth-title">Welcome to the best in the market</h1>
-          <hr />
-          {!resetPassword ? (
-            <div className="auth-wrapper">
-              {toggleLogin ?
-                <div className="signIn">
-                  <h2>Sign in</h2>
-                  <form
-                    className="info_form auth-form"
-                    onSubmit={authForm.onSubmit((formValues) => {
-                      console.log("clicked");
-                      signInWithEmailAndPassword(
-                        auth,
-                        formValues.email,
-                        formValues.password
-                      )
-                      .then((res) => {
-                        setIsLoginError(false);
-                        setUserUID(res.user.uid);
-                        navigate("/");
-                        authForm.reset()
-                      })
-                      .catch((error) => {
-                        setIsLoginError(true)
-                        console.log(error.message);
-                        console.log(error.code);
-                      });
-                    })}
-                    >
-                    <div className="auth-links">
-                      <Button size="md" leftIcon={Google} uppercase fullWidth className="auth-btn google-btn" onClick={() => createNewUser('Google')} >
-                        Google
-                      </Button>
-                      <Button size="md" leftIcon={Facebook} uppercase fullWidth className="auth-btn fb-btn" onClick={() => createNewUser('Facebook')} >
-                        Facebook
-                      </Button>
-                      <span className="hr">
-                        <hr />
-                        or <hr />
-                      </span>
-                    </div>
-                    {isLoginError && (
-                      <Text color={"red"} className="auth-error" title="Login">
-                        <span className="auth-icon">{error}</span> Invalid login
-                        or password. You may need to reset your password.
-                      </Text>
-                    )}
-                    <TextInput
-                      label="Email Address"
-                      type={"email"}
-                      className="full"
-                      placeholder="Email Address"
-                      withAsterisk
-                      {...authForm.getInputProps("email")}
-                      required
-                    />
-                    <TextInput
-                      label="Password"
-                      className="full"
-                      type={"password"}
-                      placeholder="Password"
-                      withAsterisk
-                      {...authForm.getInputProps("password")}
-                      required
-                    />
-                    <Anchor
-                      className="auth-anchor"
-                      underline
-                      size={"sm"}
-                      align="right"
-                      onClick={() => setResetPassword(true)}
-                    >
-                      Forgot Your Password
-                    </Anchor>
-                    <Button size="md"
-                      type="submit"
-                      fullWidth
-                      className="auth-btn auth-CTA"
-                    >
-                      Login
-                    </Button>
-                  </form>
-                </div>
-              : 
-                <Button size="md"
-                  fullWidth
-                  className="signIn  auth-toggle-btn"
-                  variant="light"
-                  onClick={() => setToggleLogin(true)}
-                >
-                  You Have An Account ?
-                </Button>
-              }
-              {!toggleLogin ? 
-                <div className="signUp">
-                  <h2>Sign Up</h2>
-                  <form
-                    className="info_form auth-form"
-                    onSubmit={
-                      authForm.onSubmit((values) => {
-                        createNewUser('Email',values);
-                      })
-                    }
+          <Paper radius="none" p="xl" className="auth-form" withBorder>
+            {isReset === "login" ? (
+              <form
+                onSubmit={authForm.onSubmit((values) => {
+                  handleSubmit(values);
+                })}
+              >
+                <Text size="lg" weight={500}>
+                  Welcome to Mantine, {type} with
+                </Text>
+                <Stack grow mb="md" mt="md">
+                  <Button
+                    size="md"
+                    leftIcon={Facebook}
+                    uppercase
+                    fullWidth
+                    className="auth-btn fb-btn"
+                    onClick={() => createNewUser("Facebook")}
                   >
-                    <div className="auth-links">
-                      <Button size="md" leftIcon={Google} uppercase fullWidth className="auth-btn google-btn" onClick={() => createNewUser('Google')} >
-                        Google
-                      </Button>
-                      <Button size="md" leftIcon={Facebook} uppercase fullWidth className="auth-btn fb-btn" onClick={() => createNewUser('Facebook')} >
-                        Facebook
-                      </Button>
-                      <span className="hr">
-                        <hr />
-                        or <hr />
-                      </span>
-                    </div>
-                    {isSignupError && (
-                      <Text color={"red"} className="auth-error" title="Login">
-                        <span className="auth-icon">{error}</span>
-                        There is already an account with this email address.
-                      </Text>
-                    )}
+                    Facebook
+                  </Button>
+                  <Button
+                    size="md"
+                    leftIcon={Google}
+                    uppercase
+                    fullWidth
+                    className="auth-btn google-btn"
+                    onClick={() => createNewUser("Google")}
+                  >
+                    Google
+                  </Button>
+                </Stack>
+                <Divider
+                  label="Or continue with email"
+                  labelPosition="center"
+                  my="lg"
+                />
+                <Stack>
+                  {type === "register" && (
                     <TextInput
                       label="Name"
-                      className="full"
-                      placeholder="Name"
-                      withAsterisk
+                      placeholder="Your name"
+                      // value={authForm.values.name}
                       {...authForm.getInputProps("name")}
-                      required
+                      error={
+                        authForm.errors.name && "Please enter a valid name"
+                      }
                     />
-                    <TextInput
-                      label="Email Address"
-                      type={"email"}
-                      className="full"
-                      placeholder="Email Address"
-                      withAsterisk
-                      {...authForm.getInputProps("email")}
-                      required
-                    />
-                    <TextInput
-                      label="Password"
-                      className="full"
-                      type={"password"}
-                      placeholder="Password"
-                      withAsterisk
-                      {...authForm.getInputProps("password")}
-                      required
-                    />
-                    <Button size="md"
-                      type="submit"
-                      fullWidth
-                      className="auth-btn auth-CTA"
-                    >
-                      Register
-                    </Button>
-                  </form>
-                </div>
-               : 
-                <Button size="md"
-                  fullWidth
-                  className="signUp  auth-toggle-btn"
-                  variant="light"
-                  onClick={() => setToggleLogin(false)}
-                >
-                  Create new Account ?
-                </Button>
-              }
-            
-            </div>
-          ) : (
-            <div className="auth-wrapper">
-              {!emailSended ? (
-                <div className="signIn">
-                  <h2>Reset Password</h2>
-                  <form
-                    className="info_form auth-form"
-                  >
-                    {isLoginError && (
-                      <Text color={"red"} className="auth-error" title="Login">
-                        <span className="auth-icon">{error}</span> It seams this
-                        email dosen't exist in our platform, Try another email
-                      </Text>
-                    )}
-                    <TextInput
-                      label="Email Address"
-                      type={"email"}
-                      className="full"
-                      placeholder="Email Address"
-                      withAsterisk
-                      {...authForm.getInputProps("email")}
-                      required
-                    />
+                  )}
 
-                    <Button size="md"
-                      type="submit"
-                      fullWidth
-                      className="auth-btn auth-CTA"
-                      onClick={(e)=> {
-                        e.preventDefault();
-                        const formValues= authForm.values;
-                          console.log(formValues.email);
-                          sendPasswordResetEmail(auth, formValues.email)
-                            .then((res) => {
-                              console.log(res);
-                              setEmailSended(true);
-                              setIsLoginError(false);
-                            })
-                            .catch((error) => {
-                              console.log(error.code);
-                              console.log(error.message);
-                              setIsLoginError(true)});
-                      }}
-                    >
-                      Send Email
-                    </Button>
-                    <Anchor
-                      className="auth-anchor"
-                      underline
-                      size={"sm"}
-                      align="right"
-                      onClick={() => {
-                        setResetPassword(false);
-                        setIsLoginError(false);
-                        setEmailSended(false);
-                      }}
-                    >
-                      Return to login
-                    </Anchor>
-                  </form>
-                </div>
-              ) : (
-                <div className="signIn">
-                  <h2>Email Sent Successfully</h2>
-                  <form
-                    className="info_form auth-form"
-                  >
-                    <Text size={"lg"} className="auth-error">
-                      Email sent successfully, Check your inbox and reset your
-                      password.
+                  <TextInput
+                    label="Email"
+                    placeholder="hello@mantine.dev"
+                    // value={authForm.values.email}
+                    {...authForm.getInputProps("email")}
+                    error={authForm.errors.email && "Invalid email"}
+                  />
+
+                  <PasswordInput
+                    label="Password"
+                    placeholder="Your password"
+                    // value={authForm.values.password}
+                    {...authForm.getInputProps("password")}
+                    error={
+                      authForm.errors.password &&
+                      "Password should include at least 6 characters"
+                    }
+                  />
+                </Stack>
+                <Stack position="apart" mt="sm" spacing="xs">
+                  {isError && (
+                    <Text size="sm" mt={5} color="red">
+                      {isError}
                     </Text>
-                    <Button size="md"
-                      type="submit"
-                      fullWidth
-                      className="auth-btn auth-CTA"
-                      onClick={()=>{
-                        setResetPassword(false);
-                        setIsLoginError(false);
-                        setEmailSended(false);
-                      }}
-                    >
-                      Return To Login
-                    </Button>
-                    <Anchor
-                      className="auth-anchor"
-                      underline
-                      size={"sm"}
-                      align="right"
-                      onClick={() => {
-                        setIsLoginError(false);
-                        setEmailSended(false);
-                      }}
-                    >
-                      Reset Password
-                    </Anchor>
-                  </form>
-                </div>
-              )}
-            </div>
-          )}
+                  )}
+                  <Anchor
+                    component="button"
+                    align="left"
+                    type="button"
+                    color="dimmed"
+                    onClick={() => toggle()}
+                    size="xs"
+                  >
+                    {type === "register"
+                      ? "Already have an account? Login"
+                      : "Don't have an account? Register"}
+                  </Anchor>
+                  <Button type="submit" fullWidth>
+                    {type}
+                  </Button>
+                </Stack>
+                <Anchor
+                  component="button"
+                  align="center"
+                  type="button"
+                  color="dimmed"
+                  onClick={() => toggleReset()}
+                  size="xs"
+                  mt="md"
+                >
+                  {isReset === "login"
+                    ? "Forgot your password? Reset"
+                    : "Already have an account? Login"}
+                </Anchor>
+              </form>
+            ) : (
+              <form
+                onSubmit={resetForm.onSubmit((values) => {
+                  handleReset(values);
+                })}
+              >
+                <Stack>
+                  {!isEmailSended ? (
+                    <>
+                      <Text size="lg" weight={500}>
+                        Reset you password
+                      </Text>
+                      <TextInput
+                        label="Email"
+                        placeholder="hello@mantine.dev"
+                        // value={authForm.values.email}
+                        {...resetForm.getInputProps("email")}
+                        error={resetForm.errors.email && "Invalid email"}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <Text size="lg" weight={500}>
+                        Email sent successfully
+                      </Text>
+                      <div className="">
+                        <BiCheckCircle />
+                      </div>
+                    </>
+                  )}
+                </Stack>
+                <Stack position="apart" mt="sm">
+                  <Button type="submit" fullWidth>
+                    {isEmailSended ? "Return to login" : "Send email message"}
+                  </Button>
+                </Stack>
+                <Anchor
+                  component="button"
+                  align="center"
+                  type="button"
+                  color="dimmed"
+                  onClick={() => toggleReset()}
+                  size="xs"
+                  mt="md"
+                >
+                  {isReset === "login"
+                    ? "Forgot your password ? Reset"
+                    : "Already have an account ? Login"}
+                </Anchor>
+              </form>
+            )}
+          </Paper>
         </div>
-      </section>
+      </div>
     </MantineProvider>
   );
 }
