@@ -1,20 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import Icons
-import {
-  BiCheckCircle,
-  BiChevronDown,
-  BiChevronLeft,
-  BiChevronUp,
-  BiRevision,
-  BiX,
-} from "react-icons/bi";
+import { BiCheckCircle, BiChevronLeft } from "react-icons/bi";
 
 //  import SVG's
 import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
+import ORDER_SUCCESS from "../Website-Assets/SVG/ORDER_SUCCESS.svg";
 
 // import Components needed
-import { ShoppingCartList } from "./Products";
 import { capitalizeSentence, GlobalContext } from "../App";
 import { DashUniqueCard } from "./Card";
 
@@ -26,11 +19,9 @@ import { useForm } from "@mantine/form";
 // import Styles
 import "../styles/index.scss";
 import {
-  ActionIcon,
   Button,
   Group,
   Modal,
-  SimpleGrid,
   Stack,
   Stepper,
   Text,
@@ -306,11 +297,25 @@ function ShoppingCart() {
 
 function Ordering() {
   const { isOrderSuccess, setIsOrderSuccess } = useContext(GlobalContext);
-  const [active, setActive] = useState(1);
+  const [active, setActive] = useState(0);
   const nextStep = () =>
     setActive((current) => (current < 2 ? current + 1 : current));
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
+
+  const Success = () => {
+    return (
+      <div className="order_success">
+        <img src={ORDER_SUCCESS} alt="Success" />
+        <h3>WE ARE SO EXCITED TO WORK WITH YOU</h3>
+        <Link to="/">
+          <Button size="lg" radius="none">
+            GO BACK TO HOME
+          </Button>
+        </Link>
+      </div>
+    );
+  };
   return (
     <div className="order_page page container">
       <nav className="destination">
@@ -326,7 +331,9 @@ function Ordering() {
         <Stepper.Step label="First Step">
           <ShippingInfo />
         </Stepper.Step>
-        <Stepper.Completed>IT'S DONE</Stepper.Completed>
+        <Stepper.Completed>
+          <Success />
+        </Stepper.Completed>
       </Stepper>
       <Group>
         <Button variant="outline" onClick={() => prevStep()}>

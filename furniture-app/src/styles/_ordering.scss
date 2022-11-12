@@ -38,6 +38,9 @@
     overflow-y: auto;
     margin-top: 0%;
   }
+  .invoice-img {
+    height: 55px !important;
+  }
 }
 
 .shipping_info {
@@ -49,6 +52,19 @@
     padding: 1rem 0% !important;
   }
 }
+
+.order_success {
+  display: grid;
+  place-items: center;
+  gap: 2rem;
+  padding: 2rem 0;
+  text-align: center;
+  color: rgb(13, 172, 13);
+  img {
+    width: min(600px, 100%);
+  }
+}
+
 .info_form {
   display: flex;
   flex-wrap: wrap;
