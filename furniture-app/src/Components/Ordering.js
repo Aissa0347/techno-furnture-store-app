@@ -185,9 +185,15 @@ function ShippingInfo() {
           />
         </div>
         <div className="btns">
-          <button type="submit" className="btn CTA">
+          <Button
+            size="lg"
+            radius="none"
+            uppercase
+            type="submit"
+            className="btn CTA"
+          >
             Order Now
-          </button>
+          </Button>
         </div>
       </form>
     </section>
@@ -200,7 +206,6 @@ function ShoppingCart() {
   const { cardProducts, subTotal, setOrderData, updateCard } =
     useContext(GlobalContext);
   const [trigger, setTrigger] = useState(false);
-  const [expand, setExpand] = useState(false);
   let totalQuantity, totalCost;
   const [cardProductsClone, setCardProductsClone] = useState(
     structuredClone(cardProducts)
@@ -254,56 +259,18 @@ function ShoppingCart() {
           <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
         </div>
       ) : (
-        <Stack
-          className="shopping_cart_list"
-          spacing={10}
-          style={expand ? { height: "100%" } : { height: "60vh" }}
-        >
+        <Stack className="shopping_cart_list" spacing={10}>
           {cardProductsClone.map((Product) => {
             return (
               <DashUniqueCard
                 Product={Product}
                 setIsChanged={setIsChanged}
                 cardProductsClone={cardProductsClone}
+                isOrdering={true}
               />
             );
           })}
         </Stack>
-      )}
-      <div className="expand-icon">
-        {expand ? (
-          <BiChevronUp className="icon" onClick={() => setExpand(!expand)} />
-        ) : (
-          <BiChevronDown className="icon" onClick={() => setExpand(!expand)} />
-        )}
-      </div>
-      {isChanged && (
-        <Group spacing={5} mb={5} noWrap>
-          <Button
-            variant="filled"
-            fullWidth
-            radius={"none"}
-            size="md"
-            onClick={() => {
-              updateCard(cardProductsClone);
-              setIsChanged(false);
-            }}
-          >
-            UPDATE
-          </Button>
-          <ActionIcon
-            variant="filled"
-            color={"red"}
-            radius={"none"}
-            size={42}
-            onClick={() => {
-              setCardProductsClone(structuredClone(cardProducts));
-              setIsChanged(false);
-            }}
-          >
-            <BiRevision size={24} />
-          </ActionIcon>
-        </Group>
       )}
       <ul className="shopping_cart_total unique_card">
         <li className="facture_price ">
@@ -319,6 +286,18 @@ function ShoppingCart() {
           <h5>{subTotal} DZD</h5>
         </li>
       </ul>
+      <Button
+        variant="filled"
+        className="shopping_cart_CTA"
+        radius="none"
+        size="lg"
+        onClick={() => {
+          updateCard(cardProductsClone);
+          setIsChanged(false);
+        }}
+      >
+        UPDATE
+      </Button>
     </section>
   );
 }
@@ -328,7 +307,10 @@ function ShoppingCart() {
 function Ordering() {
   const { isOrderSuccess, setIsOrderSuccess } = useContext(GlobalContext);
   const [active, setActive] = useState(1);
-
+  const nextStep = () =>
+    setActive((current) => (current < 2 ? current + 1 : current));
+  const prevStep = () =>
+    setActive((current) => (current > 0 ? current - 1 : current));
   return (
     <div className="order_page page container">
       <nav className="destination">
@@ -337,19 +319,23 @@ function Ordering() {
           &nbsp;continue shopping
         </Link>
       </nav>
-      <div className="slice ">
-        <ShippingInfo />
-        <ShoppingCart />
-      </div>
-      {/* <Stepper active={active} onStepClick={setActive}>
-        <Stepper.Step label="First Step">1</Stepper.Step>
-        <Stepper.Step label="First Step">2</Stepper.Step>
+      <Stepper my={32} px={8} active={active} onStepClick={setActive}>
+        <Stepper.Step label="First Step">
+          <ShoppingCart />
+        </Stepper.Step>
+        <Stepper.Step label="First Step">
+          <ShippingInfo />
+        </Stepper.Step>
         <Stepper.Completed>IT'S DONE</Stepper.Completed>
       </Stepper>
       <Group>
-        <Button variant="outline">Back</Button>
-        <Button variant="filled">Next Step</Button>
-      </Group> */}
+        <Button variant="outline" onClick={() => prevStep()}>
+          Back
+        </Button>
+        <Button variant="filled" onClick={() => nextStep()}>
+          Next Step
+        </Button>
+      </Group>
       {/* <ShoppingBag /> */}
       <Modal
         opened={isOrderSuccess}

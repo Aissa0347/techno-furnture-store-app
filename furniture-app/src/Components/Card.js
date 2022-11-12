@@ -1,5 +1,12 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import { BiCartAlt, BiHeart, BiShow, BiShowAlt, BiX } from "react-icons/bi";
+import {
+  BiCartAlt,
+  BiHeart,
+  BiShow,
+  BiShowAlt,
+  BiTrash,
+  BiX,
+} from "react-icons/bi";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 
 //  Import from Libraries
@@ -364,7 +371,12 @@ export function UniqueCard({ Product, setTrigger }) {
   );
 }
 
-export function DashUniqueCard({ Product, setIsChanged, cardProductsClone }) {
+export function DashUniqueCard({
+  Product,
+  setIsChanged,
+  cardProductsClone,
+  isOrdering = false,
+}) {
   const [quantityValue, setQuantityValue] = useState(
     Product?.numberOfProduct || 1
   );
@@ -513,17 +525,33 @@ export function DashUniqueCard({ Product, setIsChanged, cardProductsClone }) {
           </ActionIcon>
         </Group> */}
       </label>
-      <CloseButton
-        size={"lg"}
-        radius={"none"}
-        color={"red"}
-        onClick={() => {
-          removeFromCard(Product, cardProducts, setCardProducts);
-          defaultNumberAndTotal();
-          setSubTotal(calcSubTotal());
-        }}
-        style={{ position: "absolute", top: "5px", right: "5px" }}
-      />
+      {isOrdering ? (
+        <ActionIcon
+          variant="subtle"
+          size={"md"}
+          radius={"none"}
+          color={"red"}
+          onClick={() => {
+            removeFromCard(Product, cardProducts, setCardProducts);
+            defaultNumberAndTotal();
+            setSubTotal(calcSubTotal());
+          }}
+        >
+          <BiTrash size={18} />
+        </ActionIcon>
+      ) : (
+        <CloseButton
+          size={"lg"}
+          radius={"none"}
+          color={"red"}
+          onClick={() => {
+            removeFromCard(Product, cardProducts, setCardProducts);
+            defaultNumberAndTotal();
+            setSubTotal(calcSubTotal());
+          }}
+          style={{ position: "absolute", top: "5px", right: "5px" }}
+        />
+      )}
     </div>
   );
 }
