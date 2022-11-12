@@ -641,7 +641,6 @@ function Home() {
       </div>
       <GeoInfo />
       <ContactUs />
-      <NewsLetter />
     </>
   );
 }
