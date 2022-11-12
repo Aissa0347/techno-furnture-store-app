@@ -4,7 +4,6 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 
 // import Components needed
 import { MediaSlider, SuggestedProducts } from "./Products";
-import { NewsLetter } from "./Home";
 import { GlobalContext } from "../App";
 
 // import DATA
@@ -326,7 +325,6 @@ function ProductPage() {
     <div className="product_page page container">
       <ProductDetailShow currentProduct={currentProduct} />
       <SuggestedProducts />
-      <NewsLetter />
     </div>
   );
 }

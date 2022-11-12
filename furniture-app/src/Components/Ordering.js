@@ -14,7 +14,6 @@ import {
 import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
 
 // import Components needed
-import { NewsLetter } from "./Home";
 import { ShoppingCartList } from "./Products";
 import { capitalizeSentence, GlobalContext } from "../App";
 import { DashUniqueCard } from "./Card";
@@ -33,6 +32,7 @@ import {
   Modal,
   SimpleGrid,
   Stack,
+  Stepper,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -327,6 +327,8 @@ function ShoppingCart() {
 
 function Ordering() {
   const { isOrderSuccess, setIsOrderSuccess } = useContext(GlobalContext);
+  const [active, setActive] = useState(1);
+
   return (
     <div className="order_page page container">
       <nav className="destination">
@@ -339,6 +341,15 @@ function Ordering() {
         <ShippingInfo />
         <ShoppingCart />
       </div>
+      {/* <Stepper active={active} onStepClick={setActive}>
+        <Stepper.Step label="First Step">1</Stepper.Step>
+        <Stepper.Step label="First Step">2</Stepper.Step>
+        <Stepper.Completed>IT'S DONE</Stepper.Completed>
+      </Stepper>
+      <Group>
+        <Button variant="outline">Back</Button>
+        <Button variant="filled">Next Step</Button>
+      </Group> */}
       {/* <ShoppingBag /> */}
       <Modal
         opened={isOrderSuccess}
@@ -354,7 +365,6 @@ function Ordering() {
           </Text>
         </Stack>
       </Modal>
-      <NewsLetter />
     </div>
   );
 }

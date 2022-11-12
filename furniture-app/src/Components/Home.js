@@ -3,10 +3,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { GlobalContext } from "../App";
 import { brands } from "../Website-Assets";
 import { ProductsCard } from "./Card";
-import { CategoryP } from "../Website-Assets/index";
 import { FeautreP } from "../Website-Assets/index";
 import { semiCategory } from "../Website-Assets/index";
-import { Products_Catalog } from "../Website-Assets";
 import Products, { TechnoImages } from "./Products";
 import { Category } from "./Products";
 import { scrollToTop } from "../App";
@@ -14,13 +12,7 @@ import { scrollToTop } from "../App";
 //* ---------------------------------- Api's --------------------------------- */
 
 //* -------------------------------- Libraries ------------------------------- */
-import {
-  BiChevronLeftCircle,
-  BiChevronRightCircle,
-  BiMailSend,
-  BiMapAlt,
-  BiPhoneCall,
-} from "react-icons/bi";
+import { BiMailSend, BiMapAlt, BiPhoneCall } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import {
   RiFacebookFill,
@@ -28,16 +20,13 @@ import {
   RiWhatsappLine,
 } from "react-icons/ri";
 import uniqid from "uniqid";
-import { Paper, SimpleGrid } from "@mantine/core";
+import { Paper, SimpleGrid, TextInput } from "@mantine/core";
 import { createStyles, Container, Title, Text, Button } from "@mantine/core";
-import { TextInput, Textarea, Group, ActionIcon } from "@mantine/core";
-import {
-  IconBrandTwitter,
-  IconBrandYoutube,
-  IconBrandInstagram,
-} from "@tabler/icons";
-import { ThemeIcon, Box, Stack } from "@mantine/core";
-import { IconSun, IconPhone, IconMapPin, IconAt } from "@tabler/icons";
+
+//* ------------------------------ Import SVG's ------------------------------ */
+
+import NEWSLETTER_SVG from "../Website-Assets/SVG/NEWSLETTER.svg";
+
 //* -------------------------------------------------------------------------- */
 //*                                 Components                                 */
 //* -------------------------------------------------------------------------- */
@@ -410,15 +399,27 @@ function ContactUs() {
 export function NewsLetter() {
   return (
     <div className="newsletter container section">
-      <h2>Subscribe Our Newsletter</h2>
-      <div className="input-email btns">
-        <input
-          type="email"
-          name="news-email"
-          id="news-email"
-          placeholder="Your Email"
-        />
-        <button className="btn CTA">subscribe</button>
+      <div className="newsletter-input">
+        <h3>
+          Wait a minute... <br /> Subscribe our NewsLetter !
+        </h3>
+        <p>You will never miss a special discounts and new updates</p>
+        <div className="newsletter-email">
+          <TextInput
+            radius="none"
+            size="lg"
+            type="email"
+            id="news-email"
+            className="newsletter-email-input"
+            placeholder="Enter Your Email"
+          />
+          <Button radius="none" size="lg" variant="filled">
+            SUBSCRIBE
+          </Button>
+        </div>
+      </div>
+      <div className="newsletter-img">
+        <img src={NEWSLETTER_SVG} alt="NEWSLETTER" />
       </div>
     </div>
   );
@@ -429,6 +430,7 @@ export function NewsLetter() {
 export function Footer() {
   return (
     <div className="footer section ">
+      <NewsLetter />
       <div className="wrapper container">
         <div className="f-block">
           <h5>Contact Us</h5>
@@ -471,7 +473,6 @@ function Home() {
         <ProductsM />
       </div>
       <GeoInfo />
-      <NewsLetter />
     </>
   );
 }
