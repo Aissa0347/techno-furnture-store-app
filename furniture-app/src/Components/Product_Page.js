@@ -17,9 +17,11 @@ import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 import {
   ActionIcon,
   Alert,
+  Button,
   ColorPicker,
   Group,
   NumberInput,
+  Stack,
   Text,
   TypographyStylesProvider,
 } from "@mantine/core";
@@ -138,7 +140,7 @@ function ProductInfo({
     <>
       <ul>
         <li className="product_name info">
-          <span>{category}</span>
+          <span className="subTitle">{category}</span>
           <h2>
             <strong>{name}</strong>
           </h2>
@@ -240,8 +242,8 @@ function ProductInfo({
             </Text>
           )}
         </li>
-        <li>
-          {error && (
+        {error && (
+          <li>
             <Alert
               icon={<BiErrorCircle size={16} />}
               title="Bummer!"
@@ -249,11 +251,64 @@ function ProductInfo({
             >
               Please select a color !
             </Alert>
-          )}
-        </li>
-        <div className="product_btns btns">
-          <button
-            className="btn CTA"
+          </li>
+        )}
+        <Stack spacing={10}>
+          <Group spacing={10} noWrap>
+            <Button
+              size="lg"
+              radius="none"
+              // className="btn CTA"
+              fullWidth
+              onClick={() => {
+                currentUserData && validatedProduct()
+                  ? addToCard(
+                      {
+                        ...currentProduct,
+                        numberOfProduct: quantityValue,
+                        selectedColor: colorPicked,
+                      },
+                      cardProducts,
+                      setCardProducts
+                    )
+                  : setOpenAuthDrawer(true);
+              }}
+            >
+              ADD TO CART
+            </Button>
+            <ActionIcon
+              variant="outline"
+              size={50}
+              radius="none"
+              color="blue"
+              // className="btn CTA-2"
+              onClick={() => {
+                currentUserData
+                  ? toggleToFavorite(
+                      currentProduct,
+                      favoriteProducts,
+                      setFavoriteProducts
+                    )
+                  : setOpenAuthDrawer(true);
+              }}
+            >
+              {isSaved ? (
+                <RiHeartFill
+                  size={20}
+                  style={{ color: "red" }}
+                  className="fav"
+                />
+              ) : (
+                <RiHeartLine size={20} className="fav" />
+              )}
+            </ActionIcon>
+          </Group>
+          <Button
+            variant="outline"
+            size="lg"
+            radius="none"
+            // className="btn CTA"
+            fullWidth
             onClick={() => {
               currentUserData && validatedProduct()
                 ? addToCard(
@@ -263,32 +318,15 @@ function ProductInfo({
                       selectedColor: colorPicked,
                     },
                     cardProducts,
-                    setCardProducts
+                    setCardProducts,
+                    true
                   )
                 : setOpenAuthDrawer(true);
             }}
           >
-            ADD TO CART
-          </button>
-          <button
-            className="btn CTA-2"
-            onClick={() => {
-              currentUserData
-                ? toggleToFavorite(
-                    currentProduct,
-                    favoriteProducts,
-                    setFavoriteProducts
-                  )
-                : setOpenAuthDrawer(true);
-            }}
-          >
-            {isSaved ? (
-              <RiHeartFill style={{ color: "red" }} className="fav" />
-            ) : (
-              <RiHeartLine className="fav" />
-            )}
-          </button>
-        </div>
+            BUY NOW
+          </Button>
+        </Stack>
       </ul>
     </>
   );

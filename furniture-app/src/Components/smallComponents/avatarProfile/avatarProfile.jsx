@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { GlobalContext } from "../../../App";
 import { auth } from "../../../firebase/firebaseConfig";
 
-function AvatarProfile() {
+export function AvatarProfile() {
   const { currentUserData } = useContext(GlobalContext);
   console.log(currentUserData?.avatarImg);
   return (
@@ -22,9 +22,6 @@ function AvatarProfile() {
             <h4>{currentUserData?.name}</h4>
             <p>{currentUserData?.email}</p>
           </Menu.Item>
-          <Menu.Divider />
-          <Menu.Item>User Information</Menu.Item>
-          <Menu.Item>Last Purchases</Menu.Item>
           <Menu.Divider />
           <Menu.Item color="red" onClick={() => signOut(auth)}>
             Sign out

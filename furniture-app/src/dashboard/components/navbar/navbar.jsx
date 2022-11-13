@@ -16,6 +16,7 @@ import {
 import { db } from "../../../firebase/firebaseConfig";
 import { useEffect, useState } from "react";
 import { showNotification } from "@mantine/notifications";
+import AvatarProfile from "../../../Components/smallComponents/avatarProfile/avatarProfile";
 
 const logo = require("../../../Website-Assets/logo.png");
 const adminImg = require("../../../Website-Assets/Admin.png");
@@ -49,9 +50,7 @@ function Navbar() {
 
       <div className="dash-right-nav">
         <Notification />
-        <div className="dash-avatar">
-          <img loading="lazy" src={adminImg} alt="Admin Image" />
-        </div>
+        <AvatarProfile />
       </div>
     </div>
   );
@@ -85,29 +84,10 @@ function Notification() {
           let slicedNotifications = notificationsArray
             ?.sort((prev, next) => next?.time - prev?.time)
             ?.reverse()
-            ?.slice(-30);
+            ?.slice(-30)
+            ?.reverse();
           let notifications = slicedNotifications.map((notify) => {
             if (notify.time > lastCheckingTime.seconds) {
-              showNotification({
-                autoClose: 5000,
-                title: "New Order Has Been Added",
-                message: (
-                  <div>
-                    {" "}
-                    Please Check{" "}
-                    <Link to={"invoices"} color="blue">
-                      Invoices
-                    </Link>{" "}
-                    Section
-                  </div>
-                ),
-                color: "blue",
-                icon: <BiMessageCheck size={32} />,
-                className: "my-notification-class",
-                style: { backgroundColor: "white" },
-                sx: { backgroundColor: "red" },
-                loading: false,
-              });
               return { ...notify, status: "new" };
             } else {
               return notify;
@@ -135,6 +115,27 @@ function Notification() {
       if (notify.status === "new") count++;
     });
     setCount(count);
+    if (count > 0)
+      showNotification({
+        autoClose: 3000,
+        title: "You have new orders",
+        message: (
+          <div>
+            {" "}
+            Please Check{" "}
+            <Link to={"invoices"} color="blue">
+              Invoices
+            </Link>{" "}
+            Section
+          </div>
+        ),
+        color: "blue",
+        icon: <BiMessageCheck size={32} />,
+        className: "my-notification-class",
+        style: { backgroundColor: "white" },
+        sx: { backgroundColor: "red" },
+        loading: false,
+      });
   }, [notificationsList]);
 
   console.log("notifications out there : ", notificationsList);

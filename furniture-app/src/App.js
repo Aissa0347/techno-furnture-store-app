@@ -8,7 +8,13 @@ import React, {
 } from "react";
 
 //  import Libraries
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
 // import Component
 import Navbar from "./Components/Navbar";
@@ -202,6 +208,7 @@ function App() {
     totalQuantity: "",
     avatarImg: "",
   });
+  const navigate = useNavigate("/ordering");
 
   useEffect(() => {
     setAnalytics();
@@ -358,7 +365,7 @@ function App() {
           });
 
           showNotification({
-            autoClose: 5000,
+            autoClose: 3000,
             title: "Item Added To Favorite Successfully",
             message: (
               <div>
@@ -380,7 +387,7 @@ function App() {
         })
         .catch((error) =>
           showNotification({
-            autoClose: 5000,
+            autoClose: 3000,
             title: "Error, Item Doesn't Added To Favorite",
             message: (
               <div>
@@ -399,7 +406,12 @@ function App() {
         );
   }
 
-  function addToCard(currentProduct, cardProducts, setCardProducts) {
+  function addToCard(
+    currentProduct,
+    cardProducts,
+    setCardProducts,
+    checkout = false
+  ) {
     let isSavedToFavorite = false;
     let isSavedSameVariant = false;
 
@@ -436,9 +448,9 @@ function App() {
             },
           ],
         })
-          .then((res) =>
+          .then((res) => {
             showNotification({
-              autoClose: 5000,
+              autoClose: 3000,
               title: "Added To Card Successfully",
               message: (
                 <div>
@@ -456,11 +468,12 @@ function App() {
               style: { backgroundColor: "white" },
               sx: { backgroundColor: "red" },
               loading: false,
-            })
-          )
+            });
+            if (checkout) navigate("/ordering");
+          })
           .catch((error) =>
             showNotification({
-              autoClose: 5000,
+              autoClose: 3000,
               title: "Error, Quantity Doesn't Updated",
               message: (
                 <div>
@@ -486,9 +499,9 @@ function App() {
       setCardProducts(cardProducts);
 
       updateDoc(userRef, { productsInCart: updatedCard })
-        .then(
+        .then((res) => {
           showNotification({
-            autoClose: 5000,
+            autoClose: 3000,
             title: "Quantity Updated Successfully",
             message: (
               <div>
@@ -506,11 +519,12 @@ function App() {
             style: { backgroundColor: "white" },
             sx: { backgroundColor: "red" },
             loading: false,
-          })
-        )
+          });
+          if (checkout) navigate("/ordering");
+        })
         .catch((error) =>
           showNotification({
-            autoClose: 5000,
+            autoClose: 3000,
             title: "Error, Product Doesn't Added To Your Card",
             message: (
               <div>
@@ -558,7 +572,7 @@ function App() {
       .then((res) => setCardProducts(newFav))
       .then((res) =>
         showNotification({
-          autoClose: 5000,
+          autoClose: 3000,
           title: "Item Removed From Cart",
           message: (
             <div>
@@ -593,7 +607,7 @@ function App() {
       .then((res) => setFavoriteProducts(newFav))
       .then((res) =>
         showNotification({
-          autoClose: 5000,
+          autoClose: 3000,
           title: "Item Removed From Favorite",
           message: (
             <div>
@@ -615,7 +629,7 @@ function App() {
       )
       .catch((error) =>
         showNotification({
-          autoClose: 5000,
+          autoClose: 3000,
           title: "Error, Item Doesn't Removed From Favorite",
           message: (
             <div>
@@ -832,7 +846,6 @@ function App() {
                   />
                 }
               ></Route>
-              <Route path="/productpage" element={<ProductPage />}></Route>
               <Route
                 path="catalog/:productId"
                 element={<ProductPage />}

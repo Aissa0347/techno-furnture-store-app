@@ -136,10 +136,8 @@ export function MediaSlider({ images, name }) {
       >
         {[...images].map((img, index) => {
           return (
-            <SwiperSlide key={index}>
-              <object data={img.url} alt={name}>
-                <param name="control" value="false" />
-              </object>
+            <SwiperSlide key={index} className="media-slider-active">
+              <img src={img.url} alt={name} />
             </SwiperSlide>
           );
         })}

@@ -31,8 +31,11 @@ import { Outlet } from "react-router-dom";
 import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
 import FAVORITE_SVG from "../Website-Assets/SVG/FAVORITE_SVG (2).svg";
 import AvatarProfile from "./smallComponents/avatarProfile/avatarProfile";
+import WhatsApp from "../Website-Assets/WhatsApp.png";
+
 import {
   ActionIcon,
+  Anchor,
   Button,
   CloseButton,
   createStyles,
@@ -306,7 +309,9 @@ function Navbar({ favoriteProducts, cardProducts }) {
               <AvatarProfile />
             ) : (
               <Link to="/auth">
-                <BiUser />
+                <Button variant="outline" size="md" radius="none" color="blue">
+                  Sign in
+                </Button>
               </Link>
             )}
           </div>
@@ -324,6 +329,19 @@ function Navbar({ favoriteProducts, cardProducts }) {
         </div>
       </div>
       <Outlet />
+      <div className="call-float">
+        <Anchor href="https://wa.me/550951515" target="_blank">
+          <ActionIcon
+            variant="filled"
+            size={50}
+            radius="xl"
+            className="call-btn"
+            p={8}
+          >
+            <img src={WhatsApp} alt="WhatsApp" className="WhatsApp" />
+          </ActionIcon>
+        </Anchor>
+      </div>
       <Footer />
     </>
   );
