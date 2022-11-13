@@ -24,6 +24,7 @@ import {
   TypographyStylesProvider,
 } from "@mantine/core";
 import { color } from "@mui/system";
+import Bradcrumbs from "./smallComponents/bradcrumbs";
 
 // import Helper Functions
 // import { findCurrentProduct } from "../App";
@@ -33,15 +34,22 @@ import { color } from "@mui/system";
 export function ProductDetailShow(props) {
   const { currentProduct } = props;
   const [isLoading, setIsLoading] = useState(true);
+  let locations;
+
+  locations = [
+    { label: "Home", path: "/" },
+    { label: "Catalog", path: "/catalog" },
+    { label: currentProduct?.name },
+  ];
+
   window.onloadeddata = () => {
     setIsLoading(false);
   };
+
   return (
     <>
       <div className="destination">
-        <span>
-          Home &nbsp;/&nbsp; Catalog &nbsp;/&nbsp; {currentProduct.name}
-        </span>
+        <Bradcrumbs locations={locations} />
       </div>
       <div className="product-show">
         <div className="product-show-media">

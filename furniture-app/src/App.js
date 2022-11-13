@@ -189,7 +189,6 @@ function App() {
   const [userUID, setUserUID] = useState("");
   const [currentUserData, setCurrentUserData] = useState("");
   const [isUser, setIsUser] = useState(true);
-  const [isOrderSuccess, setIsOrderSuccess] = useState(false);
   const [orderData, setOrderData] = useState({
     userId: "",
     willaya: "",
@@ -210,11 +209,16 @@ function App() {
 
   console.log(ProductsCatalog);
   function calcSubTotal(ProductList = cardProducts) {
+    console.log("here we are in reduce card :", subTotal);
     return ProductList.reduce(
-      (prev, current) => prev + current.totalProductPrice,
+      (prev, current) => prev + ~~current.totalProductPrice,
       0
     );
   }
+
+  useEffect(() => {
+    setSubTotal(calcSubTotal());
+  }, [cardProducts]);
 
   //* ------------------------------ Get User Info ----------------------------- */
 
@@ -281,8 +285,8 @@ function App() {
     }));
     setProductsCatalog(fullData);
     setIsDataLoaded(true);
-    console.log("its on", ProductsCatalog);
   };
+  console.log("its on", ProductsCatalog);
   console.log(ProductsCatalog);
 
   function updateData() {
@@ -306,6 +310,9 @@ function App() {
           ...foundProduct,
           selectedColor: currentProduct?.selectedColor,
           numberOfProduct: currentProduct?.quantity,
+          totalProductPrice:
+            currentProduct?.quantity *
+            (foundProduct?.pricePromotion || foundProduct?.price),
         });
     }
     console.log("check this first : ", cardProducts);
@@ -638,14 +645,16 @@ function App() {
       removeFromFavorite(currentProduct, favoriteProducts, setFavoriteProducts);
   }
 
-  const updateCard = (updatedCard) => {
+  const updateCard = (updatedCard, goNext = false) => {
     setCardProducts(updatedCard);
     let updateFormat = updatedCard.map((product) => ({
       docId: product?.docId,
       quantity: product?.numberOfProduct,
       selectedColor: product?.selectedColor,
     }));
-    updateDoc(userRef, { productsInCart: updateFormat });
+    updateDoc(userRef, { productsInCart: updateFormat }).then((res) => {
+      if (goNext) goNext();
+    });
   };
 
   //* ------------------------------- Send Order ------------------------------- */
@@ -655,7 +664,7 @@ function App() {
     return "INV-" + includeZeros;
   };
 
-  function sendOrder(userInfo) {
+  function sendOrder(userInfo, goNext) {
     showNotification({
       id: "sending-order",
       loading: true,
@@ -695,7 +704,6 @@ function App() {
           })
             .then((res) => {
               updateNotification({ id: "sending-order", autoClose: 0 });
-              setIsOrderSuccess(true);
             })
             .catch((error) =>
               updateNotification({
@@ -730,7 +738,9 @@ function App() {
                   avatarImg,
                 },
               ],
-            }).catch((error) => console.log(error.code, error.message));
+            })
+              .then((res) => goNext())
+              .catch((error) => console.log(error.code, error.message));
           })
           .catch((error) => console.log(error.code, error.message));
       })
@@ -774,8 +784,6 @@ function App() {
         updateCard,
         isUser,
         openAuthDrawer,
-        isOrderSuccess,
-        setIsOrderSuccess,
         setOpenAuthDrawer,
       }}
     >

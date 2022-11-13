@@ -49,25 +49,7 @@ import Auth from "../authentication/auth";
 function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
   const { updateCard, setCardProducts, subTotal, setSubTotal, calcSubTotal } =
     useContext(GlobalContext);
-  const [cardProductsClone, setCardProductsClone] = useState(
-    structuredClone(cardProducts)
-  );
-  const [isChanged, setIsChanged] = useState(false);
 
-  useEffect(() => {
-    setSubTotal(calcSubTotal(cardProductsClone));
-  }, [cardProductsClone]);
-
-  useEffect(() => {
-    setCardProductsClone(structuredClone(cardProducts));
-    setSubTotal(calcSubTotal());
-  }, [cardProducts]);
-
-  useEffect(() => {
-    !isChanged && setCardProductsClone(structuredClone(cardProducts));
-  }, [isChanged]);
-
-  console.log("check if it;s updated : ", cardProductsClone);
   // set on value change subtotal change also
   return (
     <Drawer
@@ -80,53 +62,18 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
       title="Card Products List"
     >
       <Stack justify={"space-between"} style={{ flex: 1, overflow: "hidden" }}>
-        {cardProductsClone.length < 1 ? (
+        {cardProducts.length < 1 ? (
           <div className="svg-interactions">
             <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
           </div>
         ) : (
           <SimpleGrid style={{ width: "100%", overflow: "auto" }}>
-            {cardProductsClone.map((Product) => {
-              return (
-                <DashUniqueCard
-                  Product={Product}
-                  setIsChanged={setIsChanged}
-                  cardProductsClone={cardProductsClone}
-                />
-              );
+            {cardProducts.map((Product) => {
+              return <DashUniqueCard Product={Product} />;
             })}
           </SimpleGrid>
         )}
         <Stack style={{ width: "100%", gap: "8px" }}>
-          {isChanged && (
-            <Group spacing={5} noWrap>
-              <Button
-                variant="filled"
-                fullWidth
-                radius={"none"}
-                size="md"
-                onClick={() => {
-                  updateCard(cardProductsClone);
-                  setIsChanged(false);
-                }}
-              >
-                UPDATE
-              </Button>
-              <ActionIcon
-                variant="filled"
-                color={"red"}
-                radius={"none"}
-                size={42}
-                onClick={() => {
-                  setCardProductsClone(structuredClone(cardProducts));
-                  setIsChanged(false);
-                }}
-              >
-                <BiRevision size={24} />
-              </ActionIcon>
-            </Group>
-          )}
-
           <div className="shopping_cart_total unique_card">
             <li className="facture_price total">
               <h5 className="cart-total">SUBTOTAL</h5>

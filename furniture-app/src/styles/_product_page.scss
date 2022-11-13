@@ -4,9 +4,13 @@
 
 .destination {
   margin: 1rem 0;
-  .icon {
-    vertical-align: middle;
-    font-size: 24px;
+  &-link {
+    display: flex;
+    align-items: center;
+    color: blue;
+    &:hover {
+      color: rgba(0, 0, 255, 0.747);
+    }
   }
 }
 

@@ -25,6 +25,13 @@ body {
   background-color: $secondColor;
 }
 
+.breadcrumbs {
+  a,
+  div {
+    color: blue !important;
+  }
+}
+
 //* --------------------------------- Navbar --------------------------------- */
 
 .navbar {
@@ -466,7 +473,7 @@ body {
   img {
     width: 100%;
     max-width: 600px;
-    max-height: 300px;
+    max-height: 230px;
   }
 }
 #news-email {
@@ -765,7 +772,7 @@ body {
   }
 
   .container {
-    max-width: 95vw;
+    max-width: 90vw;
   }
   .Hero .BigTitle h1
   // .mHero h2
@@ -832,6 +839,9 @@ body {
     font-size: 1rem;
   }
 
+  .newsletter-input {
+    width: 90%;
+  }
   .footer {
     margin-bottom: 0;
     .wrapper {

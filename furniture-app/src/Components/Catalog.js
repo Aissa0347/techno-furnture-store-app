@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, lazy, Suspense } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 // import Icons
 import {
@@ -35,15 +35,18 @@ import {
 } from "@mantine/core";
 import { max } from "moment";
 import { useRef } from "react";
+import Bradcrumbs from "./smallComponents/bradcrumbs";
 
 //* -------------------------------- Mini Hero ------------------------------- */
 
 export function MiniHero() {
+  const locations = [{ label: "Home", path: "/" }, { label: "Catalog" }];
+
   return (
     <div className="mHero">
       <div className="title">
         <h1>Product Catalog</h1>
-        <span>Home &gt;&gt; Catalog</span>
+        <Bradcrumbs locations={locations} />
       </div>
     </div>
   );

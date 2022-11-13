@@ -7,6 +7,12 @@
     margin-top: 10vh;
     color: $whiteColor;
   }
+  .breadcrumbs {
+    a,
+    div {
+      color: $whiteColor !important;
+    }
+  }
 }
 .search-bar {
   // position: sticky;

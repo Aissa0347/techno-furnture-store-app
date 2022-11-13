@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import Icons
-import { BiCheckCircle, BiChevronLeft } from "react-icons/bi";
+import { BiCheckCircle, BiChevronLeft, BiLeftArrowAlt } from "react-icons/bi";
 
 //  import SVG's
 import EMPTY_CART from "../Website-Assets/SVG/EMPTY_CART.svg";
@@ -22,6 +22,7 @@ import {
   Button,
   Group,
   Modal,
+  Paper,
   Stack,
   Stepper,
   Text,
@@ -32,7 +33,7 @@ import { serverTimestamp } from "firebase/firestore";
 
 //* ------------------------------ Shipping Info ----------------------------- */
 
-function ShippingInfo() {
+function ShippingInfo({ goNext }) {
   const { setOrderData, currentUserData, sendOrder } =
     useContext(GlobalContext);
 
@@ -84,17 +85,17 @@ function ShippingInfo() {
           formValues.willaya = capitalizeSentence(formValues.willaya, "string");
           formValues.address = capitalizeSentence(formValues.address, "string");
           if (auth.currentUser) {
-            setOrderData(
-              (lastData) => ({
-                ...lastData,
-                userId: auth.currentUser.uid,
-                firstName: formValues.firstName,
-                lastName: formValues.lastName,
-                willaya: formValues.willaya,
-                address: formValues.address,
-                phoneNumber: Number(formValues.phoneNumber),
-              }),
-              sendOrder({
+            setOrderData((lastData) => ({
+              ...lastData,
+              userId: auth.currentUser.uid,
+              firstName: formValues.firstName,
+              lastName: formValues.lastName,
+              willaya: formValues.willaya,
+              address: formValues.address,
+              phoneNumber: Number(formValues.phoneNumber),
+            }));
+            sendOrder(
+              {
                 userId: auth.currentUser.uid,
                 fullName: `${formValues.firstName} ${formValues.lastName}`,
                 firstName: formValues.firstName,
@@ -103,7 +104,8 @@ function ShippingInfo() {
                 address: formValues.address,
                 phoneNumber: Number(formValues.phoneNumber),
                 orderDate: serverTimestamp(),
-              })
+              },
+              goNext
             );
           } else {
             console.log("go to sign up sir");
@@ -149,7 +151,6 @@ function ShippingInfo() {
             size={"md"}
             className=" input "
             placeholder="Enter your current willaya"
-            autoCapitalize
             withAsterisk
             {...orderForm.getInputProps("willaya")}
           />
@@ -158,7 +159,6 @@ function ShippingInfo() {
             label="Address"
             type={"text"}
             size={"md"}
-            autoCapitalize
             className=" input "
             placeholder="Enter your exact address"
             withAsterisk
@@ -187,39 +187,21 @@ function ShippingInfo() {
           </Button>
         </div>
       </form>
+      <Group position="apart" my={8}>
+        <Button variant="light" size="xs" radius="none" color="red">
+          Back
+        </Button>
+      </Group>
     </section>
   );
 }
 
 //* ------------------------------ Shopping Cart ----------------------------- */
 
-function ShoppingCart() {
-  const { cardProducts, subTotal, setOrderData, updateCard } =
-    useContext(GlobalContext);
-  const [trigger, setTrigger] = useState(false);
-  let totalQuantity, totalCost;
-  const [cardProductsClone, setCardProductsClone] = useState(
-    structuredClone(cardProducts)
-  );
-  const [isChanged, setIsChanged] = useState(false);
+function ShoppingCart({ goNext, subTotal }) {
+  const { cardProducts, setOrderData, updateCard } = useContext(GlobalContext);
 
   useEffect(() => {
-    setCardProductsClone(structuredClone(cardProducts));
-  }, [cardProducts]);
-
-  useEffect(() => {
-    !isChanged && setCardProductsClone(structuredClone(cardProducts));
-  }, [isChanged]);
-
-  useEffect(() => {
-    totalQuantity = cardProducts.reduce(
-      (acc, current) => acc + ~~current.numberOfProduct,
-      0
-    );
-    totalCost = cardProducts.reduce(
-      (acc, current) => acc + ~~current?.totalProductPrice,
-      0
-    );
     setOrderData((prevOrderData) => {
       return {
         ...prevOrderData,
@@ -234,32 +216,27 @@ function ShoppingCart() {
           selectedColor: product?.selectedColor || null,
           productName: product.name,
         })),
-        totalCost,
-        totalQuantity,
+        totalCost: subTotal,
+        totalQuantity: cardProducts.reduce((acc, item) => {
+          return acc + item?.numberOfProduct;
+        }, 0),
         avatarImg: auth?.currentUser?.photoURL,
       };
     });
-  }, [cardProducts, trigger]);
+  }, [cardProducts]);
 
   console.log("is shopping cart trigger again");
   return (
     <section className="shopping_cart">
       <h3 className="title">Shopping Cart</h3>
-      {cardProductsClone.length < 1 ? (
+      {cardProducts.length < 1 ? (
         <div className="svg-interactions">
           <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
         </div>
       ) : (
         <Stack className="shopping_cart_list" spacing={10}>
-          {cardProductsClone.map((Product) => {
-            return (
-              <DashUniqueCard
-                Product={Product}
-                setIsChanged={setIsChanged}
-                cardProductsClone={cardProductsClone}
-                isOrdering={true}
-              />
-            );
+          {cardProducts.map((Product) => {
+            return <DashUniqueCard Product={Product} isOrdering={true} />;
           })}
         </Stack>
       )}
@@ -282,9 +259,9 @@ function ShoppingCart() {
         className="shopping_cart_CTA"
         radius="none"
         size="lg"
+        disabled={cardProducts.length < 1}
         onClick={() => {
-          updateCard(cardProductsClone);
-          setIsChanged(false);
+          updateCard(cardProducts, goNext);
         }}
       >
         UPDATE
@@ -296,7 +273,8 @@ function ShoppingCart() {
 //* ------------------------------- Order Page ------------------------------- */
 
 function Ordering() {
-  const { isOrderSuccess, setIsOrderSuccess } = useContext(GlobalContext);
+  const { subTotal } = useContext(GlobalContext);
+
   const [active, setActive] = useState(0);
   const nextStep = () =>
     setActive((current) => (current < 2 ? current + 1 : current));
@@ -305,31 +283,38 @@ function Ordering() {
 
   const Success = () => {
     return (
-      <div className="order_success">
-        <img src={ORDER_SUCCESS} alt="Success" />
+      <Paper shadow="md" className="order_success">
+        <img src={ORDER_SUCCESS} alt="Success" loading="lazy" />
         <h3>WE ARE SO EXCITED TO WORK WITH YOU</h3>
         <Link to="/">
           <Button size="lg" radius="none">
             GO BACK TO HOME
           </Button>
         </Link>
-      </div>
+      </Paper>
     );
   };
   return (
     <div className="order_page page container">
       <nav className="destination">
-        <Link to={"/catalog"}>
-          <BiChevronLeft className="icon" />
-          &nbsp;continue shopping
+        <Link to={"/catalog"} className="destination-link">
+          ← &nbsp;continue shopping
         </Link>
       </nav>
-      <Stepper my={32} px={8} active={active} onStepClick={setActive}>
-        <Stepper.Step label="First Step">
-          <ShoppingCart />
+      <Stepper my={32} active={active} onStepClick={setActive}>
+        <Stepper.Step
+          label="First Step"
+          allowStepSelect={active === 1}
+          allowStepClick={active === 1}
+        >
+          <ShoppingCart goNext={nextStep} subTotal={subTotal} />
         </Stepper.Step>
-        <Stepper.Step label="First Step">
-          <ShippingInfo />
+        <Stepper.Step
+          label="First Step"
+          allowStepClick={false}
+          allowStepSelect={false}
+        >
+          <ShippingInfo goNext={nextStep} />
         </Stepper.Step>
         <Stepper.Completed>
           <Success />
@@ -344,20 +329,6 @@ function Ordering() {
         </Button>
       </Group>
       {/* <ShoppingBag /> */}
-      <Modal
-        opened={isOrderSuccess}
-        onClose={() => setIsOrderSuccess(false)}
-        centered
-        withCloseButton={false}
-        padding="xl"
-      >
-        <Stack align={"center"}>
-          <BiCheckCircle fill="green" size={64} />
-          <Text align="center" size={"xl"} color="black">
-            ORDER DONE SUCCESSFULLY
-          </Text>
-        </Stack>
-      </Modal>
     </div>
   );
 }

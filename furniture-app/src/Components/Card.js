@@ -290,93 +290,7 @@ export function ProductsCard({
 
 //* ------------------------- Import Unique Cards ------------------------- */
 
-export function UniqueCard({ Product, setTrigger }) {
-  const {
-    cardProducts,
-    removeFromFavorite,
-    setCardProducts,
-    setSubTotal,
-    calcSubTotal,
-  } = useContext(GlobalContext);
-  const [productNumber, setProductNumber] = useState(
-    Product.numberOfProduct || 1
-  );
-  if (productNumber < 1) {
-    console.log(typeof productNumber);
-    setProductNumber(1);
-  }
-  let variable;
-
-  Product.numberOfProduct = ~~productNumber;
-  variable = productNumber;
-  console.log(Product.img);
-  Product.totalProductPrice = ~~Product.price * ~~Product.numberOfProduct;
-
-  useEffect(() => {
-    setProductNumber(Product.numberOfProduct);
-  }, [cardProducts]);
-
-  useEffect(() => {
-    if (setTrigger) setTrigger((prev) => !prev);
-  }, [variable]);
-
-  useEffect(() => {
-    setSubTotal(calcSubTotal());
-  }, [productNumber]);
-
-  function defaultNumberAndTotal() {
-    Product.totalProductPrice = 0;
-    Product.numberOfProduct = 1;
-  }
-  return (
-    <li className="unique_card product-info">
-      <div className="img_name">
-        <img
-          src={Product.img[0].url}
-          alt={Product.name}
-          className="product_image"
-        />
-        <div className="product_title">
-          <h5>{Product.name}</h5>
-          <h4>{Product.category}</h4>
-        </div>
-      </div>
-      <label htmlFor="Qty-input" className="product_quantity">
-        {" "}
-        Qty:&nbsp;
-        <button onClick={() => setProductNumber(+(productNumber + 1))}>
-          +
-        </button>
-        <input
-          type="number"
-          name="Qty-input"
-          id="Qty-input"
-          value={Product.numberOfProduct}
-          onChange={(event) => setProductNumber(+event.target.value)}
-        />
-        <button onClick={() => setProductNumber(+(productNumber - 1))}>
-          -
-        </button>
-      </label>
-      <h4 className="product_price">{Product.totalProductPrice} DZD</h4>
-      <BiX
-        className="remove-icon icon"
-        onClick={() => {
-          removeFromFavorite(Product, cardProducts, setCardProducts);
-          defaultNumberAndTotal();
-          setSubTotal(calcSubTotal());
-        }}
-      />
-    </li>
-  );
-}
-
-export function DashUniqueCard({
-  Product,
-  setIsChanged,
-  cardProductsClone,
-  isOrdering = false,
-}) {
+export function DashUniqueCard({ Product, isOrdering = false }) {
   const [quantityValue, setQuantityValue] = useState(
     Product?.numberOfProduct || 1
   );
@@ -394,24 +308,17 @@ export function DashUniqueCard({
     Product.numberOfProduct = 1;
   }
 
-  function setChanged(not = true) {
-    not ? setIsChanged(true) : setIsChanged(false);
-  }
-
   useEffect(() => {
     setQuantityValue(Product?.numberOfProduct);
   }, [Product]);
-
-  useEffect(() => {
-    setChanged();
-  }, [quantityValue]);
 
   useEffect(() => {
     if (quantityValue > 0) {
       Product.numberOfProduct = quantityValue;
       Product.totalProductPrice =
         (~~Product?.pricePromotion || ~~Product?.price) * quantityValue;
-      setSubTotal(calcSubTotal(cardProductsClone));
+      setSubTotal(calcSubTotal());
+      setCardProducts((prev) => prev);
     } else if (quantityValue < 1) {
       setQuantityValue(1);
     }
@@ -450,108 +357,72 @@ export function DashUniqueCard({
           </Group>
         </div>
       </div>
-      <label htmlFor="Qty-input" className="quantity-controls">
-        {" "}
-        Qty:&nbsp;
-        <Group spacing={5}>
-          <ActionIcon
-            radius={"none"}
-            size={36}
-            variant="default"
-            onClick={() => handlers.current.increment()}
-          >
-            +
-          </ActionIcon>
-
-          <NumberInput
-            size="sm"
-            radius={"none"}
-            name="quantity"
-            id="quantity"
-            hideControls
-            value={quantityValue}
-            onChange={(val) => {
-              setQuantityValue(val);
-            }}
-            min={1}
-            step={1}
-            handlersRef={handlers}
-            styles={{ input: { width: 50, textAlign: "center" } }}
-          />
-
-          <ActionIcon
-            radius={"none"}
-            size={36}
-            variant="default"
-            onClick={() => handlers.current.decrement()}
-          >
-            -
-          </ActionIcon>
-        </Group>
-        {/* <Group spacing={5}>
-          <ActionIcon
-            variant="default"
-            size={36}
-            radius={"none"}
-            onClick={() => {
-              setQuantityValue((prev) => prev + 1);
-            }}
-          >
-            +
-          </ActionIcon>
-          <NumberInput
-            radius={"none"}
-            hideControls
-            type="number"
-            name="Qty-input"
-            id="Qty-input"
-            styles={{ input: { width: 50, textAlign: "center" } }}
-            min={1}
-            value={quantityValue}
-            onChange={(e) => {
-              setQuantityValue(e !== undefined ? e : 1);
-            }}
-          />
-          <ActionIcon
-            variant="default"
-            size={36}
-            radius={"none"}
-            onClick={() => {
-              setIsChanged(true);
-              setQuantityValue((prev) => prev - 1);
-            }}
-          >
-            -
-          </ActionIcon>
-        </Group> */}
-      </label>
       {isOrdering ? (
-        <ActionIcon
-          variant="subtle"
-          size={"md"}
-          radius={"none"}
-          color={"red"}
-          onClick={() => {
-            removeFromCard(Product, cardProducts, setCardProducts);
-            defaultNumberAndTotal();
-            setSubTotal(calcSubTotal());
-          }}
-        >
-          <BiTrash size={18} />
-        </ActionIcon>
+        <label htmlFor="Qty-input" className="quantity-controls">
+          {" "}
+          Qty:&nbsp;
+          <Group spacing={5}>
+            <ActionIcon
+              radius={"none"}
+              size={36}
+              variant="default"
+              onClick={() => handlers.current.increment()}
+            >
+              +
+            </ActionIcon>
+
+            <NumberInput
+              size="sm"
+              radius={"none"}
+              name="quantity"
+              id="quantity"
+              hideControls
+              value={quantityValue}
+              onChange={(val) => {
+                setQuantityValue(val);
+              }}
+              min={1}
+              step={1}
+              handlersRef={handlers}
+              styles={{ input: { width: 50, textAlign: "center" } }}
+            />
+
+            <ActionIcon
+              radius={"none"}
+              size={36}
+              variant="default"
+              onClick={() => handlers.current.decrement()}
+            >
+              -
+            </ActionIcon>
+          </Group>
+        </label>
       ) : (
-        <CloseButton
-          size={"lg"}
+        <NumberInput
+          size="sm"
           radius={"none"}
-          color={"red"}
-          onClick={() => {
-            removeFromCard(Product, cardProducts, setCardProducts);
-            defaultNumberAndTotal();
-            setSubTotal(calcSubTotal());
-          }}
-          style={{ position: "absolute", top: "5px", right: "5px" }}
+          name="quantity"
+          id="quantity"
+          hideControls
+          readOnly
+          value={quantityValue}
+          styles={{ input: { width: 50, textAlign: "center" } }}
         />
       )}
+
+      <ActionIcon
+        variant="subtle"
+        size={"md"}
+        radius={"none"}
+        color={"red"}
+        onClick={() => {
+          removeFromCard(Product, cardProducts, setCardProducts);
+          defaultNumberAndTotal();
+          setSubTotal(calcSubTotal());
+        }}
+      >
+        <BiTrash size={18} />
+      </ActionIcon>
     </div>
   );
 }
@@ -595,48 +466,17 @@ export function FavUniqueCard({ Product, setClose }) {
           </Group>
         </div>
       </div>
-      {/* <Group
-        position="apart"
-        align={"center"}
-        mt={"0.5rem"}
-        style={{ width: "100%" }}
+      <ActionIcon
+        variant="subtle"
+        size={"md"}
+        radius={"none"}
+        color={"red"}
+        onClick={() => {
+          removeFromFavorite(Product, favoriteProducts, setFavoriteProducts);
+        }}
       >
-        <label htmlFor="Qty-input" className="quantity-controls">
-          {" "}
-          Qty:&nbsp;
-          <Group spacing={5}>
-            <ActionIcon
-              variant="default"
-              size={36}
-              radius={"none"}
-              onClick={() => setQuantityValue((prev) => prev + 1)}
-            >
-              +
-            </ActionIcon>
-            <NumberInput
-              radius={"none"}
-              hideControls
-              type="number"
-              name="Qty-input"
-              id="Qty-input"
-              styles={{ input: { width: 50, textAlign: "center" } }}
-              min={1}
-              value={quantityValue}
-              onChange={(e) => {
-                setQuantityValue(e !== undefined ? e : 1);
-              }}
-            />
-            <ActionIcon
-              variant="default"
-              size={36}
-              radius={"none"}
-              onClick={() => setQuantityValue((prev) => prev - 1)}
-            >
-              -
-            </ActionIcon>
-          </Group>
-        </label>
-      </Group> */}
+        <BiTrash size={18} />
+      </ActionIcon>
       <Link to={`catalog/${Product.id}`} onClick={() => setClose(false)}>
         <Button
           variant="light"
@@ -648,15 +488,6 @@ export function FavUniqueCard({ Product, setClose }) {
           show
         </Button>
       </Link>
-      <CloseButton
-        size={"lg"}
-        radius={"none"}
-        color={"red"}
-        onClick={() =>
-          removeFromFavorite(Product, favoriteProducts, setFavoriteProducts)
-        }
-        style={{ position: "absolute", top: "5px", right: "5px" }}
-      />
     </div>
   );
 }
