@@ -352,7 +352,10 @@ export default function EnhancedTable({ rows, headCells }) {
                         <TableCell align="left">{row.phoneNumber}</TableCell>
                         <TableCell align="left">{createdAt}</TableCell>
                         <TableCell align="left">{row.orderQuantity}</TableCell>
-                        <TableCell align="left">{row.orderCost} DZD</TableCell>
+                        <TableCell align="left">
+                          {row?.orderCostHT} DA
+                        </TableCell>
+                        <TableCell align="left">{row.orderCost} DA</TableCell>
                         <TableCell align="left">
                           <SelectStatus row={row} />
                         </TableCell>

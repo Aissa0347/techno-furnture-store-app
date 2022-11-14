@@ -53,7 +53,6 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
   const { updateCard, setCardProducts, subTotal, setSubTotal, calcSubTotal } =
     useContext(GlobalContext);
 
-  // set on value change subtotal change also
   return (
     <Drawer
       position="right"
@@ -79,8 +78,8 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
         <Stack style={{ width: "100%", gap: "8px" }}>
           <div className="shopping_cart_total unique_card">
             <li className="facture_price total">
-              <h5 className="cart-total">SUBTOTAL</h5>
-              <h5>{`${subTotal}`} DZD</h5>
+              <h5 className="cart-total">SUBTOTAL TTC</h5>
+              <h5>{`${subTotal}`} DA</h5>
             </li>
           </div>
 

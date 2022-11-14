@@ -15,12 +15,20 @@ import {
   StyleSheet,
   Font,
 } from "@react-pdf/renderer";
+import moment from "moment";
 import { LOGO } from "../Website-Assets";
 
 const MainPDF = ({ data }) => {
+  let totalPriceHT = data.reduce((acc, current) => {
+    return acc + current?.productTotalHT;
+  }, 0);
+  let totalTaxAmount = data.reduce((acc, current) => {
+    return acc + current?.taxAmount;
+  }, 0);
   let totalPrice = data.reduce((acc, current) => {
     return acc + current?.productTotal;
   }, 0);
+
   console.log(totalPrice);
   return (
     <Document>
@@ -37,7 +45,15 @@ const MainPDF = ({ data }) => {
           </View>
         </View>
         <View style={body.commandeInfo} fixed>
-          <Text style={body.textHeader}>Commande n INV-0021</Text>
+          <View style={body.factureHead}>
+            <View>
+              <Text style={body.textHeader}>Facture N° : INV-0021</Text>
+              <Text style={body.textSm}>
+                cheraga Le : {moment().format("DD-MM-YY")}
+              </Text>
+            </View>
+            <Text style={body.textHeader}>Doit : SPA KNC CONSTRUCTION</Text>
+          </View>
           <View style={body.info}>
             <View style={body.textWrap}>
               <Text style={body.textSmHeader}>Date de commande : </Text>
@@ -67,13 +83,13 @@ const MainPDF = ({ data }) => {
                 Quantite
               </TableCell>
               <TableCell style={table.headCell} weighting={1}>
-                Prix unitaire
+                PU HT RRR. %
               </TableCell>
               <TableCell style={table.headCell} weighting={1}>
-                Taxes
+                Montant HT
               </TableCell>
               <TableCell style={table.headCell} weighting={1}>
-                Montant
+                TVA
               </TableCell>
             </TableHeader>
             <TableBody
@@ -98,29 +114,48 @@ const MainPDF = ({ data }) => {
                 weighting={1}
                 textAlign={"right"}
                 style={table.bodyCell}
-                getContent={(content) => `${content?.currentPrice},00 DA`}
+                getContent={(content) => `${content?.currentPriceHT}.00`}
               />
               <DataTableCell
                 weighting={1}
                 textAlign={"right"}
                 style={table.bodyCell}
-                getContent={(content) => content?.taxes}
+                getContent={(content) => `${content?.productTotalHT}.00`}
               />
               <DataTableCell
                 weighting={1}
                 textAlign={"right"}
                 style={table.bodyCell}
-                getContent={(content) => `${content?.productTotal},00 DA`}
+                getContent={(content) => `${content?.tax} %`}
               />
             </TableBody>
           </Table>
           <View style={table.totalWrap}>
-            <View style={table.total}>
-              <Text style={body.textSmHeader}>Total</Text>
-              <Text style={body.text}>{totalPrice},00 DA</Text>
+            <View style={table.totalSection}>
+              <View style={table.subTotal}>
+                <Text style={body.textSm}>Total H.T</Text>
+                <Text style={body.text}>{totalPriceHT}.00 DA</Text>
+              </View>
+              <View style={table.subTotal}>
+                <Text style={body.textSm}>TVA</Text>
+                <Text style={body.text}>{totalTaxAmount}.00 DA</Text>
+              </View>
+              <View style={table.subTotal}>
+                <Text style={body.textSm}>Total TTC</Text>
+                <Text style={body.text}>{totalPrice}.00 DA</Text>
+              </View>
+              <View style={table.subTotal}>
+                <Text style={body.textSm}>Timbre</Text>
+                <Text style={body.text}>100.00 DA</Text>
+              </View>
+              <View style={table.total}>
+                <Text style={body.textSmHeader}>Net a payer</Text>
+                <Text style={body.text}>{`${totalPrice + 100}`}.00 DA</Text>
+              </View>
             </View>
           </View>
         </View>
+        <Text style={body.service}>Service Enterprise</Text>
         <View style={body.footerWrap}>
           <View style={body.footer}>
             <Text style={body.footerText}>0795914857 / 0550951515</Text>
@@ -168,15 +203,29 @@ const table = StyleSheet.create({
     border: "none",
     margin: "5px",
     paddingLeft: "10px",
-    fontSize: "11px",
+    fontSize: "10px",
     fontWeight: "500",
     textTransform: "uppercase",
   },
   totalWrap: {
+    width: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-end",
+  },
+  totalSection: {
+    display: "flex",
+    flexDirection: "column",
+    width: "170px",
+    maxWidth: "170px",
     marginTop: "10px",
+  },
+  subTotal: {
+    width: "170px",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: "2px 5px",
   },
   total: {
     width: "170px",
@@ -194,9 +243,9 @@ const body = StyleSheet.create({
     marginTop: "15px",
   },
   textHeader: {
-    fontSize: "18px",
+    fontSize: "14px",
     fontWeight: "900",
-    marginVertical: "15px",
+    marginVertical: "8px",
   },
   info: {
     display: "flex",
@@ -208,12 +257,33 @@ const body = StyleSheet.create({
   },
   textSmHeader: {
     fontSize: "12px",
-    fontWeight: "600",
+    fontWeight: "800",
     marginBottom: "5px",
+  },
+  textSm: {
+    fontSize: "12px",
+    fontWeight: "500",
   },
   text: {
     fontSize: "12px",
     fontWeight: "light",
+  },
+  factureHead: {
+    display: "flex",
+    flexDirection: "row",
+    gap: "24px",
+    marginBottom: "1rem",
+  },
+
+  totalSection: {
+    display: "flex",
+    flexDirection: "column",
+    fontSize: "11px",
+    padding: "5px",
+  },
+  service: {
+    marginLeft: "64px",
+    fontSize: "9px",
   },
   footerWrap: {
     position: "absolute",

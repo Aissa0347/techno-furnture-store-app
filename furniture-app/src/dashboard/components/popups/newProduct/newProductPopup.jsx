@@ -5,10 +5,9 @@ import {
   Select,
   Button,
   NumberInput,
-  MultiSelect,
-  CloseButton,
   Group,
   Text,
+  Divider,
 } from "@mantine/core";
 import { AddCategoriesPopup, AddColorsPopup } from "./addPopup";
 // Import React Lib
@@ -29,8 +28,6 @@ import {
 } from "firebase/storage";
 import { uuidv4 } from "@firebase/util";
 // Import styles
-import { newImageList } from "@mui/material";
-import { type } from "@testing-library/user-event/dist/type";
 import { useContext } from "react";
 import { GlobalContext } from "../../../../App";
 import { defaultProduct } from "../../../../Website-Assets";
@@ -64,6 +61,8 @@ export default function NewProductPopup({
   const [isImagesUploaded, setIsImagesUploaded] = useState(
     typeOfForm == "edit" ? true : false
   );
+  const [TAX, setTAX] = useState(19);
+  const [priceHT, setPriceHT] = useState(0);
   const [isUploadImagesLoading, setIsUploadImagesLoading] = useState(false);
   const [selectColors, setSelectColors] = useState({
     state: false,
@@ -79,6 +78,7 @@ export default function NewProductPopup({
   });
 
   const [defaultValues, setDefaultValues] = useState(defaultProduct);
+  const newProductFormRef = useRef();
   const selectRef = useRef();
   const productNameRef = useRef();
   const priceRef = useRef();
@@ -107,17 +107,26 @@ export default function NewProductPopup({
     });
   };
 
-  console.log(
-    "this is image list : ",
-    newImageList,
-    primaryImages,
-    updatedImageList
-  );
+  const calcTaxPrice = (defaultPrice, tax = TAX) => {
+    return (defaultPrice * (100 - tax)) / 100;
+  };
+
+  const calcTaxAmount = (defaultPrice, tax = TAX) => {
+    if (newProductFormRef.current?.pricePromotion?.value)
+      return (newProductFormRef.current?.pricePromotion?.value * tax) / 100;
+    return (defaultPrice * tax) / 100;
+  };
 
   useEffect(() => {
     document.querySelectorAll(".ql-blank").value = show;
     console.log(selectRef.current.value);
   });
+
+  useEffect(() => {
+    let priceHT = calcTaxPrice(newProductFormRef.current?.price?.value);
+    console.log("here is the TAX :", priceHT);
+    setPriceHT(priceHT);
+  }, [TAX]);
 
   //* --------------------------- Upload new Product --------------------------- */
   // console.log(files.name);
@@ -192,13 +201,19 @@ export default function NewProductPopup({
       img: updatedImageList[0] ? updatedImageList : primaryImages,
       price: Number(newProductForm.price?.value),
       pricePromotion: Number(newProductForm.pricePromotion?.value),
-      box: {
-        price: Number(newProductForm.priceOfBox?.value),
-        numberOfPieces: Number(newProductForm.numberOfBoxPieces?.value),
-        pricePromotion:
-          Number(newProductForm.pricePromotion?.value) *
-          Number(newProductForm.numberOfBoxPieces?.value),
+      priceHT: {
+        price: priceHT,
+        pricePromotion: calcTaxPrice(newProductForm.pricePromotion?.value) || 0,
+        taxAmount: calcTaxAmount(newProductForm.price?.value),
       },
+      tax: TAX,
+      // box: {
+      // price: Number(newProductForm.priceOfBox?.value),
+      // numberOfPieces: Number(newProductForm.numberOfBoxPieces?.value),
+      // pricePromotion:
+      // Number(newProductForm.pricePromotion?.value) *
+      // Number(newProductForm.numberOfBoxPieces?.value),
+      // },
       mark: "",
       markName: newProductForm.brand?.value.toUpperCase(),
       dimensions: {
@@ -210,6 +225,7 @@ export default function NewProductPopup({
       productQuantity: Number(50),
       numberOfProduct: Number(1),
       totalProductPrice: Number(0),
+      totalProductPriceHT: Number(0),
       description: descriptionTextContent,
       details: "",
       id: typeOfForm === "edit" ? primaryValues?.id : uuidv4(),
@@ -280,7 +296,7 @@ export default function NewProductPopup({
     <MantineProvider>
       <div className="popup popup_new-product">
         <h2>Add New Product</h2>
-        <form className="info_form new-product-form">
+        <form className="info_form new-product-form" ref={newProductFormRef}>
           <div className="input half">
             <TextInput
               placeholder="Product Name"
@@ -362,7 +378,7 @@ export default function NewProductPopup({
           <div className="input half">
             <NumberInput
               placeholder="Price in DA"
-              label="Price"
+              label="Price TTC"
               min={0}
               name="price"
               ref={priceRef}
@@ -380,6 +396,33 @@ export default function NewProductPopup({
             <Group noWrap>
               <NumberInput
                 placeholder="Price in DA"
+                label="Price generated HT"
+                min={0}
+                readOnly
+                value={priceHT}
+                onChange={setPriceHT}
+                name="priceHT"
+                defaultValue={primaryValues?.priceHT}
+              />
+              <Select
+                placeholder="TVA percentage"
+                label="TVA %"
+                data={[
+                  { label: "19%", value: 19 },
+                  { label: "9%", value: 9 },
+                  { label: "0%", value: 0 },
+                ]}
+                value={TAX}
+                onChange={setTAX}
+                name="TAX"
+                defaultValue={primaryValues?.TAX}
+              />
+            </Group>
+          </div>
+          {/* <div className="input half">
+            <Group noWrap>
+              <NumberInput
+                placeholder="Price in DA"
                 label="Price of box"
                 min={0}
                 name="priceOfBox"
@@ -394,7 +437,7 @@ export default function NewProductPopup({
                 defaultValue={primaryValues?.box?.numberOfPieces}
               />
             </Group>
-          </div>
+          </div> */}
           <div className="input half">
             <NumberInput
               placeholder="Price in DA"
@@ -404,80 +447,13 @@ export default function NewProductPopup({
               defaultValue={primaryValues?.pricePromotion}
             />
           </div>
+          <Divider variant="solid" my="sm" />
           <div className=" half ">
             <MultiSelectColors
               data={selectColors.data}
               colors={selectColors}
               setColors={setSelectColors}
             />
-            {/* <MultiSelect
-              placeholder="Pick all you like"
-              label="Colors"
-              radius="none"
-              size="md"
-              name="colors"
-              className="multi-select"
-              defaultValue={primaryValues?.colors}
-              searchable
-              style={{ marginBottom: "20px" }}
-              ref={selectRef}
-              onChange={(event) => {
-                console.log("this is colors event", event);
-                if (event[event.length - 1] === "+ ADD NEW COLOR")
-                  addNewCategory(
-                    event[event.length - 1],
-                    "+ ADD NEW COLOR",
-                    setSelectColors
-                  );
-              }}
-              valueComponent={(props) => {
-                const { label, value, onRemove, ref, ...others } = props;
-                if (value !== "+ ADD NEW COLOR")
-                  if (
-                    selectColors.value.find(
-                      (colorNames) =>
-                        colorNames?.value?.colorName !== value?.colorName
-                    )
-                  )
-                    setSelectColors((prev) => {
-                      return { ...prev, value: [...prev.value, { value }] };
-                    });
-                console.log("check tose others : ", others);
-                return (
-                  <div className="color-label">
-                    <span
-                      className="color-shower"
-                      style={{ backgroundColor: value?.colorRef }}
-                    ></span>
-                    <span>{value?.colorName}</span>
-                    <CloseButton
-                      variant="transparent"
-                      size={"xs"}
-                      onMouseDown={onRemove}
-                    />
-                  </div>
-                );
-              }}
-              itemComponent={(props) => {
-                const { label, value, ref, className, ...others } = props;
-                console.log("check tose props : ", props);
-                return (
-                  <div
-                    ref={ref}
-                    {...others}
-                    className={className + " color-label color-item "}
-                  >
-                    <span
-                      className="color-shower"
-                      style={{ backgroundColor: value?.colorRef }}
-                    ></span>
-                    <span>{value?.colorName}</span>
-                  </div>
-                );
-              }}
-              nothingFound="No options"
-              data={selectColors.data}
-            /> */}
           </div>
           <div className="input half new-product-dimension">
             <NumberInput

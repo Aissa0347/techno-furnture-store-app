@@ -198,7 +198,7 @@ function ShippingInfo({ goNext }) {
 
 //* ------------------------------ Shopping Cart ----------------------------- */
 
-function ShoppingCart({ goNext, subTotal }) {
+function ShoppingCart({ goNext, subTotal, totalHT }) {
   const { cardProducts, setOrderData, updateCard } = useContext(GlobalContext);
 
   useEffect(() => {
@@ -211,12 +211,20 @@ function ShoppingCart({ goNext, subTotal }) {
           productTotal:
             ~~product.numberOfProduct *
             (~~product?.pricePromotion || ~~product.price),
-          currentPrice: ~~product.price,
+          productTotalHT:
+            ~~product.numberOfProduct *
+            (~~product?.priceHT?.pricePromotion || ~~product.priceHT?.price),
+          currentPrice: ~~product?.pricePromotion || ~~product.price,
           promotionPrice: ~~product?.pricePromotion,
           selectedColor: product?.selectedColor || null,
           productName: product.name,
+          currentPriceHT:
+            ~~product?.priceHT?.pricePromotion || ~~product?.priceHT?.price,
+          tax: product?.tax,
+          taxAmount: ~~product?.priceHT?.taxAmount,
         })),
         totalCost: subTotal,
+        totalCostHT: totalHT,
         totalQuantity: cardProducts.reduce((acc, item) => {
           return acc + item?.numberOfProduct;
         }, 0),
@@ -242,12 +250,12 @@ function ShoppingCart({ goNext, subTotal }) {
       )}
       <ul className="shopping_cart_total unique_card">
         <li className="facture_price ">
-          <h5>Subtotal</h5>
-          <h4>{subTotal} DZD</h4>
+          <h5>total H.T</h5>
+          <h4>{totalHT} DA</h4>
         </li>
         <li className="facture_price ">
-          <h5>Shipping</h5>
-          <h4>0 DZD</h4>
+          <h5>Subtotal</h5>
+          <h4>{subTotal} DA</h4>
         </li>
         <li className="facture_price total">
           <h5 className="cart-total">TOTAL</h5>
@@ -273,7 +281,7 @@ function ShoppingCart({ goNext, subTotal }) {
 //* ------------------------------- Order Page ------------------------------- */
 
 function Ordering() {
-  const { subTotal } = useContext(GlobalContext);
+  const { subTotal, totalHT } = useContext(GlobalContext);
 
   const [active, setActive] = useState(0);
   const nextStep = () =>
@@ -307,7 +315,11 @@ function Ordering() {
           allowStepSelect={active === 1}
           allowStepClick={active === 1}
         >
-          <ShoppingCart goNext={nextStep} subTotal={subTotal} />
+          <ShoppingCart
+            goNext={nextStep}
+            subTotal={subTotal}
+            totalHT={totalHT}
+          />
         </Stepper.Step>
         <Stepper.Step
           label="First Step"

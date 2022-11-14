@@ -41,6 +41,7 @@ function Statics() {
         order?.willaya + ", " + order?.address,
         order?.orderDate,
         order?.totalQuantity,
+        order?.totalCostHT || 0,
         order?.totalCost,
         order?.status,
         order

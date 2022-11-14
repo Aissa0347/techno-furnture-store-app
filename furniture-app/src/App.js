@@ -192,6 +192,7 @@ function App() {
     price: [],
   });
   const [subTotal, setSubTotal] = useState(0);
+  const [totalHT, setTotalHT] = useState(0);
   const [userUID, setUserUID] = useState("");
   const [currentUserData, setCurrentUserData] = useState("");
   const [isUser, setIsUser] = useState(true);
@@ -217,6 +218,12 @@ function App() {
   console.log(ProductsCatalog);
   function calcSubTotal(ProductList = cardProducts) {
     console.log("here we are in reduce card :", subTotal);
+    let totalSomHT = ProductList.reduce(
+      (prev, current) => prev + ~~current?.totalProductPriceHT,
+      0
+    );
+    setTotalHT(totalSomHT);
+
     return ProductList.reduce(
       (prev, current) => prev + ~~current.totalProductPrice,
       0
@@ -320,6 +327,10 @@ function App() {
           totalProductPrice:
             currentProduct?.quantity *
             (foundProduct?.pricePromotion || foundProduct?.price),
+          totalProductPriceHT:
+            currentProduct?.quantity *
+            (foundProduct?.priceHT?.pricePromotion ||
+              foundProduct?.priceHT?.price),
         });
     }
     console.log("check this first : ", cardProducts);
@@ -789,6 +800,7 @@ function App() {
         cardProducts,
         setFilters,
         subTotal,
+        totalHT,
         setSubTotal,
         calcSubTotal,
         currentUserData,

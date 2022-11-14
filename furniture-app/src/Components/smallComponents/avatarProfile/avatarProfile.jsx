@@ -6,14 +6,14 @@ import { auth } from "../../../firebase/firebaseConfig";
 
 export function AvatarProfile() {
   const { currentUserData } = useContext(GlobalContext);
-  console.log(currentUserData?.avatarImg);
+  console.log("here is avatarImg : ", currentUserData?.avatarImg);
   return (
     <MantineProvider>
       <Menu trigger="hover" openDelay={100} closeDelay={400} width={220}>
         <Menu.Target>
           <Avatar
             radius="xl"
-            src={`${currentUserData?.avatarImg}`}
+            src={currentUserData?.avatarImg}
             alt={currentUserData?.name}
           ></Avatar>
         </Menu.Target>

@@ -5,8 +5,8 @@ import { Features } from "../Components/Home";
 import { GlobalContext } from "../App";
 
 // Import Libraries
-import uniqid from "uniqid";
-
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 // Import Icons
 import { BiX } from "react-icons/bi";
 
@@ -102,7 +102,7 @@ export function Category() {
         >
           {CategoryP.map((Category, index) => {
             return (
-              <SwiperSlide className="category" key={uniqid.time()}>
+              <SwiperSlide className="category" key={index}>
                 <SmallCard {...Category} />
               </SwiperSlide>
             );
@@ -137,7 +137,9 @@ export function MediaSlider({ images, name }) {
         {[...images].map((img, index) => {
           return (
             <SwiperSlide key={index} className="media-slider-active">
-              <img src={img.url} alt={name} />
+              <Zoom>
+                <img src={img.url} alt={name} />
+              </Zoom>
             </SwiperSlide>
           );
         })}
@@ -208,7 +210,7 @@ export function SuggestedProducts() {
         >
           {filteredSuggestedProducts.map((Product) => {
             return (
-              <SwiperSlide key={uniqid.time()}>
+              <SwiperSlide key={Product?.id}>
                 <ProductsCard {...Product} currentProduct={Product} />
               </SwiperSlide>
             );

@@ -83,10 +83,16 @@ export const headCells = [
     label: "QTY",
   },
   {
+    id: "orderCostHT",
+    numeric: true,
+    disablePadding: false,
+    label: "Cost H.T",
+  },
+  {
     id: "orderCost",
     numeric: true,
     disablePadding: false,
-    label: "Cost",
+    label: "Cost TTC",
   },
   {
     id: "orderStatus",
@@ -94,6 +100,7 @@ export const headCells = [
     disablePadding: false,
     label: "Status",
   },
+
   { label: "Actions", isNotSorted: true },
 ];
 
@@ -106,6 +113,7 @@ export function createData(
   orderAddress,
   inDate,
   orderQuantity,
+  orderCostHT,
   orderCost,
   orderStatus,
   order
@@ -119,6 +127,7 @@ export function createData(
     orderAddress,
     inDate,
     orderQuantity,
+    orderCostHT,
     orderCost,
     orderStatus,
     order,
@@ -157,6 +166,7 @@ function Invoices() {
     { value: "orderDate", label: "In date" },
     { value: "phoneNumber", label: "Phone number" },
     { value: "totalQuantity", label: "QTY", format: "number" },
+    { value: "totalCostHT", label: "Cost H.T", format: "number" },
     { value: "totalCost", label: "Cost", format: "number" },
     { value: "status", label: "Status" },
   ];
@@ -177,6 +187,7 @@ function Invoices() {
           order?.willaya + ", " + order?.address,
           order?.orderDate,
           order?.totalQuantity,
+          order?.totalCostHT || 0,
           order?.totalCost,
           order?.status,
           order

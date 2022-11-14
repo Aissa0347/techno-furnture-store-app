@@ -305,6 +305,7 @@ export function DashUniqueCard({ Product, isOrdering = false }) {
 
   function defaultNumberAndTotal() {
     Product.totalProductPrice = 0;
+    Product.totalProductPriceHT = 0;
     Product.numberOfProduct = 1;
   }
 
@@ -317,6 +318,9 @@ export function DashUniqueCard({ Product, isOrdering = false }) {
       Product.numberOfProduct = quantityValue;
       Product.totalProductPrice =
         (~~Product?.pricePromotion || ~~Product?.price) * quantityValue;
+      Product.totalProductPriceHT =
+        (~~Product?.priceHT?.pricePromotion || ~~Product?.priceHT?.price) *
+        quantityValue;
       setSubTotal(calcSubTotal());
       setCardProducts((prev) => prev);
     } else if (quantityValue < 1) {
