@@ -2,7 +2,7 @@ import CustomersTable from "../../components/tables/customerTable";
 import { customersList, defaultUser } from "../../../Website-Assets";
 
 import { search, visit } from "../../components/icons";
-import { useContext, useMemo, useRef, useState } from "react";
+import React, { useContext, useMemo, useRef, useState } from "react";
 import { db } from "../../../firebase/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect } from "react";
@@ -99,7 +99,6 @@ function Customer() {
 
   // function getUsersData() {
   //   let userList = [];
-  //   console.log("heyyy friend");
   //   getDocs(usersCol)
   //     .then((users) => {
   //       users.docs.map((user) => {
@@ -108,8 +107,6 @@ function Customer() {
   //       setCustomers(userList);
   //     })
   //     .catch((error) => {
-  //       console.log(error.code);
-  //       console.log(error.message);
   //     });
   // }
 
@@ -170,4 +167,4 @@ function Customer() {
   );
 }
 
-export default Customer;
+export default React.memo(Customer);

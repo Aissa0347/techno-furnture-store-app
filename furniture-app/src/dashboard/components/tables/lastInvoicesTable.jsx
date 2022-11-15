@@ -295,14 +295,6 @@ export default function EnhancedTable({ rows }) {
                           >
                             {show}
                           </span>
-                          <span className="action">
-                            <PDFDownloadLink
-                              fileName="InvoiceSir"
-                              document={<MainPDF data={row.order.orderList} />}
-                            >
-                              {download}
-                            </PDFDownloadLink>
-                          </span>
                         </div>
                       </TableCell>
                     </TableRow>

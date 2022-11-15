@@ -17,6 +17,7 @@ import {
   startAt,
 } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import React from "react";
 
 // import Styles
 // import "./_dashboard.scss";
@@ -154,4 +155,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default React.memo(Dashboard);

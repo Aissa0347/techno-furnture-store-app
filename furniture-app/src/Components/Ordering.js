@@ -351,4 +351,4 @@ function Ordering() {
   );
 }
 
-export default Ordering;
+export default React.memo(Ordering);

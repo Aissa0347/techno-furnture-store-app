@@ -4,6 +4,8 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  lazy,
+  Suspense,
   useState,
 } from "react";
 
@@ -16,19 +18,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-// import Component
-import Navbar from "./Components/Navbar";
-import Home from "./Components/Home";
-import Catalog from "./Components/Catalog";
-import ProductPage from "./Components/Product_Page";
-import Dashboard from "./dashboard/Dashboard";
-
-// import Dashboard Components
-import Main from "./dashboard/pages/main/Main";
-import Customers from "./dashboard/pages/customers/customers";
-import Products from "./dashboard/pages/products/products";
-import Invoices from "./dashboard/pages/invoices/invoices";
-
 // import Styles
 import "./styles/index.scss";
 import Product_Page from "./Components/Product_Page";
@@ -40,7 +29,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  onSnapshot,
   query,
   serverTimestamp,
   setDoc,
@@ -48,12 +36,9 @@ import {
   where,
 } from "firebase/firestore";
 import { db, auth } from "./firebase/firebaseConfig";
-import { async } from "@firebase/util";
 import { defaultProduct } from "./Website-Assets";
 import Auth from "./authentication/auth";
-import { useLayoutEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
-import { ref } from "firebase/storage";
 import moment from "moment";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import {
@@ -63,6 +48,20 @@ import {
   BiXCircle,
 } from "react-icons/bi";
 import { Drawer } from "@mantine/core";
+
+// import Component
+import Navbar from "./Components/Navbar";
+import ProductPage from "./Components/Product_Page";
+// import Dashboard Components
+import Main from "./dashboard/pages/main/Main";
+import Customers from "./dashboard/pages/customers/customers";
+import Products from "./dashboard/pages/products/products";
+import Invoices from "./dashboard/pages/invoices/invoices";
+
+//* ----------------------- import lazy load components ---------------------- */
+const Home = lazy(() => import("./Components/Home"));
+const Dashboard = lazy(() => import("./dashboard/Dashboard"));
+const Catalog = lazy(() => import("./Components/Catalog"));
 
 //* ---------------------------- Main App Function --------------------------- */
 
@@ -211,35 +210,30 @@ function App() {
   });
   const navigate = useNavigate("/ordering");
 
-  useEffect(() => {
-    setAnalytics();
-  }, []);
-
   console.log(ProductsCatalog);
-  function calcSubTotal(ProductList = cardProducts) {
-    console.log("here we are in reduce card :", subTotal);
-    let totalSomHT = ProductList.reduce(
-      (prev, current) => prev + ~~current?.totalProductPriceHT,
-      0
-    );
-    setTotalHT(totalSomHT);
+  const calcSubTotal = useCallback(
+    (ProductList = cardProducts) => {
+      console.log("here we are in reduce card :", subTotal);
+      let totalSomHT = ProductList.reduce(
+        (prev, current) => prev + ~~current?.totalProductPriceHT,
+        0
+      );
+      setTotalHT(totalSomHT);
 
-    return ProductList.reduce(
-      (prev, current) => prev + ~~current.totalProductPrice,
-      0
-    );
-  }
-
-  useEffect(() => {
-    setSubTotal(calcSubTotal());
-  }, [cardProducts]);
+      return ProductList.reduce(
+        (prev, current) => prev + ~~current.totalProductPrice,
+        0
+      );
+    },
+    [cardProducts]
+  );
 
   //* ------------------------------ Get User Info ----------------------------- */
 
   const getUserData = async (userUID) => {
     const usersRef = collection(db, "Users");
     const userQuery = query(usersRef, where("id", "==", userUID));
-    getDocs(userQuery)
+    await getDocs(userQuery)
       .then((user) => {
         console.log("this is user on snapshot", user);
         console.log("this is user data ", user.docs[0] == 1);
@@ -265,41 +259,23 @@ function App() {
     if (user?.uid && !currentUserData) await getUserData(user?.uid);
     if (!user?.uid) setCurrentUserData("");
   });
-  useCallback(() => {
-    console.log("samir");
-    getUserData(userUID);
-  }, [userUID]);
-
-  console.log("is user : ", isUser);
-  useEffect(() => {
-    if (currentUserData) {
-      setUserRef(doc(db, "Users", currentUserData.docId));
-      setCardProducts(
-        getCardProductsFromLocal(currentUserData?.productsInCart)
-      );
-      setFavoriteProducts(
-        getFavoriteProductsFromLocal(currentUserData?.favoriteProducts)
-      );
-    } else {
-      setIsUser(true);
-      setCardProducts([]);
-      setFavoriteProducts([]);
-    }
-  }, [currentUserData]);
 
   //* -------------------------------- Get Data -------------------------------- */
 
-  const getData = async () => {
+  const getData = useCallback(async () => {
     const ProductRef = collection(db, "ProductsList");
     let dataPromise = await getDocs(ProductRef);
-    let fullData = dataPromise.docs.map((doc) => ({
-      ...doc.data(),
-      docId: doc.id,
-      // id: doc.id,
-    }));
+    let fullData = dataPromise.docs.map(
+      (doc) => ({
+        ...doc.data(),
+        docId: doc.id,
+        // id: doc.id,
+      }),
+      []
+    );
     setProductsCatalog(fullData);
     setIsDataLoaded(true);
-  };
+  });
   console.log("its on", ProductsCatalog);
   console.log(ProductsCatalog);
 
@@ -307,7 +283,7 @@ function App() {
     getData();
   }
 
-  function getCardProductsFromLocal(productsInCard) {
+  const getCardProductsFromLocal = (productsInCard) => {
     let cardProducts = [];
     for (let i = 0; i < productsInCard.length; i++) {
       let currentProduct = productsInCard[i];
@@ -335,9 +311,9 @@ function App() {
     }
     console.log("check this first : ", cardProducts);
     return cardProducts;
-  }
+  };
 
-  function getFavoriteProductsFromLocal(productsInFavorite) {
+  const getFavoriteProductsFromLocal = (productsInFavorite) => {
     let favFromLocal = [];
     for (let i = 0; i < productsInFavorite.length; i++) {
       let favProduct = ProductsCatalog.find(
@@ -347,20 +323,15 @@ function App() {
     }
     console.log("favorite from local : ", favFromLocal, productsInFavorite);
     return favFromLocal;
-  }
-
-  useEffect(() => {
-    getData();
-    console.log(ProductsCatalog);
-  }, []);
+  };
 
   //?  Toggle To Favorite Functions As example but it works also with card
 
-  function addToFavorite(
+  const addToFavorite = (
     currentProduct,
     favoriteProducts,
     setFavoriteProducts
-  ) {
+  ) => {
     console.log("here is the current in card : ", currentProduct);
     let isSavedToFavorite = false;
     favoriteProducts.forEach((favProduct) => {
@@ -415,14 +386,14 @@ function App() {
             loading: false,
           })
         );
-  }
+  };
 
-  function addToCard(
+  const addToCard = (
     currentProduct,
     cardProducts,
     setCardProducts,
     checkout = false
-  ) {
+  ) => {
     let isSavedToFavorite = false;
     let isSavedSameVariant = false;
 
@@ -554,18 +525,18 @@ function App() {
         );
     }
     return;
-  }
+  };
 
-  function isFavorite(currentProduct, cardProducts) {
+  const isFavorite = (currentProduct, cardProducts) => {
     let isSaved = false;
     cardProducts.forEach((cardProduct) => {
       console.log(currentProduct);
       if (cardProduct.id === currentProduct.id) isSaved = true;
     });
     return isSaved;
-  }
+  };
 
-  function removeFromCard(currentProduct, cardProducts, setCardProducts) {
+  const removeFromCard = (currentProduct, cardProducts, setCardProducts) => {
     let newFav = cardProducts.filter((favProduct) => {
       return favProduct.id !== currentProduct.id
         ? true
@@ -603,13 +574,13 @@ function App() {
           loading: false,
         })
       );
-  }
+  };
 
-  function removeFromFavorite(
+  const removeFromFavorite = (
     currentProduct,
     favoriteProducts,
     setFavoriteProducts
-  ) {
+  ) => {
     let newFav = favoriteProducts.filter((favProduct) => {
       return favProduct.id !== currentProduct.id;
     });
@@ -657,18 +628,18 @@ function App() {
           loading: false,
         })
       );
-  }
+  };
 
-  function toggleToFavorite(
+  const toggleToFavorite = (
     currentProduct,
     favoriteProducts,
     setFavoriteProducts
-  ) {
+  ) => {
     if (!isFavorite(currentProduct, favoriteProducts))
       addToFavorite(currentProduct, favoriteProducts, setFavoriteProducts);
     else
       removeFromFavorite(currentProduct, favoriteProducts, setFavoriteProducts);
-  }
+  };
 
   const updateCard = (updatedCard, goNext = false) => {
     setCardProducts(updatedCard);
@@ -689,7 +660,7 @@ function App() {
     return "INV-" + includeZeros;
   };
 
-  function sendOrder(userInfo, goNext) {
+  const sendOrder = async (userInfo, goNext) => {
     showNotification({
       id: "sending-order",
       loading: true,
@@ -702,8 +673,8 @@ function App() {
     const orderRef = collection(db, "Orders");
     const userRef = query(collection(db, "Users"), where("id", "==", userUID));
     const notificationsRef = doc(db, "Notifications", "Orders-Notifications");
-    getDoc(ordersInfosRef)
-      .then((res) => {
+    await getDoc(ordersInfosRef)
+      .then(async (res) => {
         const currentValue = res.data().ordersCount;
         const newOrderData = {
           ...orderData,
@@ -711,12 +682,12 @@ function App() {
           orderId: generateOrderId(currentValue + 1),
         };
         console.log("newOrderData", newOrderData);
-        addDoc(orderRef, newOrderData);
-        updateDoc(ordersInfosRef, { ordersCount: ~~currentValue + 1 });
+        await addDoc(orderRef, newOrderData);
+        await updateDoc(ordersInfosRef, { ordersCount: ~~currentValue + 1 });
         setStaticValue("orders", 1);
-        getDocs(userRef).then((res) => {
+        await getDocs(userRef).then(async (res) => {
           const data = res.docs[0].data();
-          updateDoc(res.docs[0].ref, {
+          await updateDoc(res.docs[0].ref, {
             invoices: arrayUnion(newOrderData.orderId),
             numberOfOrders: ~~data.numberOfOrders + 1,
             amountSpent: ~~data.amountSpent + ~~newOrderData.totalCost,
@@ -747,11 +718,11 @@ function App() {
               })
             );
         });
-        getDoc(notificationsRef)
-          .then((res) => {
+        await getDoc(notificationsRef)
+          .then(async (res) => {
             const oldData = res.data().notifications;
             const avatarImg = auth.currentUser.photoURL;
-            updateDoc(notificationsRef, {
+            await updateDoc(notificationsRef, {
               notifications: [
                 ...oldData,
                 {
@@ -776,9 +747,43 @@ function App() {
 
     console.log("this is what we send : ", orderData);
     return;
-  }
+  };
 
   console.log("those are our favorite", favoriteProducts);
+  useEffect(() => {
+    setAnalytics();
+  }, []);
+
+  useEffect(() => {
+    getData();
+    console.log(ProductsCatalog);
+  }, []);
+
+  useEffect(() => {
+    setSubTotal(calcSubTotal());
+  }, [cardProducts]);
+
+  useEffect(() => {
+    console.log("samir");
+    getUserData(userUID);
+  }, [userUID]);
+
+  console.log("is user : ", isUser);
+  useEffect(() => {
+    if (currentUserData) {
+      setUserRef(doc(db, "Users", currentUserData.docId));
+      setCardProducts(
+        getCardProductsFromLocal(currentUserData?.productsInCart)
+      );
+      setFavoriteProducts(
+        getFavoriteProductsFromLocal(currentUserData?.favoriteProducts)
+      );
+    } else {
+      setIsUser(true);
+      setCardProducts([]);
+      setFavoriteProducts([]);
+    }
+  }, [currentUserData]);
 
   return (
     <GlobalContext.Provider
@@ -816,55 +821,57 @@ function App() {
       {" "}
       {isDataLoaded ? (
         <div className="main">
-          <Routes>
-            {!currentUserData && (
-              <Route
-                path="/auth/"
-                element={
-                  <Auth
-                    setUserUID={setUserUID}
-                    setOpenAuthDrawer={setOpenAuthDrawer}
-                  />
-                }
-              ></Route>
-            )}
-            {!isUser && (
-              <Route path="/dashboard/" element={<Dashboard />}>
-                <Route index element={<Main />}></Route>
-                <Route path="customers" element={<Customers />}></Route>
-                <Route path="products" element={<Products />}></Route>
-                <Route path="invoices" element={<Invoices />}></Route>
-              </Route>
-            )}
+          <Suspense fallback={<h1>I am loading now shut up or gooo</h1>}>
+            <Routes>
+              {!currentUserData && (
+                <Route
+                  path="/auth/"
+                  element={
+                    <Auth
+                      setUserUID={setUserUID}
+                      setOpenAuthDrawer={setOpenAuthDrawer}
+                    />
+                  }
+                ></Route>
+              )}
+              {!isUser && (
+                <Route path="/dashboard/" element={<Dashboard />}>
+                  <Route index element={<Main />}></Route>
+                  <Route path="customers" element={<Customers />}></Route>
+                  <Route path="products" element={<Products />}></Route>
+                  <Route path="invoices" element={<Invoices />}></Route>
+                </Route>
+              )}
 
-            <Route
-              path="/"
-              element={
-                <Navbar
-                  favoriteProducts={favoriteProducts}
-                  cardProducts={cardProducts}
-                />
-              }
-            >
-              <Route index element={<Home />}></Route>
               <Route
-                path="/catalog"
+                path="/"
                 element={
-                  <Catalog
-                    searchFilter={searchFilter}
-                    setSearchFilter={setSearchFilter}
-                    filters={filters}
-                    setFilters={setFilters}
+                  <Navbar
+                    favoriteProducts={favoriteProducts}
+                    cardProducts={cardProducts}
                   />
                 }
-              ></Route>
-              <Route
-                path="catalog/:productId"
-                element={<ProductPage />}
-              ></Route>
-              <Route path="/ordering" element={<Ordering />}></Route>
-            </Route>
-          </Routes>
+              >
+                <Route index element={<Home />}></Route>
+                <Route
+                  path="/catalog"
+                  element={
+                    <Catalog
+                      searchFilter={searchFilter}
+                      setSearchFilter={setSearchFilter}
+                      filters={filters}
+                      setFilters={setFilters}
+                    />
+                  }
+                ></Route>
+                <Route
+                  path="catalog/:productId"
+                  element={<ProductPage />}
+                ></Route>
+                <Route path="/ordering" element={<Ordering />}></Route>
+              </Route>
+            </Routes>
+          </Suspense>
           <Drawer
             opened={!currentUserData && openAuthDrawer}
             onClose={() => setOpenAuthDrawer(false)}

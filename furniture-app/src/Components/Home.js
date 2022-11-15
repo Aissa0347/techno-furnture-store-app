@@ -42,7 +42,6 @@ const heroStyles = createStyles((theme) => ({
     // "linear-gradient(250deg, rgba(130, 201, 30, 0) 0%, #062343 70%), url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80)",
     paddingTop: theme.spacing.xl * 3,
     paddingBottom: theme.spacing.xl * 3,
-    marginTop: "6rem",
   },
 
   inner: {
@@ -249,19 +248,11 @@ function ProductsM() {
       <h2>Our Products</h2>
       {/* <Control /> */}
 
-      <SimpleGrid
-        cols={5}
-        breakpoints={[
-          { maxWidth: 1400, cols: 4, spacing: "md" },
-          { maxWidth: 981, cols: 3, spacing: "sm" },
-          { maxWidth: 768, cols: 2, spacing: "sm" },
-          { maxWidth: 400, cols: 1, spacing: "xs" },
-        ]}
-      >
+      <div className="custom-simple-grid">
         {ourProducts.map((card) => {
           return <ProductsCard {...card} currentProduct={card} key={card.id} />;
         })}
-      </SimpleGrid>
+      </div>
 
       <div className="btns">
         <Link
@@ -470,4 +461,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default React.memo(Home);

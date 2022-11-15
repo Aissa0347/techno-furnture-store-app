@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { DashboardContext } from "../../Dashboard";
 import { Button, Group } from "@mantine/core";
 import { BiRefresh } from "react-icons/bi";
+import React from "react";
 
 //* --------------------------- Duration Component --------------------------- */
 
@@ -157,4 +158,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default React.memo(Main);

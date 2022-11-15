@@ -352,4 +352,4 @@ function Navbar({ favoriteProducts, cardProducts }) {
   );
 }
 
-export default Navbar;
+export default React.memo(Navbar);

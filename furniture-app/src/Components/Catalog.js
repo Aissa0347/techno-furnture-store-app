@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 // import Icons
 import {
@@ -18,7 +18,6 @@ import NO_RESULT from "../Website-Assets/SVG/NO_RESULT.svg";
 import { ProductsCard } from "./Card";
 
 // import DATA
-import { Products_Catalog } from "../Website-Assets";
 
 // import Styles
 import "../styles/index.scss";
@@ -33,7 +32,6 @@ import {
   SimpleGrid,
   TextInput,
 } from "@mantine/core";
-import { max } from "moment";
 import { useRef } from "react";
 import Bradcrumbs from "./smallComponents/bradcrumbs";
 
@@ -402,35 +400,36 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
   const { ProductsCatalog } = useContext(GlobalContext);
 
   const [productsList, setProductsList] = useState([...ProductsCatalog]);
-  const [categoryProductList, setCategoryProductList] = useState([
-    ...ProductsCatalog,
-  ]);
+
   const [searchFilteredProducts, setSearchFilteredProducts] = useState([]);
   const [isFilterBarActive, setIsFilterBarActive] = useState(false);
 
-  let setFiltersToProducts = (filtersType, filtersTypesNames) => {
-    let filteredProduct = [...ProductsCatalog];
-    console.log(filtersType, filtersTypesNames);
-    filtersType.forEach((filterTypeArray, index) => {
-      if (filterTypeArray?.length > 0) {
-        filteredProduct = [
-          ...filteredProduct.filter((product) => {
-            console.log(index);
-            if (filtersTypesNames[index] === "price") {
-              return (
-                product.price >= filterTypeArray[0] &&
-                product.price <= filterTypeArray[1]
+  let setFiltersToProducts = useCallback(
+    (filtersType, filtersTypesNames) => {
+      let filteredProduct = [...ProductsCatalog];
+      console.log(filtersType, filtersTypesNames);
+      filtersType.forEach((filterTypeArray, index) => {
+        if (filterTypeArray?.length > 0) {
+          filteredProduct = [
+            ...filteredProduct.filter((product) => {
+              console.log(index);
+              if (filtersTypesNames[index] === "price") {
+                return (
+                  product.price >= filterTypeArray[0] &&
+                  product.price <= filterTypeArray[1]
+                );
+              }
+              return filterTypeArray.some(
+                (eachFilter) => product[filtersTypesNames[index]] === eachFilter
               );
-            }
-            return filterTypeArray.some(
-              (eachFilter) => product[filtersTypesNames[index]] === eachFilter
-            );
-          }),
-        ];
-      }
-    });
-    return filteredProduct;
-  };
+            }),
+          ];
+        }
+      });
+      return filteredProduct;
+    },
+    [filters]
+  );
 
   function searchFiltering() {
     let searchProductList = productsList.filter((filteredProduct) =>
@@ -485,4 +484,4 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
   );
 }
 
-export default Catalog;
+export default React.memo(Catalog);

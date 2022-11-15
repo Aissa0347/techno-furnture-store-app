@@ -23,7 +23,7 @@ import { colProductList } from "../../components/popups/newProduct/newProductPop
 import { customersList, defaultProduct } from "../../../Website-Assets";
 
 import { add, filter, search, visit, sale } from "../../components/icons";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../../App";
 import ListFilter from "../../components/filtering/listFilter";
 import { DashboardContext } from "../../Dashboard";
@@ -291,4 +291,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default React.memo(Products);

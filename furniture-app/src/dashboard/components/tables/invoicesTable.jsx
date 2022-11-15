@@ -373,16 +373,6 @@ export default function EnhancedTable({ rows, headCells }) {
                             >
                               {show}
                             </span>
-                            <span className="action">
-                              <PDFDownloadLink
-                                fileName="InvoiceSir"
-                                document={
-                                  <MainPDF data={row.order.orderList} />
-                                }
-                              >
-                                {download}
-                              </PDFDownloadLink>
-                            </span>
                           </div>
                         </TableCell>
                       </TableRow>
@@ -415,24 +405,29 @@ export default function EnhancedTable({ rows, headCells }) {
           label="Dense padding"
         />
       </Box>
-
-      <Modal
-        size="80%"
-        radius="none"
-        title={<h3>Invoice detail</h3>}
-        withCloseButton={false}
-        onClose={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
-        opened={showInvoice.state}
-        // centered
-      >
-        <CloseButton
-          size={"lg"}
-          style={{ position: "absolute", top: "0px", right: "0px" }}
-          color="red"
-          onClick={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
-        />
-        <InvoiceView data={showInvoice.data} id={showInvoice.id} />
-      </Modal>
+      {showInvoice.state ? (
+        <Modal
+          transition="slide-down"
+          transitionDuration={300}
+          size="80%"
+          radius="none"
+          title={<h3>Invoice detail</h3>}
+          withCloseButton={false}
+          onClose={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
+          opened={showInvoice.state}
+          // centered
+        >
+          <CloseButton
+            size={"lg"}
+            style={{ position: "absolute", top: "0px", right: "0px" }}
+            color="red"
+            onClick={() =>
+              setShowInvoice((prev) => ({ ...prev, state: false }))
+            }
+          />
+          <InvoiceView data={showInvoice.data} id={showInvoice.id} />
+        </Modal>
+      ) : null}
     </>
   );
 }

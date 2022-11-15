@@ -3,7 +3,7 @@ import InovoicesTable from "../../components/tables/invoicesTable";
 import { customersList, InvoicesList } from "../../../Website-Assets";
 
 import { sale, order, user } from "../../components/icons";
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import { useState } from "react";
@@ -255,4 +255,4 @@ function Invoices() {
   );
 }
 
-export default Invoices;
+export default React.memo(Invoices);
