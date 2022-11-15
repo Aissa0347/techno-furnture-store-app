@@ -338,6 +338,7 @@ function SelectProductColor({ colorPicked, setColorPicked, colors, setError }) {
     <div className="select-product-color">
       {colors?.map((color, index) => (
         <div
+          key={color.colorRef + color.colorName}
           className={
             index === colorPicked?.index
               ? "product-color selected"

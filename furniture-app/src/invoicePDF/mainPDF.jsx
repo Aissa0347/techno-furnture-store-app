@@ -23,7 +23,7 @@ const MainPDF = ({ data }) => {
     return acc + current?.productTotalHT;
   }, 0);
   let totalTaxAmount = data.reduce((acc, current) => {
-    return acc + current?.taxAmount;
+    return acc + current?.taxAmount * current?.quantity;
   }, 0);
   let totalPrice = data.reduce((acc, current) => {
     return acc + current?.productTotal;

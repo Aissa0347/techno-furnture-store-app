@@ -84,8 +84,11 @@ export function MultiSelectColors({ data, colors, setColors }) {
         onClick={touchMultiSelect}
       >
         <div className="input-values">
-          {colors.value.map((color, index) => (
-            <div className="selected-value" key={index}>
+          {colors.value.map((color) => (
+            <div
+              className="selected-value"
+              key={color.colorRef + color.colorName}
+            >
               <span
                 className="color-shower"
                 style={{ backgroundColor: color.colorRef }}

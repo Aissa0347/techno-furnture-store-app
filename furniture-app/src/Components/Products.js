@@ -42,36 +42,6 @@ import {
 import { ProductsCard, SmallCard } from "./Card";
 import { useParams } from "react-router-dom";
 
-//* --------------------------- Our Products component --------------------------- */
-
-export default function Products({ ourProducts }) {
-  return (
-    <>
-      <Swiper
-        modules={[Grid, Pagination]}
-        slidesPerView={2}
-        grid={{
-          rows: 2,
-        }}
-        spaceBetween={10}
-        pagination={{
-          clickable: true,
-        }}
-        className="swiper-products mySwiper"
-      >
-        {ourProducts.map((card) => {
-          return (
-            <SwiperSlide key={card.id}>
-              {" "}
-              <ProductsCard {...card} currentProduct={card} />{" "}
-            </SwiperSlide>
-          );
-        })}
-      </Swiper>
-    </>
-  );
-}
-
 //* -------------------------------- Category Slider -------------------------------- */
 
 export function Category() {
@@ -100,9 +70,9 @@ export function Category() {
           pagination={{}}
           className="cards Category"
         >
-          {CategoryP.map((Category, index) => {
+          {CategoryP.map((Category) => {
             return (
-              <SwiperSlide className="category" key={index}>
+              <SwiperSlide className="category" key={Category.name}>
                 <SmallCard {...Category} />
               </SwiperSlide>
             );
@@ -134,9 +104,9 @@ export function MediaSlider({ images, name }) {
         thumbs={{ swiper: thumbsSwiper }}
         className="media-slider"
       >
-        {[...images].map((img, index) => {
+        {[...images].map((img) => {
           return (
-            <SwiperSlide key={index} className="media-slider-active">
+            <SwiperSlide key={img.url} className="media-slider-active">
               <Zoom>
                 <img src={img.url} alt={name} />
               </Zoom>
@@ -152,9 +122,9 @@ export function MediaSlider({ images, name }) {
         freeMode={true}
         className="media-slider-thumb"
       >
-        {[...images].map((img, index) => {
+        {[...images].map((img) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={img.url}>
               <img loading="lazy" src={img.url} alt={name} />
             </SwiperSlide>
           );
@@ -234,7 +204,7 @@ export function ShoppingCartList() {
     >
       {ProductsCatalog.slice(0, 8).map((Product) => {
         return (
-          <SwiperSlide>
+          <SwiperSlide key={Product.id}>
             <li className="unique_card product-info">
               <div className="img_name">
                 <img

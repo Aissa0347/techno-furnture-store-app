@@ -75,7 +75,7 @@ function EditInvoice({
       <div className="invoice-products">
         {filteredProductsList.map((Product, index) => (
           <DashUniqueCard
-            key={index}
+            key={Product.id}
             Product={Product}
             orderProduct={orderedProducts[index]}
             orderedProducts={orderedProducts}

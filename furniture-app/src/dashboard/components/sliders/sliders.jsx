@@ -16,6 +16,7 @@ function UploadedImagesSlider({ files, setFiles, isImagesUploaded }) {
           <SwiperSlide className="image-wrapper">
             {!isImagesUploaded && (
               <CloseButton
+                key={file.id}
                 className="image-close"
                 radius={"none"}
                 color={"red"}

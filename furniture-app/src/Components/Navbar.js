@@ -71,7 +71,12 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
         ) : (
           <SimpleGrid style={{ width: "100%", overflow: "auto" }}>
             {cardProducts.map((Product) => {
-              return <DashUniqueCard Product={Product} />;
+              return (
+                <DashUniqueCard
+                  Product={Product}
+                  key={Product.id + Product?.selectedColor?.colorRef}
+                />
+              );
             })}
           </SimpleGrid>
         )}
@@ -132,6 +137,7 @@ function FavoriteProducts({
               <FavUniqueCard
                 Product={Product}
                 setClose={setShowFavoriteProducts}
+                key={Product.id + Product?.selectedColor?.colorRef}
               />
             );
           })}

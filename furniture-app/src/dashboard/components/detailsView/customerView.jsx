@@ -117,10 +117,10 @@ function CustomerInvoices({
 
   return (
     <div className="invoice-products-wrapper ">
-      {invoicesList.map((invoice, index) => {
+      {invoicesList.map((invoice) => {
         return (
           <Invoice
-            key={index}
+            key={invoice.orderId}
             invoiceData={invoice}
             setIsInvoicesOverview={setIsInvoicesOverview}
           />

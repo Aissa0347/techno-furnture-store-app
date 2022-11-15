@@ -138,7 +138,9 @@ function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
       <div className="products-catalog-wrapper">
         {pageData.map((card, index) => {
           if (index < productPerPage) {
-            return <ProductsCard currentProduct={card} {...card} key={index} />;
+            return (
+              <ProductsCard currentProduct={card} {...card} key={card.id} />
+            );
           }
         })}
       </div>
@@ -269,9 +271,9 @@ function FilterBar({
             <summary>
               Categories <BiChevronLeft className="chevron" />
             </summary>
-            {uniq_categories.map((category, index) => {
+            {uniq_categories.map((category) => {
               return (
-                <div className="col" key={index}>
+                <div className="col" key={category}>
                   <input
                     type="checkbox"
                     name={category}
@@ -307,7 +309,7 @@ function FilterBar({
             <summary>
               Marks <BiChevronLeft className="chevron" />
             </summary>
-            {uniq_marks.map((mark, index) => {
+            {uniq_marks.map((mark) => {
               return (
                 <div className="col" key={mark}>
                   <input

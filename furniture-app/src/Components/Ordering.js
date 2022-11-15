@@ -244,7 +244,13 @@ function ShoppingCart({ goNext, subTotal, totalHT }) {
       ) : (
         <Stack className="shopping_cart_list" spacing={10}>
           {cardProducts.map((Product) => {
-            return <DashUniqueCard Product={Product} isOrdering={true} />;
+            return (
+              <DashUniqueCard
+                Product={Product}
+                isOrdering={true}
+                key={Product.id + Product?.selectedColor?.colorRef}
+              />
+            );
           })}
         </Stack>
       )}

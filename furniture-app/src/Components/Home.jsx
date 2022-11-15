@@ -203,10 +203,10 @@ function Brands() {
 export function Features() {
   return (
     <>
-      {FeautreP.map((feautre, index) => {
-        const { text, img, key = index } = feautre;
+      {FeautreP.map((feautre) => {
+        const { text, img } = feautre;
         return (
-          <div className="feautre" key={uniqid.time()}>
+          <div className="feautre" key={text}>
             <img loading="lazy" src={img} alt={text} />
             <h4 className="ft">{text}</h4>
           </div>
@@ -264,9 +264,9 @@ function Control() {
   return (
     <div className="control">
       <div className="type">
-        {semiCategory.map((Category, index) => {
+        {semiCategory.map((Category) => {
           return (
-            <span className={Category.state} key={index}>
+            <span className={Category.state} key={Category.name}>
               {Category.name}
               <span className="slash">/</span>
             </span>

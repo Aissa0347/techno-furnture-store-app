@@ -199,9 +199,9 @@ export function Features() {
   return (
     <>
       {FeautreP.map((feautre, index) => {
-        const { text, img, key = index } = feautre;
+        const { text, img } = feautre;
         return (
-          <div className="feautre" key={uniqid.time()}>
+          <div className="feautre" key={text}>
             <img loading="lazy" src={img} alt={text} />
             <h4 className="ft">{text}</h4>
           </div>
@@ -248,29 +248,21 @@ function ProductsM() {
     <div className="ProductsM section ">
       <h2>Our Products</h2>
       {/* <Control /> */}
-      {(() => {
-        if (false) {
-          return <Products ourProducts={ourProducts} />;
-        } else {
-          return (
-            <SimpleGrid
-              cols={5}
-              breakpoints={[
-                { maxWidth: 1400, cols: 4, spacing: "md" },
-                { maxWidth: 981, cols: 3, spacing: "sm" },
-                { maxWidth: 768, cols: 2, spacing: "sm" },
-                { maxWidth: 400, cols: 1, spacing: "xs" },
-              ]}
-            >
-              {ourProducts.map((card) => {
-                return (
-                  <ProductsCard {...card} currentProduct={card} key={card.id} />
-                );
-              })}
-            </SimpleGrid>
-          );
-        }
-      })()}
+
+      <SimpleGrid
+        cols={5}
+        breakpoints={[
+          { maxWidth: 1400, cols: 4, spacing: "md" },
+          { maxWidth: 981, cols: 3, spacing: "sm" },
+          { maxWidth: 768, cols: 2, spacing: "sm" },
+          { maxWidth: 400, cols: 1, spacing: "xs" },
+        ]}
+      >
+        {ourProducts.map((card) => {
+          return <ProductsCard {...card} currentProduct={card} key={card.id} />;
+        })}
+      </SimpleGrid>
+
       <div className="btns">
         <Link
           to="/catalog"
@@ -293,7 +285,7 @@ function Control() {
       <div className="type">
         {semiCategory.map((Category, index) => {
           return (
-            <span className={Category.state} key={index}>
+            <span className={Category.state} key={Category.name}>
               {Category.name}
               <span className="slash">/</span>
             </span>
@@ -338,6 +330,7 @@ export function GeoInfo() {
           <iframe
             style={{ width: "100vw", height: "70vh" }}
             id="gmap_canvas"
+            loading="lazy"
             src="https://maps.google.com/maps?q=techno%20cheraga&t=&z=19&ie=UTF8&iwloc=&output=embed"
             frameborder="0"
             scrolling="no"
@@ -381,7 +374,7 @@ function ContactUs() {
     <div className="contact-wrapper">
       {contactIcons.map((contact) => {
         return (
-          <div className="contact">
+          <div className="contact" key={contact.title}>
             <div className="contact-icon">{contact.icon}</div>
             <div className="contact-data">
               <h4>{contact.title}</h4>

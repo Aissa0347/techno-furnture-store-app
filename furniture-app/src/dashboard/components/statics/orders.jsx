@@ -31,7 +31,7 @@ function CustomLegend(props) {
         console.log(entry.payload);
         const { payload } = entry;
         return (
-          <div className="one-legend">
+          <div className="one-legend" key={payload.value + payload.fill}>
             <h5 style={{ color: payload.fill }}>
               <span
                 className="icon-legend"
