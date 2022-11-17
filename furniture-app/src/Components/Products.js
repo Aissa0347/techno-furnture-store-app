@@ -63,7 +63,7 @@ export function Category() {
             },
             300: {
               spaceBetween: 5,
-              slidesPerView: 4,
+              slidesPerView: 3,
             },
           }}
           slidesPerView={"9"}

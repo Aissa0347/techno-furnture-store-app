@@ -4,7 +4,6 @@ import { GlobalContext } from "../App";
 import { brands } from "../Website-Assets";
 import { ProductsCard } from "./Card";
 import { FeautreP } from "../Website-Assets/index";
-import { semiCategory } from "../Website-Assets/index";
 import Products, { TechnoImages } from "./Products";
 import { Category } from "./Products";
 import { scrollToTop } from "../App";
@@ -16,15 +15,24 @@ import { BiMailSend, BiMapAlt, BiPhoneCall } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import {
   RiFacebookFill,
+  RiInstagramFill,
   RiInstagramLine,
+  RiLinkedinFill,
+  RiLinkedinLine,
   RiWhatsappLine,
 } from "react-icons/ri";
-import uniqid from "uniqid";
-import { Paper, SimpleGrid, TextInput } from "@mantine/core";
-import { createStyles, Container, Title, Text, Button } from "@mantine/core";
-
+import { Paper, TextInput } from "@mantine/core";
+import {
+  createStyles,
+  Container,
+  Title,
+  Text,
+  Button,
+  Group,
+  ActionIcon,
+} from "@mantine/core";
 //* ------------------------------ Import SVG's ------------------------------ */
-
+import logo from "../Website-Assets/logo.png";
 import NEWSLETTER_SVG from "../Website-Assets/SVG/NEWSLETTER.svg";
 
 //* -------------------------------------------------------------------------- */
@@ -40,11 +48,11 @@ const heroStyles = createStyles((theme) => ({
     backgroundPosition: "center",
     // backgroundImage:
     // "linear-gradient(250deg, rgba(130, 201, 30, 0) 0%, #062343 70%), url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80)",
-    paddingTop: "100px",
-    paddingBottom: " 90px",
+    paddingTop: "90px",
+    paddingBottom: " 100px",
     [theme.fn.smallerThan("md")]: {
-      paddingTop: "80px",
-      paddingBottom: " 70px",
+      paddingTop: "8vh",
+      paddingBottom: " 15vh",
     },
   },
 
@@ -182,6 +190,7 @@ export function Features() {
             px={5}
             py={10}
             className="feautre"
+            withBorder
             key={text}
           >
             <img loading="lazy" src={img} alt={text} />
@@ -345,61 +354,127 @@ export function NewsLetter() {
     <div className="newsletter container section">
       <div className="newsletter-input">
         <h3>
-          Wait a minute... <br /> Subscribe our NewsLetter !
+          Wait a minute... <br />
+          Subscribe our NewsLetter !
         </h3>
         <p>You will never miss a special discounts and new updates</p>
-        <div className="newsletter-email">
-          <TextInput
-            radius="none"
-            size="lg"
-            type="email"
-            id="news-email"
-            className="newsletter-email-input"
-            placeholder="Enter Your Email"
-          />
-          <Button radius="none" size="lg" variant="filled">
-            SUBSCRIBE
-          </Button>
-        </div>
       </div>
-      <div className="newsletter-img">
+      <div className="newsletter-email">
+        <TextInput
+          radius="none"
+          size="lg"
+          type="email"
+          id="news-email"
+          className="newsletter-email-input"
+          placeholder="Enter Your Email"
+        />
+        <Button radius="none" size="lg" variant="filled">
+          SUBSCRIBE
+        </Button>
+      </div>
+      {/* <div className="newsletter-img">
         <img src={NEWSLETTER_SVG} alt="NEWSLETTER" />
-      </div>
+      </div> */}
     </div>
   );
 }
 
 //* --------------------------------- Footer --------------------------------- */
 
+const useStyles = createStyles((theme) => ({
+  footer: {
+    marginTop: 120,
+    marginBottom: "56px",
+    borderTop: `1px solid ${
+      theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2]
+    }`,
+    [theme.fn.smallerThan("md")]: {
+      marginTop: 90,
+    },
+    [theme.fn.smallerThan("sm")]: {
+      marginTop: 60,
+    },
+    [theme.fn.smallerThan("xs")]: {
+      marginTop: 40,
+    },
+  },
+
+  logo: {
+    maxHeight: "70px",
+  },
+
+  inner: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: theme.spacing.xl,
+    paddingBottom: theme.spacing.xl,
+
+    [theme.fn.smallerThan("xs")]: {
+      flexDirection: "column",
+    },
+  },
+
+  links: {
+    gap: "10px",
+    [theme.fn.smallerThan("xs")]: {
+      marginTop: theme.spacing.md,
+    },
+  },
+
+  link: {
+    // border: "1px solid black",
+  },
+
+  copyright: {
+    textAlign: "center",
+    color: "grey",
+  },
+}));
+
 export function Footer() {
+  const { classes } = useStyles();
+
   return (
-    <div className="footer section ">
+    <div className={classes.footer}>
       <NewsLetter />
-      <div className="wrapper container">
-        <div className="f-block">
-          <h5>Contact Us</h5>
-          <span>Tel: 055095914857</span>
-          <span>Email: SEMOAUI0347@GMAIL.COM</span>
-          <span>Address: Bordj El-Kiffan lot 483 grp 15</span>
+      <Container className={classes.inner}>
+        <div>
+          <img
+            src={logo}
+            className={classes.logo}
+            alt="Techno Cheraga logo"
+            loading="lazy"
+          />
         </div>
-        <div className="f-block social-media">
-          <h5>Social Media</h5>
-          <div className="social-media-links">
-            <RiFacebookFill />
-            <RiInstagramLine />
-            <RiWhatsappLine />
-          </div>
-        </div>
-        <div className="f-block">
-          <h5>Useful links</h5>
-          <ul className="nav-links-footer">
-            <li className="link N-1">Home</li>
-            <li className="link N-2">All Products</li>
-            <li className="link N-3">Contact</li>
-          </ul>
-        </div>
-      </div>
-      <div className="copyright">© Techno Cheraga 2022</div>
+        <Group spacing={0} className={classes.links} position="right" noWrap>
+          <ActionIcon
+            size="lg"
+            radius="none"
+            variant="outline"
+            className={classes.link}
+          >
+            <RiFacebookFill size={24} stroke={1.5} />
+          </ActionIcon>
+          <ActionIcon
+            size="lg"
+            radius="none"
+            variant="outline"
+            className={classes.link}
+          >
+            <RiInstagramFill size={24} stroke={1.5} />
+          </ActionIcon>
+          <ActionIcon
+            size="lg"
+            radius="none"
+            variant="outline"
+            className={classes.link}
+          >
+            <RiLinkedinFill size={24} stroke={1.5} />
+          </ActionIcon>
+        </Group>
+      </Container>
+      <div className={classes.copyright}>© Techno Cheraga 2022</div>
     </div>
   );
 }

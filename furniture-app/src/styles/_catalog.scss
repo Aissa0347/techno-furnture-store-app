@@ -31,7 +31,7 @@
   align-items: center;
   flex-wrap: wrap;
   // margin-top: 3rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   // border-radius: 4px;
   z-index: 99;
   top: -10%;
@@ -283,7 +283,10 @@ details {
   .products-catalog-wrapper {
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
-
+  .nav-links.nav-icons a {
+    padding-left: 0.8px;
+    padding-right: 0.8px;
+  }
   .search-bar {
     padding: 0 0.8rem;
 

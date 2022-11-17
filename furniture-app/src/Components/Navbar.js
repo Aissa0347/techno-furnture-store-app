@@ -1,26 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import logo from "../Website-Assets/logo.png";
 import {
-  BiCartAlt,
   BiCategory,
-  BiChevronDown,
   BiCreditCard,
-  BiCurrentLocation,
   BiHome,
-  BiMessageDetail,
-  BiRevision,
   BiShoppingBag,
   BiStore,
-  BiUser,
-  BiX,
 } from "react-icons/bi";
 import { RiHeartLine, RiMenuFill } from "react-icons/ri";
 import "../styles/index.scss";
 
 //  import Components
-import App, { GlobalContext, scrollToTop } from "../App";
+import { GlobalContext, scrollToTop } from "../App";
 import { DashUniqueCard, FavUniqueCard } from "./Card";
-import { ShoppingCartList } from "./Products";
 import { Footer } from "./Home";
 
 //  import libraries
@@ -37,15 +29,11 @@ import {
   ActionIcon,
   Anchor,
   Button,
-  CloseButton,
-  createStyles,
   Drawer,
-  Group,
+  Paper,
   SimpleGrid,
   Stack,
-  Text,
 } from "@mantine/core";
-import Auth from "../authentication/auth";
 
 //* --------------------------- Bag Side Component --------------------------- */
 
@@ -166,9 +154,27 @@ function Navbar({ favoriteProducts, cardProducts }) {
     useContext(GlobalContext);
   const [showFavoriteProducts, setShowFavoriteProducts] = useState(false);
   const [showCardProducts, setShowCardProducts] = useState(false);
+  const [isWider, setIsWider] = useState(true);
 
   let favoriteProductsNumber = favoriteProducts.length;
   let cardProductsNumber = cardProducts.length;
+
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 576) {
+        setIsWider(true);
+      } else {
+        setIsWider(false);
+      }
+    });
+    return window.removeEventListener("resize", () => {
+      if (window.innerWidth > 576) {
+        setIsWider(true);
+      } else {
+        setIsWider(false);
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -178,66 +184,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
             <img loading="lazy" src={logo} alt="Logo" />
           </Link>
         </div>
-        <nav className="nav-links">
-          <ul>
-            <li className="link N-1" onClick={scrollToTop}>
-              {" "}
-              <Link to="/">Home </Link>
-            </li>
-            <li className="link N-2">
-              <Link to="/catalog">All&nbsp;Products </Link>
-            </li>
-            <li className="link N-3" onClick={scrollToTop}>
-              {" "}
-              <Link to="/ordering">Basket</Link>
-            </li>
-            {!isUser && (
-              <li className="link N-3" onClick={scrollToTop}>
-                {" "}
-                <Link to="/dashboard">Dashboard</Link>
-              </li>
-            )}
-          </ul>
-        </nav>
-
-        {/* ------------------------------ Tablet Navbar ------------------------------ */}
-        <div className="icon">
-          <div
-            className="icon-set bag"
-            onClick={() => {
-              setShowCardProducts(!showCardProducts);
-            }}
-          >
-            <BiShoppingBag />
-            {cardProductsNumber === 0 ? (
-              ""
-            ) : (
-              <span className="product-number">{cardProductsNumber}</span>
-            )}
-          </div>
-          <ShoppingBag
-            cardProducts={cardProducts}
-            showCardProducts={showCardProducts}
-            setShowCardProducts={setShowCardProducts}
-          />
-          <div
-            className="icon-set favorite"
-            onClick={() => {
-              setShowFavoriteProducts(!showFavoriteProducts);
-            }}
-          >
-            <RiHeartLine />
-            {favoriteProductsNumber === 0 ? (
-              ""
-            ) : (
-              <span className="product-number">{favoriteProductsNumber}</span>
-            )}
-          </div>
-          <FavoriteProducts
-            favoriteProducts={favoriteProducts}
-            showFavoriteProducts={showFavoriteProducts}
-            setShowFavoriteProducts={setShowFavoriteProducts}
-          />
+        {!isWider ? (
           <div className="icon-set login">
             {currentUserData ? (
               <AvatarProfile />
@@ -249,18 +196,102 @@ function Navbar({ favoriteProducts, cardProducts }) {
               </Link>
             )}
           </div>
-          <div
-            className="icon-set burger-menu"
-            onClick={() => {
-              let navLinksStyle = document.querySelector(".nav-links").style;
-              navLinksStyle.height === "50px"
-                ? (navLinksStyle.height = "0px")
-                : (navLinksStyle.height = "50px");
-            }}
-          >
-            <RiMenuFill />
-          </div>
-        </div>
+        ) : null}
+        {isWider ? (
+          <>
+            <nav className="nav-links">
+              <ul>
+                <li className="link N-1" onClick={scrollToTop}>
+                  {" "}
+                  <Link to="/">Home </Link>
+                </li>
+                <li className="link N-2">
+                  <Link to="/catalog">All&nbsp;Products </Link>
+                </li>
+                <li className="link N-3" onClick={scrollToTop}>
+                  {" "}
+                  <Link to="/ordering">Basket</Link>
+                </li>
+                {!isUser && (
+                  <li className="link N-3" onClick={scrollToTop}>
+                    {" "}
+                    <Link to="/dashboard">Dashboard</Link>
+                  </li>
+                )}
+              </ul>
+            </nav>
+            <div className="icon">
+              <div
+                className="icon-set bag"
+                onClick={() => {
+                  setShowCardProducts(!showCardProducts);
+                }}
+              >
+                <BiShoppingBag />
+                {cardProductsNumber === 0 ? (
+                  ""
+                ) : (
+                  <span className="product-number">{cardProductsNumber}</span>
+                )}
+              </div>
+
+              <div
+                className="icon-set favorite"
+                onClick={() => {
+                  setShowFavoriteProducts(!showFavoriteProducts);
+                }}
+              >
+                <RiHeartLine />
+                {favoriteProductsNumber === 0 ? (
+                  ""
+                ) : (
+                  <span className="product-number">
+                    {favoriteProductsNumber}
+                  </span>
+                )}
+              </div>
+
+              <div className="icon-set login">
+                {currentUserData ? (
+                  <AvatarProfile />
+                ) : (
+                  <Link to="/auth">
+                    <Button
+                      variant="outline"
+                      size="md"
+                      radius="none"
+                      color="blue"
+                    >
+                      Sign in
+                    </Button>
+                  </Link>
+                )}
+              </div>
+              <div
+                className="icon-set burger-menu"
+                onClick={() => {
+                  let navLinksStyle =
+                    document.querySelector(".nav-links").style;
+                  navLinksStyle.height === "50px"
+                    ? (navLinksStyle.height = "0px")
+                    : (navLinksStyle.height = "50px");
+                }}
+              >
+                <RiMenuFill />
+              </div>
+            </div>{" "}
+          </>
+        ) : null}
+        <FavoriteProducts
+          favoriteProducts={favoriteProducts}
+          showFavoriteProducts={showFavoriteProducts}
+          setShowFavoriteProducts={setShowFavoriteProducts}
+        />
+        <ShoppingBag
+          cardProducts={cardProducts}
+          showCardProducts={showCardProducts}
+          setShowCardProducts={setShowCardProducts}
+        />
       </div>
       <Outlet />
       <div className="call-float">
@@ -278,7 +309,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
       </div>
       <Footer />
       {/* ------------------------------ Mobile Navbar ------------------------------ */}
-      <div className="bottom-navbar">
+      <Paper shadow="md" className="bottom-navbar">
         <nav className="nav-links nav-icons">
           <ul>
             <li className="link N-1" onClick={scrollToTop}>
@@ -343,7 +374,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
             </li>
           </ul>
         </nav>
-      </div>
+      </Paper>
     </>
   );
 }
