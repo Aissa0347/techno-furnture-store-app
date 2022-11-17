@@ -29,9 +29,11 @@ import {
 import {
   addDoc,
   collection,
+  doc,
   getDocs,
   query,
   serverTimestamp,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { defaultUser } from "../Website-Assets";
@@ -132,7 +134,8 @@ function Auth(props) {
                 displayName: userName,
                 photoURL: userAvatarImg,
               }).then(async (res) => {
-                await addDoc(colUsers, {
+                let userDoc = doc(db, "Users", userUID);
+                await setDoc(userDoc, {
                   ...defaultUser,
                   id: userUID,
                   name: userName,

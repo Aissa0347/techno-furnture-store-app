@@ -3,6 +3,12 @@
 import LOGIN_SVG from "../Website-Assets/SVG/LOGIN_SVG.svg";
 import ERROR_404 from "../Website-Assets/SVG/ERROR_404.svg";
 
+import fournitures from "../Website-Assets/categories/fournitures.svg";
+import envloppes from "../Website-Assets/categories/envloppes.svg";
+import classement from "../Website-Assets/categories/classement.svg";
+import informatiques from "../Website-Assets/categories/informatiques.svg";
+import papier from "../Website-Assets/categories/papier.svg";
+
 export const brands = {
   Brand1: require("../Website-Assets/Brands 1.png"),
   Brand2: require("../Website-Assets/Brands 2.png"),
@@ -18,22 +24,26 @@ export const brands = {
 
 export const CategoryP = [
   {
-    img: require("../Website-Assets/sofa.png"),
-    name: "Sofa",
+    img: fournitures,
+    name: "Fournitures & Accessoires",
   },
 
   {
-    img: require("../Website-Assets/bed.png"),
-    name: "Bed",
+    img: envloppes,
+    name: "Enveloppes & Emballages",
   },
 
   {
-    img: require("../Website-Assets/chair.png"),
-    name: "Chair",
+    img: classement,
+    name: "Classement & Archivage",
   },
   {
-    img: require("../Website-Assets/books.png"),
-    name: "Bad",
+    img: papier,
+    name: "Papier & Etiquettes",
+  },
+  {
+    img: informatiques,
+    name: "Consommables informatiques",
   },
 ];
 

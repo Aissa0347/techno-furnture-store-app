@@ -1,28 +1,17 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import {
-  BiCartAlt,
-  BiHeart,
-  BiShow,
-  BiShowAlt,
-  BiTrash,
-  BiX,
-} from "react-icons/bi";
+import { BiShow, BiShowAlt, BiTrash } from "react-icons/bi";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 
 //  Import from Libraries
 import { Link } from "react-router-dom";
 import {
   Card,
-  Image,
   Text,
   Group,
-  Badge,
   createStyles,
-  Center,
   Button,
   ActionIcon,
   NumberInput,
-  CloseButton,
   Stack,
 } from "@mantine/core";
 
@@ -35,7 +24,7 @@ export function SmallCard(props) {
   const { setFilters } = useContext(GlobalContext);
   const { img, name } = props;
   return (
-    <div className="card ">
+    <div className="category-wrapper ">
       <Link
         to={"/catalog"}
         onClick={() => {
@@ -43,11 +32,11 @@ export function SmallCard(props) {
           window.scrollTo(0, 0);
         }}
       >
-        <div className="imgbx">
+        <div className="category-icon">
           <img loading="lazy" src={img} alt={name} />
         </div>
       </Link>
-      <h3>{name}</h3>
+      <h4>{name}</h4>
     </div>
   );
 }
@@ -224,7 +213,7 @@ export function ProductsCard({
           <img src={img[0].url} alt={name} className={classes.img} />
         </Card.Section>
       </Link>
-      <Link to={`/catalog/${id}`}>
+      <Link to={`/catalog/${id}`} style={{ flex: "1" }}>
         <Group position="center" className={classes.productName} py="xs">
           <div>
             <Text weight={500} component="h3" transform="uppercase">
@@ -331,7 +320,7 @@ export function DashUniqueCard({ Product, isOrdering = false }) {
   console.log("product is here : ", Product);
 
   return (
-    <div className="unique_card product-info invoice-product-info">
+    <div className="unique_card invoice-product-info">
       <div className="img_name ">
         <img
           src={Product?.img[0]?.url}

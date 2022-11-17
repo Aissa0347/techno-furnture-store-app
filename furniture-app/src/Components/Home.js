@@ -40,21 +40,25 @@ const heroStyles = createStyles((theme) => ({
     backgroundPosition: "center",
     // backgroundImage:
     // "linear-gradient(250deg, rgba(130, 201, 30, 0) 0%, #062343 70%), url(https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1080&q=80)",
-    paddingTop: theme.spacing.xl * 3,
-    paddingBottom: theme.spacing.xl * 3,
+    paddingTop: "100px",
+    paddingBottom: " 90px",
+    [theme.fn.smallerThan("md")]: {
+      paddingTop: "80px",
+      paddingBottom: " 70px",
+    },
   },
 
   inner: {
     display: "flex",
     justifyContent: "space-between",
 
-    [theme.fn.smallerThan("md")]: {
+    [theme.fn.smallerThan("sm")]: {
       flexDirection: "column",
     },
   },
 
   image: {
-    [theme.fn.smallerThan("md")]: {
+    [theme.fn.smallerThan("sm")]: {
       display: "none",
     },
   },
@@ -64,7 +68,7 @@ const heroStyles = createStyles((theme) => ({
     paddingBottom: theme.spacing.xl * 2,
     marginRight: theme.spacing.xl * 3,
 
-    [theme.fn.smallerThan("md")]: {
+    [theme.fn.smallerThan("sm")]: {
       marginRight: 0,
     },
   },
@@ -77,7 +81,7 @@ const heroStyles = createStyles((theme) => ({
     maxWidth: 700,
     fontSize: 72,
 
-    [theme.fn.smallerThan("md")]: {
+    [theme.fn.smallerThan("sm")]: {
       maxWidth: "100%",
       fontSize: 34,
       lineHeight: 1.15,
@@ -89,7 +93,7 @@ const heroStyles = createStyles((theme) => ({
     opacity: 0.75,
     maxWidth: 500,
 
-    [theme.fn.smallerThan("md")]: {
+    [theme.fn.smallerThan("sm")]: {
       maxWidth: "100%",
     },
   },
@@ -100,7 +104,7 @@ const heroStyles = createStyles((theme) => ({
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
     fontSize: 22,
 
-    [theme.fn.smallerThan("md")]: {
+    [theme.fn.smallerThan("sm")]: {
       width: "100%",
     },
   },
@@ -151,34 +155,6 @@ export function Hero() {
   );
 }
 
-function Heros() {
-  return (
-    <>
-      <div className="Hero">
-        <div className="BigTitle">
-          <h1>
-            Find Your Best
-            <br /> <b>Furniture.</b>
-          </h1>
-          <h5>
-            We are the best in the world, just find your best chair and buy it
-            in easy way
-          </h5>
-          <div className="btns">
-            <Link to="/catalog" onClick={() => scrollToTop()}>
-              <button className="btn CTA">Explore More</button>
-            </Link>
-            {/* <Link to="/catalog">
-              <button className="btn CTA-2">Explore More</button>
-            </Link> */}
-          </div>
-        </div>
-      </div>
-      <Brands />
-    </>
-  );
-}
-
 function Brands() {
   return (
     <div className="brands">
@@ -200,10 +176,17 @@ export function Features() {
       {FeautreP.map((feautre, index) => {
         const { text, img } = feautre;
         return (
-          <div className="feautre" key={text}>
+          <Paper
+            shadow="xs"
+            radius="none"
+            px={5}
+            py={10}
+            className="feautre"
+            key={text}
+          >
             <img loading="lazy" src={img} alt={text} />
             <h4 className="ft">{text}</h4>
-          </div>
+          </Paper>
         );
       })}
     </>
@@ -268,29 +251,6 @@ function ProductsM() {
   );
 }
 
-//* --------------------------------- Control -------------------------------- */
-
-function Control() {
-  return (
-    <div className="control">
-      <div className="type">
-        {semiCategory.map((Category, index) => {
-          return (
-            <span className={Category.state} key={Category.name}>
-              {Category.name}
-              <span className="slash">/</span>
-            </span>
-          );
-        })}
-      </div>
-      {/* <div className="direction">
-        <BiChevronLeftCircle />
-        <BiChevronRightCircle />
-      </div> */}
-    </div>
-  );
-}
-
 //* ---------------------------------- Geolocation info ---------------------------------- */
 
 export function GeoInfo() {
@@ -305,7 +265,7 @@ export function GeoInfo() {
           textAlign: "right",
           marginLeft: "auto",
           marginRight: "auto",
-          overflow: "hidden",
+          overflow: "visible",
           padding: "1rem",
         }}
       >

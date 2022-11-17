@@ -53,13 +53,14 @@ body {
 
 .custom-simple-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 1rem;
 }
 
 //* --------------------------------- Navbar --------------------------------- */
 
 .navbar {
+  position: relative;
   padding: 0.5rem 10vw;
   width: 100%;
   height: 100px;
@@ -79,67 +80,87 @@ body {
       object-fit: contain;
     }
   }
-  .nav-links {
-    ul {
-      display: flex;
-      justify-content: space-between;
-      min-width: 20vw;
-      margin-left: 10vw;
-      margin-right: 30px;
-      a {
-        padding: 1rem;
-        // border-radius: 4px;
-        cursor: pointer;
-        transition: 0.1s ease;
-        min-width: fit-content;
-        font-size: large;
-      }
-      a:hover {
-        background-color: $secondColor;
-      }
-    }
+  .nav-links ul {
+    margin-left: 10vw;
+    margin-right: 30px;
   }
-  .nav-links.nav-icons {
-    display: none;
-    position: fixed;
-    top: calc(100% - 56px);
-    height: 56px;
-    padding: 0% 1rem;
-    ul {
-      width: 100%;
-      a {
-        padding: 1rem 0.5rem;
-        font-size: 28px;
-      }
-      span {
-        text-align: center;
-      }
-    }
-  }
-  .icon {
+}
+.nav-links {
+  ul {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    column-gap: 0.5rem;
-    margin-left: 1.5rem;
-  }
-  .icon {
-    .burger-menu {
-      display: none;
-    }
-    .icon-set {
-      height: 100%;
-      width: 100%;
-      text-align: center;
-      border-radius: 50%;
+    min-width: 20vw;
+    a {
+      padding: 1rem;
+      // border-radius: 4px;
       cursor: pointer;
-    }
-    svg {
-      vertical-align: middle;
-      font-size: 1.5rem;
       transition: 0.1s ease;
-      margin: 0.5rem;
+      min-width: fit-content;
+      font-size: large;
     }
+    a:hover {
+      background-color: $secondColor;
+    }
+  }
+}
+
+.bottom-navbar {
+  height: 0px;
+  background-color: $whiteColor;
+}
+
+.nav-links.nav-icons {
+  display: none;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  max-height: 56px;
+  min-height: 56px;
+  bottom: 0px;
+  // top: 100vh; /* Fallback for browsers that do not support Custom Properties */
+  left: 0px;
+  right: 0px;
+  height: 56px;
+  // transform: translateY(-56px);
+  padding: 0 1rem;
+  background-color: $whiteColor;
+  z-index: 99;
+  overflow-y: hidden;
+
+  ul {
+    width: 100%;
+    a {
+      padding: 1rem;
+      font-size: 28px;
+    }
+    span {
+      text-align: center;
+    }
+  }
+}
+.icon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 0.5rem;
+  margin-left: 1.5rem;
+}
+.icon {
+  .burger-menu {
+    display: none;
+  }
+  .icon-set {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  svg {
+    vertical-align: middle;
+    font-size: 1.5rem;
+    transition: 0.1s ease;
+    margin: 0.5rem;
   }
 }
 
@@ -225,37 +246,30 @@ body {
   margin: 5rem auto;
 }
 
+.categories {
+  margin: 2rem 0rem 1rem;
+  padding: 1rem;
+}
+
+.category {
+  padding: 0.5rem;
+  width: 25px;
+}
+
+.category-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center !important;
+  img {
+    max-height: 100px;
+  }
+}
+
 .cards {
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
-}
-.cards.Category {
-  padding: 2rem 0;
-  .category .card {
-    height: 100%;
-    text-align: center;
-    background-color: transparent;
-    border: none;
-    // min-height: 15vw;
-    .imgbx {
-      margin-bottom: 0.5rem;
-    }
-    img {
-      max-height: 130px;
-      width: 100%;
-      object-fit: contain;
-    }
-    h3 {
-      font-family: "Roboto", sans-serif;
-      text-transform: capitalize;
-      font-weight: bold;
-    }
-    h3:hover {
-      text-decoration: none;
-      cursor: default;
-    }
-  }
 }
 
 .card {
@@ -277,15 +291,26 @@ body {
   width: 90%;
   margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
+  gap: 1rem;
+  text-align: center;
   .feautre {
     display: flex;
+    flex: 1;
+    min-width: 200px;
+    gap: 1rem;
     align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    background-color: transparent;
     img {
-      margin-right: 1.5rem;
-      width: 7vw;
-      max-width: 115px;
+      height: 60px;
     }
+  }
+  .ft {
+    font-size: 24px;
   }
 }
 
@@ -323,7 +348,7 @@ body {
     }
   }
   h2 {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
   .CTA-3 {
     margin-right: 0rem !important;
@@ -414,12 +439,6 @@ body {
   GeoLocation Info
   ================
 */
-.mapouter {
-  background-color: $primaryColor;
-  h2 {
-    text-align: center;
-  }
-}
 
 .store-images-wrapper {
   display: flex;
@@ -701,9 +720,7 @@ body {
   .btn {
     padding: 1rem 2rem !important;
   }
-  .feautres .feautre img {
-    margin-right: 0.5rem;
-  }
+
   .ProductsM {
     .control {
       margin-bottom: 0.5rem;
@@ -768,6 +785,10 @@ body {
 }
 
 @media only screen and (max-width: 567px) {
+  .custom-simple-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.5rem;
+  }
   .navbar {
     height: 70px;
     justify-content: center;
@@ -777,15 +798,25 @@ body {
         height: 50px;
       }
     }
-    .nav-links.nav-icons {
-      display: flex;
+  }
+  .nav-links.nav-icons {
+    display: flex;
+    a:hover {
+      background-color: $secondColor;
     }
-    .icon {
-      .favorite,
-      .burger-menu,
-      .bag {
-        display: none;
-      }
+    a:focus {
+      background-color: $greyColor;
+    }
+    a:active {
+      background-color: #062343;
+      color: $whiteColor;
+    }
+  }
+  .icon {
+    .favorite,
+    .burger-menu,
+    .bag {
+      display: none;
     }
   }
   .call-float {
@@ -797,7 +828,7 @@ body {
   }
 
   .container {
-    max-width: 90vw;
+    max-width: 85vw;
   }
   .Hero .BigTitle h1
   // .mHero h2
@@ -856,9 +887,7 @@ body {
       font-size: 14px;
     }
   }
-  .feautres .feautre img {
-    margin-right: 0.5rem;
-  }
+
   .actions {
     // min-width: max(55%, 100px);
     font-size: 1rem;

@@ -51,24 +51,24 @@ export function Category() {
         <h2>Ecplore By Category</h2>
         <Swiper
           modules={[Pagination]}
-          spaceBetween={0}
+          spaceBetween={30}
           breakpoints={{
             767: {
               spaceBetween: 20,
-              slidesPerView: 5,
+              slidesPerView: 7,
             },
             576: {
               spaceBetween: 10,
-              slidesPerView: 4,
+              slidesPerView: 5,
             },
             300: {
               spaceBetween: 5,
-              slidesPerView: 3,
+              slidesPerView: 4,
             },
           }}
-          slidesPerView={"3"}
+          slidesPerView={"9"}
           pagination={{}}
-          className="cards Category"
+          className="cards categories"
         >
           {CategoryP.map((Category) => {
             return (

@@ -170,13 +170,6 @@ function Navbar({ favoriteProducts, cardProducts }) {
   let favoriteProductsNumber = favoriteProducts.length;
   let cardProductsNumber = cardProducts.length;
 
-  // useEffect(() => {
-  //   const barOffset = document.getElementById("navbar").offsetTop;
-  //   window.addEventListener("scroll", () =>
-  //     stickyBar(document.getElementById("navbar"))
-  //   );
-  // }, []);
-
   return (
     <>
       <div className="navbar" id="navbar">
@@ -206,71 +199,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
             )}
           </ul>
         </nav>
-        {/* ------------------------------ Mobile Navbar ------------------------------ */}
-        <nav className="nav-links nav-icons">
-          <ul>
-            <li className="link N-1" onClick={scrollToTop}>
-              {" "}
-              <Link to="/">
-                <BiHome />{" "}
-              </Link>
-            </li>
-            <li className="link N-2">
-              <Link to="/catalog">
-                <BiStore />{" "}
-              </Link>
-            </li>
-            <li className="link N-3" onClick={scrollToTop}>
-              {" "}
-              <Link to="/ordering">
-                <BiCreditCard />{" "}
-              </Link>
-            </li>
-            {!isUser && (
-              <li className="link N-4" onClick={scrollToTop}>
-                {" "}
-                <Link to="/dashboard">
-                  <BiCategory />{" "}
-                </Link>
-              </li>
-            )}
 
-            <li
-              className="icon-set bag"
-              onClick={() => {
-                setShowCardProducts(!showCardProducts);
-              }}
-            >
-              <a>
-                <BiShoppingBag />
-                {cardProductsNumber === 0 ? (
-                  ""
-                ) : (
-                  <span className="product-number">{cardProductsNumber}</span>
-                )}
-              </a>
-            </li>
-            <li>
-              <div
-                className="icon-set favorite"
-                onClick={() => {
-                  setShowFavoriteProducts(!showFavoriteProducts);
-                }}
-              >
-                <a>
-                  <RiHeartLine />
-                </a>
-                {favoriteProductsNumber === 0 ? (
-                  ""
-                ) : (
-                  <span className="product-number">
-                    {favoriteProductsNumber}
-                  </span>
-                )}
-              </div>
-            </li>
-          </ul>
-        </nav>
         {/* ------------------------------ Tablet Navbar ------------------------------ */}
         <div className="icon">
           <div
@@ -348,6 +277,73 @@ function Navbar({ favoriteProducts, cardProducts }) {
         </Anchor>
       </div>
       <Footer />
+      {/* ------------------------------ Mobile Navbar ------------------------------ */}
+      <div className="bottom-navbar">
+        <nav className="nav-links nav-icons">
+          <ul>
+            <li className="link N-1" onClick={scrollToTop}>
+              {" "}
+              <Link to="/">
+                <BiHome />{" "}
+              </Link>
+            </li>
+            <li className="link N-2">
+              <Link to="/catalog">
+                <BiStore />{" "}
+              </Link>
+            </li>
+            <li className="link N-3" onClick={scrollToTop}>
+              {" "}
+              <Link to="/ordering">
+                <BiCreditCard />{" "}
+              </Link>
+            </li>
+            {!isUser && (
+              <li className="link N-4" onClick={scrollToTop}>
+                {" "}
+                <Link to="/dashboard">
+                  <BiCategory />{" "}
+                </Link>
+              </li>
+            )}
+
+            <li
+              className="icon-set bag"
+              onClick={() => {
+                setShowCardProducts(!showCardProducts);
+              }}
+            >
+              <a>
+                <BiShoppingBag />
+                {cardProductsNumber === 0 ? (
+                  ""
+                ) : (
+                  <span className="product-number">{cardProductsNumber}</span>
+                )}
+              </a>
+            </li>
+            <li>
+              <div
+                className="icon-set favorite"
+                onClick={() => {
+                  setShowFavoriteProducts(!showFavoriteProducts);
+                }}
+              >
+                <a>
+                  <RiHeartLine />
+                </a>
+                {favoriteProductsNumber === 0 ? (
+                  ""
+                ) : (
+                  <span className="product-number">
+                    {favoriteProductsNumber}
+                  </span>
+                )}
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </>
   );
 }

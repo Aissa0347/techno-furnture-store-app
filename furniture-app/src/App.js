@@ -718,26 +718,18 @@ function App() {
               })
             );
         });
-        await getDoc(notificationsRef)
-          .then(async (res) => {
-            const oldData = res.data().notifications;
-            const avatarImg = auth.currentUser.photoURL;
-            await updateDoc(notificationsRef, {
-              notifications: [
-                ...oldData,
-                {
-                  name: newOrderData.fullName,
-                  action: "order",
-                  time: moment().unix(),
-                  userId: newOrderData.userId,
-                  orderId: newOrderData.orderId,
-                  avatarImg,
-                },
-              ],
-            })
-              .then((res) => goNext())
-              .catch((error) => console.log(error.code, error.message));
-          })
+        const avatarImg = auth.currentUser.photoURL;
+        await updateDoc(notificationsRef, {
+          notifications: arrayUnion({
+            name: newOrderData.fullName,
+            action: "order",
+            time: moment().unix(),
+            userId: newOrderData.userId,
+            orderId: newOrderData.orderId,
+            avatarImg,
+          }),
+        })
+          .then((res) => goNext())
           .catch((error) => console.log(error.code, error.message));
       })
       .catch((error) => {
@@ -760,13 +752,32 @@ function App() {
   }, []);
 
   useEffect(() => {
+    console.log("user uid changed :", userUID);
+  }, [userUID]);
+
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      let adminsUID = [
+        "dGnlVOf16zUFWWgEtYH6E4s8mEf2",
+        "5F2owTlKwjPwZNNjcKOuKRKDSpC2",
+      ];
+
+      // console.log("this is the top uid : ", userUID);
+      if (adminsUID.some((uid) => uid === user?.uid)) setIsUser(false);
+      if (userUID !== user?.uid) setUserUID(user?.uid);
+      if (user?.uid && !currentUserData) await getUserData(user?.uid);
+      if (!user?.uid) setCurrentUserData("");
+    });
+  }, []);
+
+  useEffect(() => {
     setSubTotal(calcSubTotal());
   }, [cardProducts]);
 
-  useEffect(() => {
-    console.log("samir");
-    getUserData(userUID);
-  }, [userUID]);
+  // useEffect(() => {
+  //   console.log("samir");
+  //   getUserData(userUID);
+  // }, [userUID]);
 
   console.log("is user : ", isUser);
   useEffect(() => {

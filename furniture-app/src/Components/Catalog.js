@@ -85,6 +85,7 @@ function SearchBar({
         <TextInput
           icon={<BiSearchAlt size={24} stroke={1.5} />}
           radius="none"
+          color="gray"
           size="lg"
           ref={searchWrapperRef}
           className="search-type-input"
@@ -96,12 +97,12 @@ function SearchBar({
                 setSearchFilter(searchFilterText);
                 window.scrollTo(0, 270);
               }}
-              size="lg"
+              size="xl"
               radius="none"
               mr={7}
               variant="filled"
             >
-              <BiRightArrowAlt size={18} stroke={1.5} />
+              <BiRightArrowAlt size={20} stroke={1.5} />
             </ActionIcon>
           }
           onChange={(e) => setSearchFilterText(e.target.value.toLowerCase())}
@@ -455,14 +456,14 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
   return (
     <div className="Catalog">
       <MiniHero />
+      <SearchBar
+        searchFilter={searchFilter}
+        setSearchFilter={setSearchFilter}
+        searchFiltering={searchFiltering}
+        isFilterBarAcitve={isFilterBarActive}
+        setIsFilterBarActive={setIsFilterBarActive}
+      />
       <div className="container">
-        <SearchBar
-          searchFilter={searchFilter}
-          setSearchFilter={setSearchFilter}
-          searchFiltering={searchFiltering}
-          isFilterBarAcitve={isFilterBarActive}
-          setIsFilterBarActive={setIsFilterBarActive}
-        />
         <div className="wrapper">
           <FilterBar
             setFilters={setFilters}

@@ -1,10 +1,9 @@
 .mHero {
-  height: 40vh;
+  height: 25vh;
   background-color: $thirdColor;
   display: grid;
   place-items: center;
   .title {
-    margin-top: 10vh;
     color: $whiteColor;
   }
   .breadcrumbs {
@@ -14,11 +13,16 @@
     }
   }
 }
+.mantine-Breadcrumbs-root {
+  row-gap: 6px;
+  flex-wrap: wrap !important;
+}
+
 .search-bar {
   // position: sticky;
   width: 100%;
   height: 50px;
-  padding: 0 0.8rem;
+  padding: 0 10%;
   // box-shadow: $shadow;
   border: $border;
   background-color: $whiteColor;
@@ -26,7 +30,7 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  margin-top: 3rem;
+  // margin-top: 3rem;
   margin-bottom: 2rem;
   // border-radius: 4px;
   z-index: 99;
@@ -114,7 +118,7 @@ label {
 .products-catalog-wrapper {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
 }
 
 .products {
@@ -223,6 +227,9 @@ details {
   .products-catalog .products {
     grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
   }
+  .products-catalog-wrapper {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
   .card .imgBx {
     height: 210px;
     img {
@@ -273,6 +280,10 @@ details {
 }
 
 @media only screen and (max-width: 567px) {
+  .products-catalog-wrapper {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+
   .search-bar {
     padding: 0 0.8rem;
 
