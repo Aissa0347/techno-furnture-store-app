@@ -81,9 +81,9 @@
     justify-content: space-between;
     margin-bottom: 1rem;
     li {
-      margin-bottom: 1rem;
+      margin-bottom: 12px;
     }
-    h4,
+    h5,
     label,
     .subTitle {
       color: $greyColor;
@@ -127,7 +127,7 @@
       width: 50px;
       height: 35px;
       padding: 0 2px 0 5px;
-      font-size: 1rem;
+      // font-size: 1rem;
     }
     &_price {
       color: $thirdColor;
@@ -195,7 +195,7 @@
       height: 160px;
     }
     h3 {
-      font-size: 1.2rem;
+      // font-size: 1.2rem;
     }
   }
 }
@@ -248,7 +248,7 @@
     font-size: 14px;
 
     span,
-    h4,
+    h5,
     label,
     summary {
       font-size: 14px;

@@ -141,18 +141,18 @@ function ProductInfo({
       <ul>
         <li className="product_name info">
           <span className="subTitle">{category}</span>
-          <h2>
+          <h3>
             <strong>{name}</strong>
-          </h2>
+          </h3>
         </li>
         <li className="product_maker info">
-          <h4>Made by:</h4>
+          <h5>Made by:</h5>
           {/*  <img loading="lazy" src={mark} alt="" /> */}
           <p>{markName}</p>
         </li>
         {(dimensions?.width || dimensions?.height || dimensions?.depth) && (
           <li className="product_dimensions info">
-            <h4>Dimensions:</h4>
+            <h5>Dimensions:</h5>
             <table>
               <thead>
                 <tr>
@@ -186,7 +186,7 @@ function ProductInfo({
         </li>
         {colors?.length && (
           <li className="product_colors">
-            <h4>Colors:</h4>
+            <h5>Colors:</h5>
             <SelectProductColor
               setError={setError}
               colors={colors}

@@ -57,6 +57,7 @@ import Main from "./dashboard/pages/main/Main";
 import Customers from "./dashboard/pages/customers/customers";
 import Products from "./dashboard/pages/products/products";
 import Invoices from "./dashboard/pages/invoices/invoices";
+import { PropagateLoader } from "react-spinners";
 
 //* ----------------------- import lazy load components ---------------------- */
 const Home = lazy(() => import("./Components/Home"));
@@ -758,7 +759,7 @@ function App() {
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       let adminsUID = [
-        "dGnlVOf16zUFWWgEtYH6E4s8mEf2",
+        "iSl5uvXoIsUBODvqBAIPfFQy2Du2",
         "5F2owTlKwjPwZNNjcKOuKRKDSpC2",
       ];
 
@@ -832,7 +833,23 @@ function App() {
       {" "}
       {isDataLoaded ? (
         <div className="main">
-          <Suspense fallback={<h1>I am loading now shut up or gooo</h1>}>
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  width: "100vw",
+                  height: "100vh",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "white",
+                }}
+              >
+                {" "}
+                <PropagateLoader color="#df3d45" />
+              </div>
+            }
+          >
             <Routes>
               {!currentUserData && (
                 <Route
@@ -897,9 +914,18 @@ function App() {
           </Drawer>
         </div>
       ) : (
-        <div>
+        <div
+          style={{
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white",
+          }}
+        >
           {" "}
-          <h1>is loading shut up and wait</h1>
+          <PropagateLoader color="#df3d45" />
         </div>
       )}
     </GlobalContext.Provider>

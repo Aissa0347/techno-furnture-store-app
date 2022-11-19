@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import logo from "../Website-Assets/logo.png";
 import {
+  BiCart,
   BiCategory,
   BiCreditCard,
   BiHome,
@@ -222,7 +223,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
             </nav>
             <div className="icon">
               <div
-                className="icon-set bag"
+                className="icon-set icon-size bag"
                 onClick={() => {
                   setShowCardProducts(!showCardProducts);
                 }}
@@ -231,12 +232,14 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 {cardProductsNumber === 0 ? (
                   ""
                 ) : (
-                  <span className="product-number">{cardProductsNumber}</span>
+                  <span className="product-number counter-size">
+                    {cardProductsNumber}
+                  </span>
                 )}
               </div>
 
               <div
-                className="icon-set favorite"
+                className="icon-set icon-size  favorite"
                 onClick={() => {
                   setShowFavoriteProducts(!showFavoriteProducts);
                 }}
@@ -245,13 +248,13 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 {favoriteProductsNumber === 0 ? (
                   ""
                 ) : (
-                  <span className="product-number">
+                  <span className="product-number counter-size">
                     {favoriteProductsNumber}
                   </span>
                 )}
               </div>
 
-              <div className="icon-set login">
+              <div className="login">
                 {currentUserData ? (
                   <AvatarProfile />
                 ) : (
@@ -268,7 +271,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 )}
               </div>
               <div
-                className="icon-set burger-menu"
+                className="icon-set icon-size burger-menu"
                 onClick={() => {
                   let navLinksStyle =
                     document.querySelector(".nav-links").style;
@@ -295,7 +298,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
       </div>
       <Outlet />
       <div className="call-float">
-        <Anchor href="https://wa.me/550951515" target="_blank">
+        <Anchor href="https://wa.me/795914857" target="_blank">
           <ActionIcon
             variant="filled"
             size={50}
@@ -312,25 +315,25 @@ function Navbar({ favoriteProducts, cardProducts }) {
       <Paper shadow="md" className="bottom-navbar">
         <nav className="nav-links nav-icons">
           <ul>
-            <li className="link N-1" onClick={scrollToTop}>
+            <li className="link N-1 icon-size" onClick={scrollToTop}>
               {" "}
               <Link to="/">
                 <BiHome />{" "}
               </Link>
             </li>
-            <li className="link N-2">
+            <li className="link icon-size N-2">
               <Link to="/catalog">
                 <BiStore />{" "}
               </Link>
             </li>
-            <li className="link N-3" onClick={scrollToTop}>
+            <li className="link icon-size N-3" onClick={scrollToTop}>
               {" "}
               <Link to="/ordering">
-                <BiCreditCard />{" "}
+                <BiCart />{" "}
               </Link>
             </li>
             {!isUser && (
-              <li className="link N-4" onClick={scrollToTop}>
+              <li className="link icon-size N-4" onClick={scrollToTop}>
                 {" "}
                 <Link to="/dashboard">
                   <BiCategory />{" "}
@@ -339,7 +342,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
             )}
 
             <li
-              className="icon-set bag"
+              className="icon-set icon-size bag"
               onClick={() => {
                 setShowCardProducts(!showCardProducts);
               }}
@@ -349,13 +352,15 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 {cardProductsNumber === 0 ? (
                   ""
                 ) : (
-                  <span className="product-number">{cardProductsNumber}</span>
+                  <span className="product-number counter-size">
+                    {cardProductsNumber}
+                  </span>
                 )}
               </a>
             </li>
             <li>
               <div
-                className="icon-set favorite"
+                className="icon-set icon-size favorite"
                 onClick={() => {
                   setShowFavoriteProducts(!showFavoriteProducts);
                 }}
@@ -366,7 +371,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 {favoriteProductsNumber === 0 ? (
                   ""
                 ) : (
-                  <span className="product-number">
+                  <span className="product-number counter-size">
                     {favoriteProductsNumber}
                   </span>
                 )}

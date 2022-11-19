@@ -28,7 +28,9 @@ body {
 .breadcrumbs {
   a,
   div {
-    color: blue !important;
+    color: rgb(78, 78, 78) !important;
+    font-size: 14px;
+    font-weight: 500;
   }
 }
 
@@ -68,7 +70,7 @@ body {
   justify-content: space-between;
   align-items: center;
   background-color: $whiteColor;
-  font-size: $s;
+  // //
   border-bottom: $border;
   border-color: $thirdColor;
   z-index: 100;
@@ -96,7 +98,7 @@ body {
       cursor: pointer;
       transition: 0.1s ease;
       min-width: fit-content;
-      font-size: large;
+      // //
     }
     a:hover {
       background-color: $secondColor;
@@ -105,8 +107,16 @@ body {
 }
 
 .bottom-navbar {
-  height: 0px;
+  // height: 0px;
   background-color: $whiteColor;
+  box-shadow: 10px 10px 10px solid darkblue;
+  .nav-icons {
+    border-top: 1px solid $greyColor;
+    box-shadow: 0px 2px 6px 0px $greyColor;
+  }
+  ul {
+    overflow-y: hidden;
+  }
 }
 
 .nav-links.nav-icons {
@@ -131,7 +141,7 @@ body {
     width: 100%;
     a {
       padding: 1rem;
-      font-size: 28px;
+      // //
     }
     span {
       text-align: center;
@@ -158,7 +168,7 @@ body {
   }
   svg {
     vertical-align: middle;
-    font-size: 1.5rem;
+    // //
     transition: 0.1s ease;
     margin: 0.5rem;
   }
@@ -206,18 +216,18 @@ body {
 
 .BigTitle {
   color: $secondColor;
-  font-size: 3rem;
+  // //
   padding-left: 10vw;
   margin-top: 5vw;
   h1 {
-    font-size: clamp(4rem, 6vw, 6rem);
+    // //
     // line-height: auto;
   }
   b {
     color: $thirdColor;
   }
   h5 {
-    font-size: $sm;
+    // //
     font-weight: 300;
     max-width: 50vw;
     margin: 1rem 0.3rem;
@@ -313,7 +323,7 @@ body {
     }
   }
   .ft {
-    font-size: 24px;
+    // //
   }
 }
 
@@ -335,7 +345,7 @@ body {
     }
 
     span {
-      font-size: 18px;
+      // //
       font-weight: 300;
       cursor: pointer;
     }
@@ -413,7 +423,7 @@ body {
   position: absolute;
   right: -30%;
   bottom: 0.5rem;
-  font-size: 1.5rem;
+  // //
   height: 15vh;
   min-height: 130px;
   margin-top: 0.5rem;
@@ -486,11 +496,11 @@ body {
   align-items: flex-end;
   gap: 1rem;
   h3 {
-    font-size: 32px;
+    // //
     font-weight: 500;
   }
   h4 {
-    font-size: 24px;
+    // //
     font-weight: 500;
   }
 }
@@ -525,7 +535,7 @@ body {
   padding: 1rem;
   max-height: 3.4rem;
   margin-right: -4px;
-  font-size: $sm;
+  // //
   // border-radius: 4px;
   border: $border;
 }
@@ -565,7 +575,7 @@ body {
     .social-media-links {
       display: flex;
       justify-content: center;
-      font-size: 2rem;
+      // //
       gap: 3rem;
     }
   }
@@ -633,7 +643,7 @@ body {
   }
 
   h5 {
-    font-size: 1.1rem !important;
+    // //
   }
 
   .Hero .BigTitle,
@@ -643,7 +653,7 @@ body {
   }
 
   .cards .card h3 {
-    font-size: 1.5rem;
+    // //
   }
 
   .mapouter {
@@ -703,20 +713,20 @@ body {
   }
 
   h2 {
-    font-size: 2rem;
+    // //
   }
   .control span,
   .actions span {
-    font-size: 1rem !important;
+    // //
   }
   h3 {
-    font-size: 1.6rem;
+    // //
   }
   .Category {
     .category .card {
       padding: 0.5rem;
       h3 {
-        font-size: calc(1.5rem - 1vw);
+        // //
         padding-bottom: 0.5rem;
       }
     }
@@ -784,7 +794,7 @@ body {
   }
 
   .mHero h1 {
-    font-size: 2rem;
+    // //
   }
 }
 
@@ -807,6 +817,14 @@ body {
   }
   .nav-links.nav-icons {
     display: flex;
+    width: 100vw;
+    ul {
+      height: 100%;
+      li {
+        display: flex;
+        align-items: center;
+      }
+    }
     a:hover {
       background-color: $secondColor;
     }
@@ -839,20 +857,20 @@ body {
   .Hero .BigTitle h1
   // .mHero h2
   {
-    font-size: calc(2rem + 3vw);
+    // //
   }
   h2 {
-    font-size: 1.5rem;
+    // //
   }
   h3 {
-    font-size: 1.3rem !important;
+    // //
   }
   h5 {
-    font-size: 15px !important;
+    // //
     max-width: 100% !important;
   }
   span {
-    font-size: 14px;
+    // //
   }
 
   .Hero .BigTitle,
@@ -873,7 +891,7 @@ body {
       height: 130px;
       padding: 0.5rem;
       h3 {
-        font-size: 16px !important;
+        // //
         padding-bottom: 0.5rem;
       }
     }
@@ -890,13 +908,13 @@ body {
     margin-top: 1rem;
     .btn {
       padding: 0.8rem 1rem !important;
-      font-size: 14px;
+      // //
     }
   }
 
   .actions {
     // min-width: max(55%, 100px);
-    font-size: 1rem;
+    // //
   }
 
   .footer {

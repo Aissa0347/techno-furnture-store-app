@@ -18,6 +18,7 @@ import {
   getDocs,
   updateDoc,
   doc,
+  getDoc,
 } from "firebase/firestore";
 import { db, storage } from "../../../../firebase/firebaseConfig";
 import {
@@ -40,7 +41,7 @@ export function collectionRef(colName) {
 }
 
 export const colProductList = collection(db, "ProductsList");
-export const colProductFilters = collection(db, "new Product Filters");
+export const colProductFilters = collection(db, "newProductFilters");
 
 //* -------------------------------------------------------------------------- */
 //*                        New Product Popup Components                        */
@@ -61,7 +62,7 @@ export default function NewProductPopup({
   const [isImagesUploaded, setIsImagesUploaded] = useState(
     typeOfForm == "edit" ? true : false
   );
-  const [TAX, setTAX] = useState(19);
+  const [TAX, setTAX] = useState();
   const [priceHT, setPriceHT] = useState(0);
   const [isUploadImagesLoading, setIsUploadImagesLoading] = useState(false);
   const [selectColors, setSelectColors] = useState({
@@ -238,27 +239,29 @@ export default function NewProductPopup({
     setPrimaryImages(primaryValues?.img);
     console.log("this is the primary values images : ", primaryValues?.img);
     setDescriptionTextContent(primaryValues?.description);
-    await getDocs(colProductFilters).then((promiseData) => {
+    await getDoc(doc(colProductFilters, "colors")).then((promiseData) => {
       console.log("its done downloading");
       let fullColorsData = {
-        data: promiseData.docs[0].data().colors,
-        id: promiseData.docs[0].id,
+        data: promiseData.data().colors,
+        id: promiseData.id,
       };
+      setSelectColors((prev) => ({
+        ...prev,
+        data: fullColorsData?.data,
+        id: fullColorsData?.id,
+      }));
+    });
+    await getDoc(doc(colProductFilters, "categories")).then((promiseData) => {
+      console.log("its done downloading");
       let fullCategoriesData = {
-        data: promiseData.docs[1].data().categories,
-        id: promiseData.docs[1].id,
+        data: promiseData.data().categories,
+        id: promiseData.id,
       };
       console.log("categories setted !!");
       setSelectCategory((prev) => ({
         ...prev,
         data: fullCategoriesData.data,
         id: fullCategoriesData.id,
-      }));
-      console.log("is done ?");
-      setSelectColors((prev) => ({
-        ...prev,
-        data: fullColorsData?.data,
-        id: fullColorsData?.id,
       }));
     });
   };

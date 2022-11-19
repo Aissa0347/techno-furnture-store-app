@@ -53,9 +53,17 @@ export function Category() {
           modules={[Pagination]}
           spaceBetween={30}
           breakpoints={{
+            1280: {
+              spaceBetween: 30,
+              slidesPerView: 7,
+            },
+            967: {
+              spaceBetween: 20,
+              slidesPerView: 6,
+            },
             767: {
               spaceBetween: 20,
-              slidesPerView: 7,
+              slidesPerView: 5,
             },
             576: {
               spaceBetween: 10,
@@ -66,7 +74,7 @@ export function Category() {
               slidesPerView: 3,
             },
           }}
-          slidesPerView={"9"}
+          slidesPerView={"7"}
           pagination={{}}
           className="cards categories"
         >

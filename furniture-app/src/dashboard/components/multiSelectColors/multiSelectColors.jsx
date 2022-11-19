@@ -5,7 +5,7 @@ import { BiChevronDown } from "react-icons/bi";
 
 // const datas = [{ colorName: 'Red', colorRef: '#42122' }, { colorName: 'Purple', colorRef: '#974411' }, { colorName: 'Yellow', colorRef: '#785465' },{ colorName: 'Yellow', colorRef: '#785465' },{ colorName: 'Yellow', colorRef: '#785465' },{ colorName: 'Yellow', colorRef: '#785465' },{ colorName: 'Yellow', colorRef: '#785465' }];
 
-// console.log(datas);
+//
 
 // export default function App() {
 //   const [data, setData] = useState(datas);
@@ -48,10 +48,6 @@ export function MultiSelectColors({ data, colors, setColors }) {
     setExpandMenu(true);
     inputRef.current.focus();
     multiSelectBox.current.style.outline = "1px solid #d96b52";
-    console.log("data : ", data);
-    console.log("colors : ", colors);
-    console.log("menuItems : ", menuItems);
-    console.log("filtered menu itesm : ", filteredMenuItems);
   }
 
   function filterMenuItems(text) {

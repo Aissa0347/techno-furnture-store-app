@@ -8,7 +8,7 @@ import { db } from "../../../../firebase/firebaseConfig";
 export function AddCategoriesPopup({ setSubmitAndState, submitAndState }) {
   const valueInput = useRef("");
   let isDuplicate = false;
-  const categoriesRef = doc(db, "new Product Filters", submitAndState.id);
+  const categoriesRef = doc(db, "newProductFilters", "categories");
   useEffect(() => {
     valueInput.current.focus();
   });
@@ -82,7 +82,7 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
   const [colorRef, setColorRef] = useState("");
   const valueInput = useRef("");
   let isDuplicate = false;
-  const colorsRef = doc(db, "new Product Filters", submitAndState.id);
+  const colorsRef = doc(db, "newProductFilters", "colors");
 
   useEffect(() => {
     console.log(...submitAndState.data, {
