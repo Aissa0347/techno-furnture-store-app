@@ -65,7 +65,6 @@ function Notification() {
   let unsub;
   useEffect(() => {
     // if (unsub) console.log("unsub ", unsub);
-
     unsub = onSnapshot(
       doc(db, "Notifications", "Orders-Notifications"),
       async (res) => {

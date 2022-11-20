@@ -57,7 +57,7 @@ import Main from "./dashboard/pages/main/Main";
 import Customers from "./dashboard/pages/customers/customers";
 import Products from "./dashboard/pages/products/products";
 import Invoices from "./dashboard/pages/invoices/invoices";
-import { PropagateLoader } from "react-spinners";
+import { PropagateLoader, PuffLoader } from "react-spinners";
 
 //* ----------------------- import lazy load components ---------------------- */
 const Home = lazy(() => import("./Components/Home"));
@@ -81,7 +81,7 @@ export const findCurrentProduct = (ProductList, paramsId) => {
 };
 
 export function scrollToTop() {
-  window.scrollTo(0, 0);
+  window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
 }
 
 export function capitalizeSentence(text, outForm = "string") {
@@ -183,14 +183,9 @@ function App() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [cardProducts, setCardProducts] = useState([]);
-  const [searchFilter, setSearchFilter] = useState([]);
   const [openAuthDrawer, setOpenAuthDrawer] = useState(true);
   const [userRef, setUserRef] = useState("");
-  const [filters, setFilters] = useState({
-    category: [],
-    markName: [],
-    price: [],
-  });
+
   const [subTotal, setSubTotal] = useState(0);
   const [totalHT, setTotalHT] = useState(0);
   const [userUID, setUserUID] = useState("");
@@ -815,7 +810,6 @@ function App() {
         favoriteProducts,
         setCardProducts,
         cardProducts,
-        setFilters,
         subTotal,
         totalHT,
         setSubTotal,
@@ -846,7 +840,7 @@ function App() {
                 }}
               >
                 {" "}
-                <PropagateLoader color="#df3d45" />
+                <PuffLoader color="#df3d45" />
               </div>
             }
           >
@@ -881,17 +875,7 @@ function App() {
                 }
               >
                 <Route index element={<Home />}></Route>
-                <Route
-                  path="/catalog"
-                  element={
-                    <Catalog
-                      searchFilter={searchFilter}
-                      setSearchFilter={setSearchFilter}
-                      filters={filters}
-                      setFilters={setFilters}
-                    />
-                  }
-                ></Route>
+                <Route path="/catalog" element={<Catalog />}></Route>
                 <Route
                   path="catalog/:productId"
                   element={<ProductPage />}

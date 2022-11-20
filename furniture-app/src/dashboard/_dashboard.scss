@@ -45,16 +45,14 @@ h1.dash-title {
 }
 
 .dash-duration {
+  display: flex;
+  justify-content: flex-end;
   text-align: right;
-  select {
-    background-color: transparent;
-    border: none;
-    color: $greyColor;
-    outline: none;
-    option {
-      background-color: transparent;
-      border: none;
-    }
+  .mantine-inputWrapper-root {
+    width: 120px;
+  }
+  .mantine-Select-rightSection svg {
+    color: #df3d45 !important;
   }
 }
 

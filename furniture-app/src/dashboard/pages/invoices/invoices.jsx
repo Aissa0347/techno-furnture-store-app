@@ -12,37 +12,6 @@ import { DashboardContext } from "../../Dashboard";
 import { Button, Group, Tabs } from "@mantine/core";
 import { BiRefresh } from "react-icons/bi";
 
-//* ---------------------------- Products Widgets ---------------------------- */
-
-function Widgets() {
-  return (
-    <section className="widgets">
-      <div className="widget-wrapper">
-        <div className="widget">
-          <h3> Total Visits</h3>
-          <div className="widget-status">
-            <h4>
-              <span className="icon">{visit}</span>{" "}
-              <span className="status-number">168889</span>
-            </h4>
-          </div>
-          <div className="widget-rank"></div>
-        </div>
-        <div className="widget">
-          <h3> Total Sales</h3>
-          <div className="widget-status">
-            <h4>
-              <span className="icon">{sale}</span>{" "}
-              <span className="status-number">1688$</span>
-            </h4>
-          </div>
-          <div className="widget-rank"></div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 //* --------------------------- Head Cells and Rows -------------------------- */
 
 export const headCells = [
@@ -213,7 +182,7 @@ function Invoices() {
 
   return (
     <section className="dash-products in-dash-container">
-      <Group position="apart">
+      <Group position="apart" mb={16}>
         <h1 className="dash-title">Products</h1>
         <Button
           variant="filled"
@@ -225,7 +194,6 @@ function Invoices() {
           Refresh
         </Button>
       </Group>
-      <Widgets />
       <Tabs
         defaultValue={"all"}
         value={generalStatus}

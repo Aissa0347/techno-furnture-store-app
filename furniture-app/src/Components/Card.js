@@ -21,16 +21,12 @@ import { GlobalContext } from "../App";
 //* -------------------------------- Category -------------------------------- */
 
 export function SmallCard(props) {
-  const { setFilters } = useContext(GlobalContext);
   const { img, name } = props;
   return (
     <div className="category-wrapper ">
       <Link
         to={"/catalog"}
-        onClick={() => {
-          setFilters({ category: [name], markName: [] });
-          window.scrollTo(0, 0);
-        }}
+        state={{ category: [name.toUpperCase()], markName: [] }}
       >
         <div className="category-icon">
           <img loading="lazy" src={img} alt={name} />
@@ -216,7 +212,12 @@ export function ProductsCard({
       <Link to={`/catalog/${id}`} style={{ flex: "1" }}>
         <Group position="center" className={classes.productName} py="xs">
           <div>
-            <Text weight={500} component="h3" transform="uppercase">
+            <Text
+              weight={500}
+              component="h3"
+              className="product-card-name"
+              transform="uppercase"
+            >
               {name}
             </Text>
           </div>

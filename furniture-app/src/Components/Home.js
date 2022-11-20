@@ -6,7 +6,6 @@ import { ProductsCard } from "./Card";
 import { FeautreP } from "../Website-Assets/index";
 import Products, { TechnoImages } from "./Products";
 import { Category } from "./Products";
-import { scrollToTop } from "../App";
 
 //* ---------------------------------- Api's --------------------------------- */
 
@@ -31,6 +30,7 @@ import {
 //* ------------------------------ Import SVG's ------------------------------ */
 import logo from "../Website-Assets/logo.png";
 import NEWSLETTER_SVG from "../Website-Assets/SVG/NEWSLETTER.svg";
+import { PuffLoader } from "react-spinners";
 
 const GeoInfo = lazy(() => import("./smallComponents/conatactUs"));
 
@@ -376,7 +376,7 @@ function Home() {
         <Category />
         <ProductsM />
       </div>
-      <Suspense fallback={<h2>I am loading</h2>}>
+      <Suspense fallback={<PuffLoader color="#df3d45" />}>
         <GeoInfo />
       </Suspense>
     </>

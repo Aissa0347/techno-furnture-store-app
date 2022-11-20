@@ -18,12 +18,11 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import { archive, Dashboard, editMenu, pause, show, stop } from "../icons";
-import { Users } from "../icons";
+import { show, stop } from "../icons";
 import { visuallyHidden } from "@mui/utils";
 
 //  Import Icons
-import { off, on, edit } from "../icons";
+import { edit } from "../icons";
 import { Select } from "@mantine/core";
 import { db } from "../../../firebase/firebaseConfig";
 import { updateDoc, doc } from "firebase/firestore";
@@ -58,7 +57,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function EnhancedTable({
+function EnhancedTable({
   rows,
   headCells,
   setProductView,
@@ -367,7 +366,6 @@ export default function EnhancedTable({
                           >
                             {edit}
                           </span>
-                          <span className="action">{stop}</span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -402,3 +400,5 @@ export default function EnhancedTable({
     </Box>
   );
 }
+
+export default React.memo(EnhancedTable);

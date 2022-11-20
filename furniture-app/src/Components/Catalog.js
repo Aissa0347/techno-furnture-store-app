@@ -34,6 +34,8 @@ import {
 } from "@mantine/core";
 import { useRef } from "react";
 import Bradcrumbs from "./smallComponents/bradcrumbs";
+import { useLocation } from "react-router-dom";
+import { useClickOutside } from "@mantine/hooks";
 
 //* -------------------------------- Mini Hero ------------------------------- */
 
@@ -106,7 +108,7 @@ function SearchBar({
               ref={submitRef}
               onClick={() => {
                 setSearchFilter(searchFilterText);
-                window.scrollTo(0, 270);
+                window.scrollTo({ left: 0, top: 165, behavior: "smooth" });
               }}
               size="xl"
               radius="none"
@@ -136,10 +138,15 @@ function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
     page * productPerPage
   );
 
-  function setFiltersToDefault() {
+  const setFiltersToDefault = () => {
     setFilters({ category: [], markName: [] });
-    window.scrollTo(0, 270);
-  }
+    window.scrollTo({ left: 0, top: 165, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    setPage(1);
+  }, [productsList]);
+
   // if (productsList?.length <= 0) {
   //   var setToDefaultTimeOut = setTimeout(setFiltersToDefault, 2000);
   // }
@@ -195,24 +202,11 @@ function FilterBar({
   isFilterBarActive,
 }) {
   const { ProductsCatalog } = useContext(GlobalContext);
+  const [uniqCategories, setUniqCategories] = useState([]);
+  const [uniqMarks, setUniqMarks] = useState([]);
+  const [isWider, setIsWider] = useState(true);
+  const outerRef = useClickOutside(() => setIsFilterBarActive(false));
 
-  // filter categories and delete duplicated
-  var uniq_categories = [
-    ...new Set(
-      ProductsCatalog.map((product) => {
-        return product.category;
-      })
-    ),
-  ];
-
-  // filter marks and delete duplicated
-  var uniq_marks = [
-    ...new Set(
-      ProductsCatalog.map((product) => {
-        return product.markName;
-      })
-    ),
-  ];
   // toggle filters, function that filter products by the type u assigned
   function toggleSubFilter(event, type, filter) {
     if (type === "price") {
@@ -251,37 +245,83 @@ function FilterBar({
   }
 
   useEffect(() => {
-    uniq_categories.forEach((category) => {
-      if (filters.category.some((filter) => category === filter)) {
-        console.log("make it true");
-        document.getElementById(category).checked = true;
-      } else {
-        document.getElementById(category).checked = false;
-      }
-    });
-    uniq_marks.forEach((mark) => {
-      if (filters.markName.some((filter) => mark === filter)) {
-        console.log("make it true");
-        document.getElementById(mark).checked = true;
-      } else {
-        document.getElementById(mark).checked = false;
-      }
-    });
+    // filter categories and delete duplicated
+    setUniqCategories([
+      ...new Set(
+        ProductsCatalog.map((product) => {
+          return product?.category;
+        })
+      ),
+    ]);
+
+    // filter marks and delete duplicated
+    setUniqMarks([
+      ...new Set(
+        ProductsCatalog.map((product) => {
+          return product?.markName;
+        })
+      ),
+    ]);
+  }, [ProductsCatalog]);
+
+  useEffect(() => {
+    console.log("proplems are here : ", filters);
+    if (filters?.category)
+      uniqCategories.forEach((category) => {
+        if (filters.category.some((filter) => category === filter)) {
+          console.log("make it true");
+          document.getElementById(category).checked = true;
+        } else {
+          document.getElementById(category).checked = false;
+        }
+      });
+
+    if (filters?.markName)
+      uniqMarks.forEach((mark) => {
+        if (filters.markName.some((filter) => mark === filter)) {
+          console.log("make it true");
+          document.getElementById(mark).checked = true;
+        } else {
+          document.getElementById(mark).checked = false;
+        }
+      });
+    console.log("or here : ", filters);
   }, [filters]);
 
+  useEffect(() => {
+    const isItWide = () => {
+      if (window.innerWidth > 767) {
+        setIsWider(true);
+      } else {
+        setIsWider(false);
+      }
+    };
+    isItWide();
+    window.addEventListener("resize", isItWide);
+    return window.removeEventListener("resize", isItWide);
+  }, []);
+
   return (
-    <div className={isFilterBarActive ? "active filter-bar" : "filter-bar"}>
+    <div
+      ref={isWider ? null : outerRef}
+      className={isFilterBarActive ? "active filter-bar" : "filter-bar"}
+    >
+      <ActionIcon
+        color="red"
+        size="lg"
+        radius="none"
+        className="exit-icon"
+        onClick={() => setIsFilterBarActive(false)}
+      >
+        <BiX size={24} />
+      </ActionIcon>
       <div className="filter-wrapper">
-        <BiX
-          className="exit-icon icon"
-          onClick={() => setIsFilterBarActive(false)}
-        />
         <div className="filter-categories filter-box">
           <details className="filter-checkbox" open>
             <summary>
               Categories <BiChevronLeft className="chevron" />
             </summary>
-            {uniq_categories.map((category) => {
+            {uniqCategories.map((category) => {
               return (
                 <div className="col" key={category}>
                   <input
@@ -319,7 +359,7 @@ function FilterBar({
             <summary>
               Marks <BiChevronLeft className="chevron" />
             </summary>
-            {uniq_marks.map((mark) => {
+            {uniqMarks.map((mark) => {
               return (
                 <div className="col" key={mark}>
                   <input
@@ -408,13 +448,18 @@ function PriceRange({ toggleSubFilter, removeSubFilter }) {
 
 //* --------------------------------- Catalog -------------------------------- */
 
-function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
+function Catalog() {
   const { ProductsCatalog } = useContext(GlobalContext);
-
+  const [searchFilter, setSearchFilter] = useState([]);
+  const [filters, setFilters] = useState({
+    category: [],
+    markName: [],
+    price: [],
+  });
   const [productsList, setProductsList] = useState([...ProductsCatalog]);
-
   const [searchFilteredProducts, setSearchFilteredProducts] = useState([]);
   const [isFilterBarActive, setIsFilterBarActive] = useState(false);
+  const location = useLocation();
 
   let setFiltersToProducts = useCallback(
     (filtersType, filtersTypesNames) => {
@@ -465,7 +510,13 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
   }, [filters]);
 
   useEffect(() => {
-    console.log("i am i rendered multi time");
+    console.log("here is location : ", location.state);
+    if (location?.state) {
+      setFilters(location.state);
+      window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+      location.state = "";
+      console.log("i am i ther reason");
+    }
   }, []);
 
   return (

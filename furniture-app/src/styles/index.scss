@@ -635,10 +635,9 @@ body {
     transition: 0.3s ease;
     ul {
       align-items: center;
-      width: 60%;
-      margin: 0% auto;
-      a {
-      }
+      width: 100%;
+      padding: 0 15vw;
+      margin: 0;
     }
   }
 
@@ -820,7 +819,7 @@ body {
   }
   .nav-links.nav-icons {
     display: flex;
-    width: 100vw;
+    max-width: 100vw;
     ul {
       height: 100%;
       li {

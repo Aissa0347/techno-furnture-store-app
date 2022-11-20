@@ -3,7 +3,6 @@ import logo from "../Website-Assets/logo.png";
 import {
   BiCart,
   BiCategory,
-  BiCreditCard,
   BiHome,
   BiShoppingBag,
   BiStore,
@@ -161,21 +160,21 @@ function Navbar({ favoriteProducts, cardProducts }) {
   let cardProductsNumber = cardProducts.length;
 
   useEffect(() => {
-    window.addEventListener("resize", () => {
+    const isItWide = () => {
       if (window.innerWidth > 576) {
         setIsWider(true);
       } else {
         setIsWider(false);
       }
-    });
-    return window.removeEventListener("resize", () => {
-      if (window.innerWidth > 576) {
-        setIsWider(true);
-      } else {
-        setIsWider(false);
-      }
-    });
+    };
+    isItWide();
+    window.addEventListener("resize", isItWide);
+    return window.removeEventListener("resize", isItWide);
   }, []);
+
+  const scrollTop = () => {
+    window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+  };
 
   return (
     <>
@@ -315,25 +314,25 @@ function Navbar({ favoriteProducts, cardProducts }) {
       <Paper shadow="md" className="bottom-navbar">
         <nav className="nav-links nav-icons">
           <ul>
-            <li className="link N-1 icon-size">
+            <li className="link N-1 icon-size" onClick={scrollTop}>
               {" "}
               <Link to="/">
                 <BiHome />{" "}
               </Link>
             </li>
-            <li className="link icon-size N-2">
+            <li className="link icon-size N-2" onClick={scrollTop}>
               <Link to="/catalog">
                 <BiStore />{" "}
               </Link>
             </li>
-            <li className="link icon-size N-3">
+            <li className="link icon-size N-3" onClick={scrollTop}>
               {" "}
               <Link to="/ordering">
                 <BiCart />{" "}
               </Link>
             </li>
             {!isUser && (
-              <li className="link icon-size N-4">
+              <li className="link icon-size N-4" onClick={scrollTop}>
                 {" "}
                 <Link to="/dashboard">
                   <BiCategory />{" "}
@@ -358,16 +357,14 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 )}
               </a>
             </li>
-            <li>
-              <div
-                className="icon-set icon-size favorite"
-                onClick={() => {
-                  setShowFavoriteProducts(!showFavoriteProducts);
-                }}
-              >
-                <a>
-                  <RiHeartLine />
-                </a>
+            <li
+              className="icon-set icon-size favorite"
+              onClick={() => {
+                setShowFavoriteProducts(!showFavoriteProducts);
+              }}
+            >
+              <a>
+                <RiHeartLine />
                 {favoriteProductsNumber === 0 ? (
                   ""
                 ) : (
@@ -375,7 +372,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
                     {favoriteProductsNumber}
                   </span>
                 )}
-              </div>
+              </a>
             </li>
           </ul>
         </nav>

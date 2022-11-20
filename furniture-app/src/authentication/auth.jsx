@@ -187,6 +187,10 @@ function Auth(props) {
     setIsError(false);
   }, [isReset, type, isEmailSended, authForm.values]);
 
+  useEffect(() => {
+    if (location.pathname === "/auth" && auth.currentUser) navigate("/catalog");
+  }, []);
+
   //* ------------------------------ Handle Reset ------------------------------ */
 
   const handleReset = (values) => {

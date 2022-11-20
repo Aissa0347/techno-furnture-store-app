@@ -47,6 +47,10 @@
   }
 }
 
+.order_page .shopping_cart {
+  padding: 0;
+}
+
 .shipping_info {
   .btns {
     margin-top: 2rem;
@@ -316,9 +320,8 @@
   position: relative;
   .product-number {
     position: absolute;
-    top: 0%;
+    top: 10%;
     right: 0%;
-    //
     color: $whiteColor;
     padding: 1px;
     width: 18px;

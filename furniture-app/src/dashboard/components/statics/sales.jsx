@@ -1,25 +1,19 @@
 import moment from "moment";
 import { useContext, useEffect, useState } from "react";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-} from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from "recharts";
 import { DashboardContext } from "../../Dashboard";
 
 function Sales() {
   const { analyticsData } = useContext(DashboardContext);
   const [data, setData] = useState([]);
 
-  let calculatedData = analyticsData.map((day) => {
-    let createdAtMoment = moment.unix(day.date?.seconds);
-    let theDay = moment(createdAtMoment).format("DD MMM");
-    return { Day: theDay, Sales: day.sales };
-  });
+  let calculatedData = analyticsData
+    .sort((prev, next) => prev.date.seconds - next.date.seconds)
+    .map((day) => {
+      let createdAtMoment = moment.unix(day.date?.seconds);
+      let theDay = moment(createdAtMoment).format("DD MMM");
+      return { Day: theDay, Sales: day.sales };
+    });
 
   useEffect(() => {
     setData(calculatedData);

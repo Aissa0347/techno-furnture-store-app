@@ -33,7 +33,7 @@ import { serverTimestamp } from "firebase/firestore";
 
 //* ------------------------------ Shipping Info ----------------------------- */
 
-function ShippingInfo({ goNext }) {
+function ShippingInfo({ goNext, goBack }) {
   const { setOrderData, currentUserData, sendOrder } =
     useContext(GlobalContext);
 
@@ -188,7 +188,13 @@ function ShippingInfo({ goNext }) {
         </div>
       </form>
       <Group position="apart" my={8}>
-        <Button variant="light" size="xs" radius="none" color="red">
+        <Button
+          variant="light"
+          size="xs"
+          radius="none"
+          color="red"
+          onClick={goBack}
+        >
           Back
         </Button>
       </Group>
@@ -315,7 +321,12 @@ function Ordering() {
           ← &nbsp;continue shopping
         </Link>
       </nav>
-      <Stepper my={32} active={active} onStepClick={setActive}>
+      <Stepper
+        mb={32}
+        active={active}
+        onStepClick={setActive}
+        sx={{ margin: "12px 0" }}
+      >
         <Stepper.Step
           label="First Step"
           allowStepSelect={active === 1}
@@ -332,7 +343,7 @@ function Ordering() {
           allowStepClick={false}
           allowStepSelect={false}
         >
-          <ShippingInfo goNext={nextStep} />
+          <ShippingInfo goNext={nextStep} goBack={prevStep} />
         </Stepper.Step>
         <Stepper.Completed>
           <Success />

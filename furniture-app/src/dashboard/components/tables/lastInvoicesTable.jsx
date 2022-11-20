@@ -62,7 +62,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function EnhancedTable({ rows }) {
+function EnhancedTable({ rows }) {
   const [order, setOrder] = React.useState("");
   const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
@@ -347,3 +347,5 @@ export default function EnhancedTable({ rows }) {
     </>
   );
 }
+
+export default React.memo(EnhancedTable);

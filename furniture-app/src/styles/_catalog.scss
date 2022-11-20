@@ -157,7 +157,7 @@ label {
   display: none;
   width: max(25%, 300px);
   height: min-content;
-  padding: 2rem 1rem 3rem;
+  padding: 3rem 1rem 2rem;
   background-color: $whiteColor;
   // box-shadow: $shadow;
   overflow-y: hidden;
@@ -207,6 +207,7 @@ details {
     label {
       color: $primaryColor;
       padding-left: 5px;
+      font-size: 14px;
     }
   }
   .price-range {
@@ -248,10 +249,12 @@ details {
     height: 100%;
     z-index: 200;
     transition: 0.3s ease;
+    border: none;
+    border-left: $border;
     .exit-icon {
       display: block;
       position: absolute;
-      bottom: 0%;
+      top: 0%;
       left: 0%;
       //
       margin: 8px;
@@ -263,16 +266,16 @@ details {
     &.active {
       right: 0%;
     }
+    .filter-wrapper {
+      height: 100%;
+      max-height: 100%;
+      overflow-y: auto;
+    }
   }
 
   .search-bar {
-    label {
-      //
-    }
-
     .filter {
       &-icon {
-        //
         margin-right: 0%;
       }
     }
@@ -292,7 +295,8 @@ details {
 
     .filter-wrapper {
       height: 100%;
-      overflow-y: scroll;
+      max-height: 100%;
+      overflow-y: auto;
     }
     label {
       display: none;

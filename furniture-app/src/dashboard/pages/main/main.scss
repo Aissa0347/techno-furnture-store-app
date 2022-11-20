@@ -28,6 +28,11 @@
       }
     }
   }
+  .widget-status {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
 
   h4 {
     position: relative;
