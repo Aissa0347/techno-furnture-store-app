@@ -8,6 +8,7 @@ import {
   Group,
   Button,
   Tabs,
+  Modal,
 } from "@mantine/core";
 import {
   onSnapshot,
@@ -267,24 +268,24 @@ function Products() {
           </section>
         )}
         {productView.state && (
-          <section className="popup-bg ">
-            <div className="product-view popup ">
-              <Group position="left">
-                <CloseButton
-                  title="Close popover"
-                  size="xl"
-                  iconSize={20}
-                  onClick={() =>
-                    setProductView({ ...productView, state: false })
-                  }
-                />
-              </Group>
-              <ProductDetailShow
-                className="dash-product-dash"
-                currentProduct={productView.currentProduct}
-              />
-            </div>
-          </section>
+          <Modal
+            transition="slide-down"
+            transitionDuration={300}
+            size="xl"
+            radius="none"
+            title={<h3>Product detail</h3>}
+            withCloseButton={true}
+            onClose={() =>
+              setProductView((prev) => ({ ...prev, state: false }))
+            }
+            opened={true}
+            className="product_page"
+          >
+            <ProductDetailShow
+              className="dash-product-dash"
+              currentProduct={productView.currentProduct}
+            />
+          </Modal>
         )}
       </MantineProvider>
     </>

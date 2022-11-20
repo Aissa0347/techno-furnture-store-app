@@ -903,8 +903,12 @@ function App() {
           <Drawer
             opened={!currentUserData && openAuthDrawer}
             onClose={() => setOpenAuthDrawer(false)}
-            withCloseButton={false}
-            size={"75%"}
+            withCloseButton={true}
+            lockScroll={true}
+            shadow="sm"
+            color="red"
+            className="auth-drawer"
+            // size="60%"
             padding={0}
           >
             <Auth

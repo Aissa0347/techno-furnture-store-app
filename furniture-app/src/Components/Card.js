@@ -221,7 +221,7 @@ export function ProductsCard({
             </Text>
           </div>
           <Stack align={"center"} spacing={2}>
-            {pricePromotion && (
+            {pricePromotion ? (
               <div>
                 <Text
                   component="span"
@@ -244,7 +244,7 @@ export function ProductsCard({
                   DA
                 </Text>
               </div>
-            )}
+            ) : null}
             <div>
               <Text
                 component="span"

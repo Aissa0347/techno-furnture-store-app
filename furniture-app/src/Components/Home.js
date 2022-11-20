@@ -141,7 +141,7 @@ export function Hero() {
                 We are the best in the world, just find your best chair and buy
                 it in easy way
               </Text>
-              <Link to="/catalog" onClick={() => scrollToTop()}>
+              <Link to="/catalog">
                 <Button
                   variant="gradient"
                   gradient={{ from: "pink", to: "yellow" }}
@@ -204,35 +204,8 @@ export function Features() {
 //* -------------------------------- ProductsM ------------------------------- */
 
 function ProductsM() {
-  const [limits, setLimits] = useState(10);
-  const [isSmaller, setSmaller] = useState(false);
-
   let { pickRandomProducts, ProductsCatalog } = useContext(GlobalContext);
   let ourProducts = pickRandomProducts(ProductsCatalog, 8);
-
-  function checkIsSmaller() {
-    if (window.innerWidth > 767) {
-      setSmaller(false);
-    } else {
-      setSmaller(true);
-    }
-  }
-
-  let i = 0;
-
-  useEffect(() => {
-    const resize = function () {
-      checkIsSmaller();
-      var Height = document.querySelector(".bx").offsetHeight;
-      if (document.querySelector(".swiper-products")) {
-        document.querySelector(".swiper-products").style.height =
-          2 * Height + 60 + "px";
-      }
-    };
-    window.addEventListener("resize", resize);
-    checkIsSmaller();
-    return () => document.removeEventListener("resize", resize);
-  });
 
   return (
     <div className="ProductsM section ">

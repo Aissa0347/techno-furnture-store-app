@@ -364,7 +364,7 @@ export default function EnhancedTable({ rows, headCells }) {
       </Box>
 
       <Modal
-        size="80%"
+        size="lg"
         radius="none"
         title={<h3>Invoice detail</h3>}
         withCloseButton={false}

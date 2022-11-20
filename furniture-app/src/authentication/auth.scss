@@ -3,6 +3,8 @@
   background: url("../Website-Assets/1\ \(5\).webp");
   // background-position: bottom;
   // background-color: #1a0d00;
+  height: 100%;
+  overflow-y: auto;
   background-size: cover;
   .info_form input {
     margin: 0%;
@@ -13,6 +15,7 @@
   display: grid;
   place-items: center;
   min-height: 100vh;
+  padding: 25px 0 100px;
   // backdrop-filter: blur(20px);
 
   & > hr {

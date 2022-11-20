@@ -233,6 +233,11 @@
     }
   }
 }
+
+.swiper-wrapper .swiper-button-next,
+.swiper-wrapper .swiper-button-prev {
+  width: auto !important;
+}
 .swiper-button-next::after,
 .swiper-button-prev::after {
   font-size: 1rem !important;

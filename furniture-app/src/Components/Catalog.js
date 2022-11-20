@@ -62,10 +62,21 @@ function SearchBar({
   const submitRef = useRef();
   const searchWrapperRef = useRef();
 
+  // useEffect(() => {
+  //   searchWrapperRef.current.onkeyup = (press) => {
+  //     submitRef.current.click();
+  //   };
+  // });
+
   useEffect(() => {
-    searchWrapperRef.current.onkeyup = (press) => {
-      submitRef.current.click();
+    searchWrapperRef.current.onkeypress = (press) => {
+      if (press.key === "Enter" || press.keyCode === 13)
+        submitRef.current.click();
     };
+  }, []);
+
+  useEffect(() => {
+    if (searchWrapperRef.current.value === "") setSearchFilter("");
   });
 
   return (
@@ -452,6 +463,10 @@ function Catalog({ searchFilter, setSearchFilter, filters, setFilters }) {
       )
     );
   }, [filters]);
+
+  useEffect(() => {
+    console.log("i am i rendered multi time");
+  }, []);
 
   return (
     <div className="Catalog">

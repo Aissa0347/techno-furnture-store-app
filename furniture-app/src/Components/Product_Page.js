@@ -150,7 +150,7 @@ function ProductInfo({
           {/*  <img loading="lazy" src={mark} alt="" /> */}
           <p>{markName}</p>
         </li>
-        {(dimensions?.width || dimensions?.height || dimensions?.depth) && (
+        {dimensions?.width || dimensions?.height || dimensions?.depth ? (
           <li className="product_dimensions info">
             <h5>Dimensions:</h5>
             <table>
@@ -177,14 +177,14 @@ function ProductInfo({
               </thead>
             </table>
           </li>
-        )}
+        ) : null}
         <li className="product_description ">
           <p>
             This product is really nice one I would to inform you that our
             product ranked with top 10 of the world
           </p>
         </li>
-        {colors?.length && (
+        {colors?.length ? (
           <li className="product_colors">
             <h5>Colors:</h5>
             <SelectProductColor
@@ -195,7 +195,7 @@ function ProductInfo({
             />
             {colorPicked?.colorName}
           </li>
-        )}
+        ) : null}
         <li className="product_quantity">
           <label htmlFor="quantity">Qty:</label>
           <Group spacing={5}>
@@ -236,13 +236,13 @@ function ProductInfo({
           <Text size={32} color="red" weight={500}>
             {pricePromotion || price} DA
           </Text>
-          {pricePromotion && (
+          {pricePromotion ? (
             <Text strikethrough size={20} color="gray" weight={"normal"}>
               {price} DA
             </Text>
-          )}
+          ) : null}
         </li>
-        {error && (
+        {error ? (
           <li>
             <Alert
               icon={<BiErrorCircle size={16} />}
@@ -252,7 +252,7 @@ function ProductInfo({
               Please select a color !
             </Alert>
           </li>
-        )}
+        ) : null}
         <Stack spacing={10}>
           <Group spacing={10} noWrap>
             <Button

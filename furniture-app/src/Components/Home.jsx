@@ -9,7 +9,6 @@ import { semiCategory } from "../Website-Assets/index";
 import { Products_Catalog } from "../Website-Assets";
 import Products, { TechnoImages } from "./Products";
 import { Category } from "./Products";
-import { scrollToTop } from "../App";
 
 //* ---------------------------------- Api's --------------------------------- */
 
@@ -136,7 +135,7 @@ export function Hero() {
                 We are the best in the world, just find your best chair and buy
                 it in easy way
               </Text>
-              <Link to="/catalog" onClick={() => scrollToTop()}>
+              <Link to="/catalog">
                 <Button
                   variant="gradient"
                   gradient={{ from: "pink", to: "yellow" }}
@@ -171,7 +170,7 @@ function Heros() {
             in easy way
           </h5>
           <div className="btns">
-            <Link to="/catalog" onClick={() => scrollToTop()}>
+            <Link to="/catalog">
               <button className="btn CTA">Explore More</button>
             </Link>
             {/* <Link to="/catalog">

@@ -21,6 +21,7 @@
   }
   .shopping_cart_total {
     max-width: 450px;
+    min-width: auto;
     align-self: flex-end;
     background-color: $whiteColor;
     border: none;
@@ -104,6 +105,8 @@
   column-gap: 1rem;
   justify-content: space-between;
   width: 100%;
+  min-width: 100%;
+  height: fit-content;
   font-weight: 300;
   background-color: $whiteColor;
   border: $borderThirdColor;
@@ -392,9 +395,7 @@
     top: 5%;
     height: 90vh;
   }
-  .unique_card.product-info {
-    height: 200px;
-  }
+
   .svg-interactions {
     height: 65%;
     // max-height: 200px;

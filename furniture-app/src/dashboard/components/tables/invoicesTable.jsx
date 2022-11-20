@@ -407,14 +407,13 @@ export default function EnhancedTable({ rows, headCells }) {
       </Box>
       {showInvoice.state ? (
         <Modal
-          transition="slide-down"
-          transitionDuration={300}
-          size="80%"
+          size="xl"
           radius="none"
+          overflow="outside"
           title={<h3>Invoice detail</h3>}
           withCloseButton={false}
           onClose={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
-          opened={showInvoice.state}
+          opened={true}
           // centered
         >
           <CloseButton

@@ -12,7 +12,7 @@ import { RiHeartLine, RiMenuFill } from "react-icons/ri";
 import "../styles/index.scss";
 
 //  import Components
-import { GlobalContext, scrollToTop } from "../App";
+import { GlobalContext } from "../App";
 import { DashUniqueCard, FavUniqueCard } from "./Card";
 import { Footer } from "./Home";
 
@@ -202,19 +202,19 @@ function Navbar({ favoriteProducts, cardProducts }) {
           <>
             <nav className="nav-links">
               <ul>
-                <li className="link N-1" onClick={scrollToTop}>
+                <li className="link N-1">
                   {" "}
                   <Link to="/">Home </Link>
                 </li>
                 <li className="link N-2">
                   <Link to="/catalog">All&nbsp;Products </Link>
                 </li>
-                <li className="link N-3" onClick={scrollToTop}>
+                <li className="link N-3">
                   {" "}
                   <Link to="/ordering">Basket</Link>
                 </li>
                 {!isUser && (
-                  <li className="link N-3" onClick={scrollToTop}>
+                  <li className="link N-3">
                     {" "}
                     <Link to="/dashboard">Dashboard</Link>
                   </li>
@@ -315,7 +315,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
       <Paper shadow="md" className="bottom-navbar">
         <nav className="nav-links nav-icons">
           <ul>
-            <li className="link N-1 icon-size" onClick={scrollToTop}>
+            <li className="link N-1 icon-size">
               {" "}
               <Link to="/">
                 <BiHome />{" "}
@@ -326,14 +326,14 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 <BiStore />{" "}
               </Link>
             </li>
-            <li className="link icon-size N-3" onClick={scrollToTop}>
+            <li className="link icon-size N-3">
               {" "}
               <Link to="/ordering">
                 <BiCart />{" "}
               </Link>
             </li>
             {!isUser && (
-              <li className="link icon-size N-4" onClick={scrollToTop}>
+              <li className="link icon-size N-4">
                 {" "}
                 <Link to="/dashboard">
                   <BiCategory />{" "}
