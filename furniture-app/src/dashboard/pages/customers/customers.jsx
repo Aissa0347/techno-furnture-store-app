@@ -7,7 +7,7 @@ import { db } from "../../../firebase/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect } from "react";
 import { useCallback } from "react";
-import { Button, Group } from "@mantine/core";
+import { Button, Group, MantineProvider } from "@mantine/core";
 import { BiRefresh, BiRightArrowAlt } from "react-icons/bi";
 import { Key } from "@mui/icons-material";
 import { capitalizeSentence } from "../../../App";
@@ -143,25 +143,59 @@ function Customer() {
 
   return (
     <section className="in-dash-container">
-      <Group position="apart">
-        <h1 className="dash-title">Customers</h1>
-        <Button
-          variant="filled"
-          radius={"none"}
-          size={"sm"}
-          rightIcon={<BiRefresh size={24} />}
-          onClick={() => setRefresh((prev) => !prev)}
-        >
-          Refresh
-        </Button>
-      </Group>
-      <ListFilter
-        primaryValues={primaryCustomers}
-        setFilteredValues={setFilteredCustomers}
-        chipsFilter={chipsFilter}
-        col="Orders"
-        date={"createdAt"}
-      />
+      <MantineProvider
+        theme={{
+          colors: {
+            blue: [
+              "#d7feff",
+              "#aaf3ff",
+              "#7aebff",
+              "#48e1ff",
+              "#1ad9ff",
+              "#00bfe6",
+              "#0095b4",
+              "#006a82",
+              "#004150",
+              "#00171f",
+            ],
+            red: [
+              "#FFDBDC",
+              "#FFDBDC",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+            ],
+          },
+        }}
+      >
+        <Group position="apart">
+          <h1 className="dash-title">Customers</h1>
+          <Button
+            variant="filled"
+            radius={"none"}
+            size={"sm"}
+            rightIcon={<BiRefresh size={24} />}
+            onClick={() => setRefresh((prev) => !prev)}
+          >
+            Refresh
+          </Button>
+        </Group>
+        <ListFilter
+          primaryValues={primaryCustomers}
+          setFilteredValues={setFilteredCustomers}
+          chipsFilter={chipsFilter}
+          col="Orders"
+          date={"createdAt"}
+        />{" "}
+      </MantineProvider>
       <CustomersTable headCells={headCells} rows={rows}></CustomersTable>
     </section>
   );

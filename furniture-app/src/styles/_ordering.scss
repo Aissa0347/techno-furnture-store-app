@@ -32,7 +32,6 @@
   .shopping_cart_CTA {
     align-self: flex-end;
     width: 100%;
-    background-color: $thirdColor;
     max-width: 450px;
   }
   h3 {
@@ -137,13 +136,13 @@
     }
   }
   h5 {
-    font-weight: 300;
+    font-weight: 400;
   }
   h4 {
     min-width: 100px;
     text-align: right;
-    font-weight: 300;
-    color: $primaryColor !important;
+    font-weight: 500;
+    color: $forthColor !important;
   }
   .remove-icon {
     //
@@ -165,12 +164,9 @@
   .total {
     padding-top: 10px;
     margin-bottom: 0%;
-    h5 {
-      font-weight: 500;
-      &:last-child {
-        color: $thirdColor;
-      }
-    }
+  }
+  h5 {
+    font-weight: 400;
   }
 }
 
@@ -327,7 +323,7 @@
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background-color: $thirdColor;
+    background-color: $forthColor;
     cursor: default;
   }
 }

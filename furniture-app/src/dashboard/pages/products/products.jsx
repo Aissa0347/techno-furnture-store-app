@@ -33,26 +33,36 @@ import { BiRefresh } from "react-icons/bi";
 
 //* ---------------------------- Products Widgets ---------------------------- */
 
-function Widgets() {
+function Widgets({ allProducts, stock, outStock }) {
   return (
     <section className="widgets">
       <div className="widget-wrapper">
         <div className="widget">
-          <h3> Total Visits</h3>
+          <h3>NUMBER OF PRODUCTS</h3>
           <div className="widget-status">
             <h4>
-              <span className="icon">{visit}</span>{" "}
-              <span className="status-number">168889</span>
+              <span className="icon">{sale}</span>{" "}
+              <span className="status-number">{allProducts}</span>
             </h4>
           </div>
           <div className="widget-rank"></div>
         </div>
         <div className="widget">
-          <h3> Total Sales</h3>
+          <h3>PRODUCTS IN STOCK</h3>
           <div className="widget-status">
             <h4>
               <span className="icon">{sale}</span>{" "}
-              <span className="status-number">1688$</span>
+              <span className="status-number">{stock}</span>
+            </h4>
+          </div>
+          <div className="widget-rank"></div>
+        </div>
+        <div className="widget">
+          <h3>PRODUCTS OUT OF STOCK</h3>
+          <div className="widget-status">
+            <h4>
+              <span className="icon">{sale}</span>{" "}
+              <span className="status-number">{outStock}</span>
             </h4>
           </div>
           <div className="widget-rank"></div>
@@ -77,17 +87,24 @@ const headCells = [
     disablePadding: false,
     label: "Category",
   },
+
   {
-    id: "productQuantity",
+    id: "priceHT",
     numeric: true,
     disablePadding: false,
-    label: "QTY",
+    label: "Price H.T",
   },
   {
     id: "price",
     numeric: true,
     disablePadding: false,
-    label: "Price",
+    label: "Price TTC",
+  },
+  {
+    id: "pricePromotion",
+    numeric: true,
+    disablePadding: false,
+    label: "Promotion Price",
   },
   {
     id: "productStatus",
@@ -106,8 +123,9 @@ function createData(
   productImg,
   name,
   category,
-  productQuantity,
+  priceHT,
   price,
+  pricePromotion,
   productStatus,
   currentProduct
 ) {
@@ -116,8 +134,9 @@ function createData(
     productImg,
     name,
     category,
-    productQuantity,
+    priceHT,
     price,
+    pricePromotion,
     productStatus,
     currentProduct,
   };
@@ -170,8 +189,9 @@ function Products() {
           product?.img[0]?.url,
           product?.name,
           product?.category,
-          product?.productQuantity,
+          product?.priceHT.price,
           product?.price,
+          product?.pricePromotion,
           product?.productStatus,
           product
         )
@@ -211,40 +231,90 @@ function Products() {
   return (
     <>
       <section className="dash-products in-dash-container">
-        <Group position="apart">
-          <h1 className="dash-title">Products</h1>
-          <Button
-            variant="filled"
-            radius={"none"}
-            size={"sm"}
-            rightIcon={<BiRefresh size={24} />}
-            onClick={() => setRefresh(true)}
-          >
-            Refresh
-          </Button>
-        </Group>
-        <Widgets />
-        <Tabs
-          defaultValue={"all"}
-          value={generalStatus}
-          onTabChange={setGeneralStatus}
-          radius={"none"}
-          color={"red"}
+        <MantineProvider
+          theme={{
+            colors: {
+              blue: [
+                "#d7feff",
+                "#aaf3ff",
+                "#7aebff",
+                "#48e1ff",
+                "#1ad9ff",
+                "#00bfe6",
+                "#0095b4",
+                "#006a82",
+                "#004150",
+                "#00171f",
+              ],
+              red: [
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+                "#FF0000",
+              ],
+            },
+          }}
         >
-          <Tabs.List grow>
-            <Tabs.Tab value="all">All</Tabs.Tab>
-            <Tabs.Tab value="inStock">IN STOCK</Tabs.Tab>
-            <Tabs.Tab value="outStock">OUT STOCK</Tabs.Tab>
-          </Tabs.List>
-        </Tabs>
-        <ListFilter
-          primaryValues={primaryProducts}
-          setFilteredValues={setFilteredProducts}
-          chipsFilter={chipsFilter}
-          col="ProductsList"
-          RightButton={AddProductsBtn}
-          date={""}
-        />
+          <Group position="apart">
+            <h1 className="dash-title">Products</h1>
+            <Button
+              variant="filled"
+              radius={"none"}
+              size={"sm"}
+              rightIcon={<BiRefresh size={24} />}
+              onClick={() => setRefresh(true)}
+            >
+              Refresh
+            </Button>
+          </Group>
+          <Widgets
+            allProducts={rows.length}
+            stock={
+              [
+                ...primaryProducts.filter(
+                  (row) => row.productStatus === "inStock"
+                ),
+              ].length
+            }
+            outStock={
+              [
+                ...primaryProducts.filter(
+                  (row) => row.productStatus === "outStock"
+                ),
+              ].length
+            }
+          />
+          <Tabs
+            defaultValue={"all"}
+            value={generalStatus}
+            onTabChange={setGeneralStatus}
+            radius={"none"}
+            color={"red"}
+          >
+            <Tabs.List grow>
+              <Tabs.Tab value="all">All</Tabs.Tab>
+              <Tabs.Tab value="inStock">IN STOCK</Tabs.Tab>
+              <Tabs.Tab value="outStock">OUT STOCK</Tabs.Tab>
+            </Tabs.List>
+          </Tabs>
+          <ListFilter
+            primaryValues={primaryProducts}
+            setFilteredValues={setFilteredProducts}
+            chipsFilter={chipsFilter}
+            col="ProductsList"
+            RightButton={AddProductsBtn}
+            date={""}
+          />{" "}
+        </MantineProvider>
         <ProductsTable
           headCells={headCells}
           rows={rows}
@@ -252,7 +322,39 @@ function Products() {
           setEditProductPopup={setEditProductPopup}
         />
       </section>
-      <MantineProvider>
+      <MantineProvider
+        theme={{
+          colors: {
+            blue: [
+              "#d7feff",
+              "#aaf3ff",
+              "#7aebff",
+              "#48e1ff",
+              "#1ad9ff",
+              "#00bfe6",
+              "#0095b4",
+              "#006a82",
+              "#004150",
+              "#00171f",
+            ],
+            red: [
+              "#FFDBDC",
+              "#FFDBDC",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+            ],
+          },
+        }}
+      >
         {newProductPopup && (
           <section className="popup-bg">
             <NewProductPopup setClose={setNewProductPopup} />

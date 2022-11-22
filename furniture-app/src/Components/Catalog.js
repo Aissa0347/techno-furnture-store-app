@@ -30,6 +30,7 @@ import {
   Pagination,
   RangeSlider,
   SimpleGrid,
+  Text,
   TextInput,
 } from "@mantine/core";
 import { useRef } from "react";
@@ -59,6 +60,7 @@ function SearchBar({
   setSearchFilter,
   isFilterBarAcitve,
   setIsFilterBarActive,
+  filterTextToDefault,
 }) {
   const [searchFilterText, setSearchFilterText] = useState([]);
   const submitRef = useRef();
@@ -80,6 +82,11 @@ function SearchBar({
   useEffect(() => {
     if (searchWrapperRef.current.value === "") setSearchFilter("");
   });
+
+  useEffect(() => {
+    setSearchFilterText("");
+    setSearchFilter("");
+  }, [filterTextToDefault]);
 
   return (
     <div className="search-bar onTop" id="search-bar">
@@ -129,7 +136,12 @@ function SearchBar({
 
 //* ---------------------------- Catalog Products ---------------------------- */
 
-function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
+function ProductsCatalogList({
+  productsList,
+  setfilterTextToDefault,
+  setProductsList,
+  setFilters,
+}) {
   const [page, setPage] = useState(1);
   const [productPerPage, setProductPerPage] = useState(25);
 
@@ -139,6 +151,7 @@ function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
   );
 
   const setFiltersToDefault = () => {
+    setfilterTextToDefault((prev) => !prev);
     setFilters({ category: [], markName: [] });
     window.scrollTo({ left: 0, top: 165, behavior: "smooth" });
   };
@@ -152,6 +165,11 @@ function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
   // }
   return (
     <div className="products-catalog btns">
+      {pageData.length > 0 ? (
+        <Text size="sm" my={5} pl={5} color="gray">
+          {productsList.length} Produit found
+        </Text>
+      ) : null}
       <div className="products-catalog-wrapper">
         {pageData.map((card, index) => {
           if (index < productPerPage) {
@@ -171,7 +189,10 @@ function ProductsCatalogList({ productsList, setProductsList, setFilters }) {
             size={"md"}
             radius={"none"}
             page={page}
-            onChange={setPage}
+            onChange={(e) => {
+              setPage(e);
+              window.scrollTo({ left: 0, top: 165, behavior: "smooth" });
+            }}
             total={Math.ceil(productsList?.length / productPerPage)}
           />
         </Group>
@@ -459,6 +480,7 @@ function Catalog() {
   const [productsList, setProductsList] = useState([...ProductsCatalog]);
   const [searchFilteredProducts, setSearchFilteredProducts] = useState([]);
   const [isFilterBarActive, setIsFilterBarActive] = useState(false);
+  const [filterTextToDefault, setfilterTextToDefault] = useState();
   const location = useLocation();
 
   let setFiltersToProducts = useCallback(
@@ -498,7 +520,7 @@ function Catalog() {
   }
   useEffect(() => {
     searchFiltering();
-  }, [searchFilter]);
+  }, [searchFilter, productsList]);
 
   useEffect(() => {
     setProductsList(
@@ -507,6 +529,7 @@ function Catalog() {
         ["category", "markName", "price"]
       )
     );
+    window.scrollTo({ left: 0, top: 165, behavior: "smooth" });
   }, [filters]);
 
   useEffect(() => {
@@ -528,6 +551,7 @@ function Catalog() {
         searchFiltering={searchFiltering}
         isFilterBarAcitve={isFilterBarActive}
         setIsFilterBarActive={setIsFilterBarActive}
+        filterTextToDefault={filterTextToDefault}
       />
       <div className="container">
         <div className="wrapper">
@@ -544,6 +568,7 @@ function Catalog() {
             }
             setFilters={setFilters}
             setProductsList={setProductsList}
+            setfilterTextToDefault={setfilterTextToDefault}
           />
         </div>
       </div>

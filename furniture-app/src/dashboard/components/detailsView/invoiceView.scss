@@ -60,15 +60,25 @@
   height: 100%;
   overflow: auto;
 }
+.invoice-products-cost-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: $secondColor;
+  padding: 0.5rem 0.5rem;
+  margin-bottom: 1rem;
+  border-top: $border;
+}
 .invoice-products-cost {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem;
-  margin-bottom: 0.5rem;
-  background-color: $secondColor;
-  border: $borderThirdColor;
-  box-shadow: 2px 5px 7px -10px #555;
+  padding: 0 0;
+  &.primary {
+    color: $forthColor;
+    padding-top: 0.5rem;
+    border-top: 1px solid #ff0000;
+  }
   p {
     font-size: 20px;
   }

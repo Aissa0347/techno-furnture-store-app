@@ -183,7 +183,7 @@ function App() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
   const [cardProducts, setCardProducts] = useState([]);
-  const [openAuthDrawer, setOpenAuthDrawer] = useState(true);
+  const [openAuthDrawer, setOpenAuthDrawer] = useState(false);
   const [userRef, setUserRef] = useState("");
 
   const [subTotal, setSubTotal] = useState(0);
@@ -259,6 +259,7 @@ function App() {
   //* -------------------------------- Get Data -------------------------------- */
 
   const getData = useCallback(async () => {
+    console.log("i get the data now");
     const ProductRef = collection(db, "ProductsList");
     let dataPromise = await getDocs(ProductRef);
     let fullData = dataPromise.docs.map(

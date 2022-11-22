@@ -64,6 +64,8 @@ export default function NewProductPopup({
   );
   const [TAX, setTAX] = useState();
   const [priceHT, setPriceHT] = useState(0);
+  const [price, setPrice] = useState(0);
+  const [pricePromotion, setPricePromotion] = useState(0);
   const [isUploadImagesLoading, setIsUploadImagesLoading] = useState(false);
   const [selectColors, setSelectColors] = useState({
     state: false,
@@ -74,7 +76,7 @@ export default function NewProductPopup({
   const [selectCategory, setSelectCategory] = useState({
     state: false,
     value: "",
-    data: ["+ ADD NEW CATEGORY"],
+    data: [],
     id: "",
   });
 
@@ -113,8 +115,7 @@ export default function NewProductPopup({
   };
 
   const calcTaxAmount = (defaultPrice, tax = TAX) => {
-    if (newProductFormRef.current?.pricePromotion?.value)
-      return (newProductFormRef.current?.pricePromotion?.value * tax) / 100;
+    if (pricePromotion) return (pricePromotion * tax) / 100;
     return (defaultPrice * tax) / 100;
   };
 
@@ -124,7 +125,7 @@ export default function NewProductPopup({
   });
 
   useEffect(() => {
-    let priceHT = calcTaxPrice(newProductFormRef.current?.price?.value);
+    let priceHT = calcTaxPrice(price);
     console.log("here is the TAX :", priceHT);
     setPriceHT(priceHT);
   }, [TAX]);
@@ -200,11 +201,11 @@ export default function NewProductPopup({
       category: newProductForm.category?.value,
       colors: selectColors?.value,
       img: updatedImageList[0] ? updatedImageList : primaryImages,
-      price: Number(newProductForm.price?.value),
-      pricePromotion: Number(newProductForm.pricePromotion?.value),
+      price: Number(price),
+      pricePromotion: Number(pricePromotion),
       priceHT: {
         price: priceHT,
-        pricePromotion: calcTaxPrice(newProductForm.pricePromotion?.value) || 0,
+        pricePromotion: calcTaxPrice(pricePromotion) || 0,
         taxAmount: calcTaxAmount(newProductForm.price?.value),
       },
       tax: TAX,
@@ -240,7 +241,7 @@ export default function NewProductPopup({
     console.log("this is the primary values images : ", primaryValues?.img);
     setDescriptionTextContent(primaryValues?.description);
     await getDoc(doc(colProductFilters, "colors")).then((promiseData) => {
-      console.log("its done downloading");
+      console.log("its done downloading ", promiseData.data());
       let fullColorsData = {
         data: promiseData.data().colors,
         id: promiseData.id,
@@ -252,7 +253,7 @@ export default function NewProductPopup({
       }));
     });
     await getDoc(doc(colProductFilters, "categories")).then((promiseData) => {
-      console.log("its done downloading");
+      console.log("its done downloading 2 ", promiseData.data());
       let fullCategoriesData = {
         data: promiseData.data().categories,
         id: promiseData.id,
@@ -268,12 +269,16 @@ export default function NewProductPopup({
 
   function toPrimaryValues() {
     setDefaultValues(primaryValues);
+    setPrice(primaryValues?.price);
+    setPricePromotion(primaryValues?.pricePromotion);
+    setTAX(primaryValues?.tax);
     setSelectCategory((prev) => ({
       ...prev,
-      value: primaryValues?.category || "",
+      value: primaryValues?.category || [],
     }));
     setSelectColors((prev) => ({
       ...prev,
+      data: prev.data,
       value: primaryValues?.colors || [],
     }));
   }
@@ -339,7 +344,7 @@ export default function NewProductPopup({
                 addNewCategory(event, "+ ADD NEW CATEGORY", setSelectCategory);
               }}
               nothingFound="No options"
-              data={selectCategory.data}
+              data={[...selectCategory.data, "+ ADD NEW CATEGORY"]}
               defaultValue={primaryValues?.category}
               value={selectCategory.value}
               withAsterisk
@@ -385,7 +390,11 @@ export default function NewProductPopup({
               min={0}
               name="price"
               ref={priceRef}
-              onChange={() => setFailedValidation(false)}
+              value={setPrice}
+              onChange={(e) => {
+                setPrice(e);
+                setFailedValidation(false);
+              }}
               error={
                 failedValidation && !priceRef.current?.value
                   ? "Please enter a valid Name"
@@ -447,6 +456,8 @@ export default function NewProductPopup({
               label="Promotion Price"
               min={0}
               name="pricePromotion"
+              value={pricePromotion}
+              onChange={setPricePromotion}
               defaultValue={primaryValues?.pricePromotion}
             />
           </div>

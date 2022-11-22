@@ -22,7 +22,14 @@ import { show, download, edit, editMenu } from "../icons";
 import { Users } from "../icons";
 import { visuallyHidden } from "@mui/utils";
 import moment from "moment";
-import { CloseButton, Group, Modal, NativeSelect, Select } from "@mantine/core";
+import {
+  CloseButton,
+  Group,
+  MantineProvider,
+  Modal,
+  NativeSelect,
+  Select,
+} from "@mantine/core";
 import InvoiceView from "../detailsView/invoiceView";
 import { collection, doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
@@ -405,28 +412,64 @@ function EnhancedTable({ rows, headCells }) {
           label="Dense padding"
         />
       </Box>
-      {showInvoice.state ? (
-        <Modal
-          size="xl"
-          radius="none"
-          overflow="outside"
-          title={<h3>Invoice detail</h3>}
-          withCloseButton={false}
-          onClose={() => setShowInvoice((prev) => ({ ...prev, state: false }))}
-          opened={true}
-          // centered
-        >
-          <CloseButton
-            size={"lg"}
-            style={{ position: "absolute", top: "0px", right: "0px" }}
-            color="red"
-            onClick={() =>
+      <MantineProvider
+        theme={{
+          colors: {
+            blue: [
+              "#d7feff",
+              "#aaf3ff",
+              "#7aebff",
+              "#48e1ff",
+              "#1ad9ff",
+              "#00bfe6",
+              "#0095b4",
+              "#006a82",
+              "#004150",
+              "#00171f",
+            ],
+            red: [
+              "#FFDBDC",
+              "#FFDBDC",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+            ],
+          },
+        }}
+      >
+        {showInvoice.state ? (
+          <Modal
+            size="xl"
+            radius="none"
+            overflow="outside"
+            title={<h3>Invoice detail</h3>}
+            withCloseButton={false}
+            onClose={() =>
               setShowInvoice((prev) => ({ ...prev, state: false }))
             }
-          />
-          <InvoiceView data={showInvoice.data} id={showInvoice.id} />
-        </Modal>
-      ) : null}
+            opened={true}
+            // centered
+          >
+            <CloseButton
+              size={"lg"}
+              style={{ position: "absolute", top: "0px", right: "0px" }}
+              color="red"
+              onClick={() =>
+                setShowInvoice((prev) => ({ ...prev, state: false }))
+              }
+            />
+            <InvoiceView data={showInvoice.data} id={showInvoice.id} />
+          </Modal>
+        ) : null}
+      </MantineProvider>
     </>
   );
 }

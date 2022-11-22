@@ -249,18 +249,18 @@ export function ProductsCard({
             <div>
               <Text
                 component="span"
-                style={{ color: "#d96b52" }}
+                color="blue"
                 mr={5}
                 size="xl"
                 weight={700}
                 sx={{ lineHeight: 1 }}
               >
-                {pricePromotion || price}0,00
+                {pricePromotion || price},00
               </Text>
               <Text
                 component="span"
                 size="sm"
-                style={{ color: "#d96b52" }}
+                color="blue"
                 weight={500}
                 sx={{ lineHeight: "1px" }}
               >
@@ -340,7 +340,7 @@ export function DashUniqueCard({ Product, isOrdering = false }) {
             ></div>
           </h5>
           <Group align={"flex-end"} spacing={5}>
-            <Text color={"red"} size={18} weight={500}>
+            <Text color={"blue"} size={18} weight={500}>
               {Product?.pricePromotion || Product?.price} DA
             </Text>
             {Product?.pricePromotion && (

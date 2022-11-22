@@ -30,6 +30,7 @@ import {
   Anchor,
   Button,
   Drawer,
+  MantineProvider,
   Paper,
   SimpleGrid,
   Stack,
@@ -38,8 +39,14 @@ import {
 //* --------------------------- Bag Side Component --------------------------- */
 
 function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
-  const { updateCard, setCardProducts, subTotal, setSubTotal, calcSubTotal } =
-    useContext(GlobalContext);
+  const {
+    updateCard,
+    setCardProducts,
+    subTotal,
+    totalHT,
+    setSubTotal,
+    calcSubTotal,
+  } = useContext(GlobalContext);
 
   return (
     <Drawer
@@ -71,8 +78,12 @@ function ShoppingBag({ cardProducts, showCardProducts, setShowCardProducts }) {
         <Stack style={{ width: "100%", gap: "8px" }}>
           <div className="shopping_cart_total unique_card">
             <li className="facture_price total">
+              <h5 className="cart-total">TOTAL HT</h5>
+              <h5>{`${totalHT}`},00 DA</h5>
+            </li>
+            <li className="facture_price total">
               <h5 className="cart-total">SUBTOTAL TTC</h5>
-              <h5>{`${subTotal}`} DA</h5>
+              <h4>{`${subTotal}`},00 DA</h4>
             </li>
           </div>
 
@@ -178,205 +189,244 @@ function Navbar({ favoriteProducts, cardProducts }) {
 
   return (
     <>
-      <div className="navbar" id="navbar">
-        <div className="logo">
-          <Link to={"/"}>
-            <img loading="lazy" src={logo} alt="Logo" />
-          </Link>
-        </div>
-        {!isWider ? (
-          <div className="icon-set login">
-            {currentUserData ? (
-              <AvatarProfile />
-            ) : (
-              <Link to="/auth">
-                <Button variant="outline" size="md" radius="none" color="blue">
-                  Sign in
-                </Button>
-              </Link>
-            )}
+      <MantineProvider
+        theme={{
+          colors: {
+            blue: [
+              "#d7feff",
+              "#aaf3ff",
+              "#7aebff",
+              "#48e1ff",
+              "#1ad9ff",
+              "#00bfe6",
+              "#0095b4",
+              "#006a82",
+              "#004150",
+              "#00171f",
+            ],
+            red: [
+              "#FFDBDC",
+              "#FFDBDC",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+            ],
+          },
+        }}
+      >
+        <div className="navbar" id="navbar">
+          <div className="logo">
+            <Link to={"/"}>
+              <img loading="lazy" src={logo} alt="Logo" />
+            </Link>
           </div>
-        ) : null}
-        {isWider ? (
-          <>
-            <nav className="nav-links">
-              <ul>
-                <li className="link N-1">
-                  {" "}
-                  <Link to="/">Home </Link>
-                </li>
-                <li className="link N-2">
-                  <Link to="/catalog">All&nbsp;Products </Link>
-                </li>
-                <li className="link N-3">
-                  {" "}
-                  <Link to="/ordering">Basket</Link>
-                </li>
-                {!isUser && (
+          {!isWider ? (
+            <div className="icon-set login">
+              {currentUserData ? (
+                <AvatarProfile />
+              ) : (
+                <Link to="/auth">
+                  <Button
+                    variant="outline"
+                    size="md"
+                    radius="none"
+                    color="blue"
+                  >
+                    Sign in
+                  </Button>
+                </Link>
+              )}
+            </div>
+          ) : null}
+          {isWider ? (
+            <>
+              <nav className="nav-links">
+                <ul>
+                  <li className="link N-1">
+                    {" "}
+                    <Link to="/">Home </Link>
+                  </li>
+                  <li className="link N-2">
+                    <Link to="/catalog">All&nbsp;Products </Link>
+                  </li>
                   <li className="link N-3">
                     {" "}
-                    <Link to="/dashboard">Dashboard</Link>
+                    <Link to="/ordering">Basket</Link>
                   </li>
-                )}
-              </ul>
-            </nav>
-            <div className="icon">
-              <div
+                  {!isUser && (
+                    <li className="link N-3">
+                      {" "}
+                      <Link to="/dashboard">Dashboard</Link>
+                    </li>
+                  )}
+                </ul>
+              </nav>
+              <div className="icon">
+                <div
+                  className="icon-set icon-size bag"
+                  onClick={() => {
+                    setShowCardProducts(!showCardProducts);
+                  }}
+                >
+                  <BiShoppingBag />
+                  {cardProductsNumber === 0 ? (
+                    ""
+                  ) : (
+                    <span className="product-number counter-size">
+                      {cardProductsNumber}
+                    </span>
+                  )}
+                </div>
+
+                <div
+                  className="icon-set icon-size  favorite"
+                  onClick={() => {
+                    setShowFavoriteProducts(!showFavoriteProducts);
+                  }}
+                >
+                  <RiHeartLine />
+                  {favoriteProductsNumber === 0 ? (
+                    ""
+                  ) : (
+                    <span className="product-number counter-size">
+                      {favoriteProductsNumber}
+                    </span>
+                  )}
+                </div>
+
+                <div className="login">
+                  {currentUserData ? (
+                    <AvatarProfile />
+                  ) : (
+                    <Link to="/auth">
+                      <Button
+                        variant="outline"
+                        size="md"
+                        radius="none"
+                        color="blue"
+                      >
+                        Sign in
+                      </Button>
+                    </Link>
+                  )}
+                </div>
+                <div
+                  className="icon-set icon-size burger-menu"
+                  onClick={() => {
+                    let navLinksStyle =
+                      document.querySelector(".nav-links").style;
+                    navLinksStyle.height === "50px"
+                      ? (navLinksStyle.height = "0px")
+                      : (navLinksStyle.height = "50px");
+                  }}
+                >
+                  <RiMenuFill />
+                </div>
+              </div>{" "}
+            </>
+          ) : null}
+          <FavoriteProducts
+            favoriteProducts={favoriteProducts}
+            showFavoriteProducts={showFavoriteProducts}
+            setShowFavoriteProducts={setShowFavoriteProducts}
+          />
+          <ShoppingBag
+            cardProducts={cardProducts}
+            showCardProducts={showCardProducts}
+            setShowCardProducts={setShowCardProducts}
+          />
+        </div>
+        <Outlet />
+        <div className="call-float">
+          <Anchor href="https://wa.me/795914857" target="_blank">
+            <ActionIcon
+              variant="filled"
+              size={50}
+              radius="xl"
+              className="call-btn"
+              p={8}
+            >
+              <img src={WhatsApp} alt="WhatsApp" className="WhatsApp" />
+            </ActionIcon>
+          </Anchor>
+        </div>
+        <Footer />
+        {/* ------------------------------ Mobile Navbar ------------------------------ */}
+        <Paper shadow="md" className="bottom-navbar">
+          <nav className="nav-links nav-icons">
+            <ul>
+              <li className="link N-1 icon-size" onClick={scrollTop}>
+                {" "}
+                <Link to="/">
+                  <BiHome />{" "}
+                </Link>
+              </li>
+              <li className="link icon-size N-2" onClick={scrollTop}>
+                <Link to="/catalog">
+                  <BiStore />{" "}
+                </Link>
+              </li>
+              <li className="link icon-size N-3" onClick={scrollTop}>
+                {" "}
+                <Link to="/ordering">
+                  <BiCart />{" "}
+                </Link>
+              </li>
+              {!isUser && (
+                <li className="link icon-size N-4" onClick={scrollTop}>
+                  {" "}
+                  <Link to="/dashboard">
+                    <BiCategory />{" "}
+                  </Link>
+                </li>
+              )}
+
+              <li
                 className="icon-set icon-size bag"
                 onClick={() => {
                   setShowCardProducts(!showCardProducts);
                 }}
               >
-                <BiShoppingBag />
-                {cardProductsNumber === 0 ? (
-                  ""
-                ) : (
-                  <span className="product-number counter-size">
-                    {cardProductsNumber}
-                  </span>
-                )}
-              </div>
-
-              <div
-                className="icon-set icon-size  favorite"
+                <a>
+                  <BiShoppingBag />
+                  {cardProductsNumber === 0 ? (
+                    ""
+                  ) : (
+                    <span className="product-number counter-size">
+                      {cardProductsNumber}
+                    </span>
+                  )}
+                </a>
+              </li>
+              <li
+                className="icon-set icon-size favorite"
                 onClick={() => {
                   setShowFavoriteProducts(!showFavoriteProducts);
                 }}
               >
-                <RiHeartLine />
-                {favoriteProductsNumber === 0 ? (
-                  ""
-                ) : (
-                  <span className="product-number counter-size">
-                    {favoriteProductsNumber}
-                  </span>
-                )}
-              </div>
-
-              <div className="login">
-                {currentUserData ? (
-                  <AvatarProfile />
-                ) : (
-                  <Link to="/auth">
-                    <Button
-                      variant="outline"
-                      size="md"
-                      radius="none"
-                      color="blue"
-                    >
-                      Sign in
-                    </Button>
-                  </Link>
-                )}
-              </div>
-              <div
-                className="icon-set icon-size burger-menu"
-                onClick={() => {
-                  let navLinksStyle =
-                    document.querySelector(".nav-links").style;
-                  navLinksStyle.height === "50px"
-                    ? (navLinksStyle.height = "0px")
-                    : (navLinksStyle.height = "50px");
-                }}
-              >
-                <RiMenuFill />
-              </div>
-            </div>{" "}
-          </>
-        ) : null}
-        <FavoriteProducts
-          favoriteProducts={favoriteProducts}
-          showFavoriteProducts={showFavoriteProducts}
-          setShowFavoriteProducts={setShowFavoriteProducts}
-        />
-        <ShoppingBag
-          cardProducts={cardProducts}
-          showCardProducts={showCardProducts}
-          setShowCardProducts={setShowCardProducts}
-        />
-      </div>
-      <Outlet />
-      <div className="call-float">
-        <Anchor href="https://wa.me/795914857" target="_blank">
-          <ActionIcon
-            variant="filled"
-            size={50}
-            radius="xl"
-            className="call-btn"
-            p={8}
-          >
-            <img src={WhatsApp} alt="WhatsApp" className="WhatsApp" />
-          </ActionIcon>
-        </Anchor>
-      </div>
-      <Footer />
-      {/* ------------------------------ Mobile Navbar ------------------------------ */}
-      <Paper shadow="md" className="bottom-navbar">
-        <nav className="nav-links nav-icons">
-          <ul>
-            <li className="link N-1 icon-size" onClick={scrollTop}>
-              {" "}
-              <Link to="/">
-                <BiHome />{" "}
-              </Link>
-            </li>
-            <li className="link icon-size N-2" onClick={scrollTop}>
-              <Link to="/catalog">
-                <BiStore />{" "}
-              </Link>
-            </li>
-            <li className="link icon-size N-3" onClick={scrollTop}>
-              {" "}
-              <Link to="/ordering">
-                <BiCart />{" "}
-              </Link>
-            </li>
-            {!isUser && (
-              <li className="link icon-size N-4" onClick={scrollTop}>
-                {" "}
-                <Link to="/dashboard">
-                  <BiCategory />{" "}
-                </Link>
+                <a>
+                  <RiHeartLine />
+                  {favoriteProductsNumber === 0 ? (
+                    ""
+                  ) : (
+                    <span className="product-number counter-size">
+                      {favoriteProductsNumber}
+                    </span>
+                  )}
+                </a>
               </li>
-            )}
-
-            <li
-              className="icon-set icon-size bag"
-              onClick={() => {
-                setShowCardProducts(!showCardProducts);
-              }}
-            >
-              <a>
-                <BiShoppingBag />
-                {cardProductsNumber === 0 ? (
-                  ""
-                ) : (
-                  <span className="product-number counter-size">
-                    {cardProductsNumber}
-                  </span>
-                )}
-              </a>
-            </li>
-            <li
-              className="icon-set icon-size favorite"
-              onClick={() => {
-                setShowFavoriteProducts(!showFavoriteProducts);
-              }}
-            >
-              <a>
-                <RiHeartLine />
-                {favoriteProductsNumber === 0 ? (
-                  ""
-                ) : (
-                  <span className="product-number counter-size">
-                    {favoriteProductsNumber}
-                  </span>
-                )}
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </Paper>
+            </ul>
+          </nav>
+        </Paper>{" "}
+      </MantineProvider>
     </>
   );
 }

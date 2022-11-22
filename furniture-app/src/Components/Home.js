@@ -58,7 +58,6 @@ const heroStyles = createStyles((theme) => ({
   inner: {
     display: "flex",
     justifyContent: "space-between",
-
     [theme.fn.smallerThan("sm")]: {
       flexDirection: "column",
     },
@@ -74,7 +73,6 @@ const heroStyles = createStyles((theme) => ({
     paddingTop: theme.spacing.xl * 2,
     paddingBottom: theme.spacing.xl * 2,
     marginRight: theme.spacing.xl * 3,
-
     [theme.fn.smallerThan("sm")]: {
       marginRight: 0,
     },
@@ -87,7 +85,6 @@ const heroStyles = createStyles((theme) => ({
     lineHeight: 1.05,
     maxWidth: 700,
     fontSize: 72,
-
     [theme.fn.smallerThan("sm")]: {
       maxWidth: "100%",
       fontSize: 34,
@@ -99,7 +96,6 @@ const heroStyles = createStyles((theme) => ({
     color: theme.white,
     opacity: 0.75,
     maxWidth: 500,
-
     [theme.fn.smallerThan("sm")]: {
       maxWidth: "100%",
     },
@@ -110,7 +106,6 @@ const heroStyles = createStyles((theme) => ({
     paddingRight: 50,
     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
     fontSize: 22,
-
     [theme.fn.smallerThan("sm")]: {
       width: "100%",
     },
@@ -130,8 +125,9 @@ export function Hero() {
                 <Text
                   component="span"
                   inherit
-                  variant="gradient"
-                  gradient={{ from: "pink", to: "yellow" }}
+                  color="blue"
+                  // variant="gradient"
+                  // gradient={{ from: "red", to: "orange" }}
                 >
                   Furniture.{" "}
                 </Text>{" "}
@@ -143,8 +139,9 @@ export function Hero() {
               </Text>
               <Link to="/catalog">
                 <Button
-                  variant="gradient"
-                  gradient={{ from: "pink", to: "yellow" }}
+                  // variant="gradient"
+                  // gradient={{ from: "blue", to: "red" }}
+                  color="blue"
                   size="xl"
                   radius={"none"}
                   className={classes.control}

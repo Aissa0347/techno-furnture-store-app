@@ -15,6 +15,7 @@ import { BiChevronLeft, BiErrorCircle, BiHeart } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import { RiHeartFill, RiHeartLine } from "react-icons/ri";
 import {
+  Accordion,
   ActionIcon,
   Alert,
   Button,
@@ -61,23 +62,20 @@ export function ProductDetailShow(props) {
           <ProductInfo {...currentProduct} currentProduct={currentProduct} />
         </div>
       </div>
-      <div className="filter-box  product_details">
-        <details className="filter-checkbox" open>
-          <summary>
-            Details <BiChevronLeft className="chevron" />
-          </summary>
-
-          <div className="col">
-            <TypographyStylesProvider style={{ width: "100%" }}>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: currentProduct?.description,
-                }}
-              ></div>
-            </TypographyStylesProvider>
-          </div>
-        </details>
-      </div>
+      {currentProduct?.description ? (
+        <div className="filter-box  product_details">
+          <Accordion
+            radius="xs"
+            chevronPosition="left"
+            defaultValue="customization"
+          >
+            <Accordion.Item value="customization">
+              <Accordion.Control>Details</Accordion.Control>
+              <Accordion.Panel>{currentProduct?.description}</Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
+        </div>
+      ) : null}
     </>
   );
 }
@@ -95,6 +93,7 @@ function ProductInfo({
   dimensions,
   pricePromotion,
   details,
+  overview,
   colors,
   currentProduct,
 }) {
@@ -179,10 +178,7 @@ function ProductInfo({
           </li>
         ) : null}
         <li className="product_description ">
-          <p>
-            This product is really nice one I would to inform you that our
-            product ranked with top 10 of the world
-          </p>
+          <p>{overview}</p>
         </li>
         {colors?.length ? (
           <li className="product_colors">
@@ -258,6 +254,7 @@ function ProductInfo({
             <Button
               size="lg"
               radius="none"
+              color="red"
               // className="btn CTA"
               fullWidth
               onClick={() => {
@@ -280,7 +277,7 @@ function ProductInfo({
               variant="outline"
               size={50}
               radius="none"
-              color="blue"
+              color="red"
               // className="btn CTA-2"
               onClick={() => {
                 currentUserData
@@ -309,6 +306,7 @@ function ProductInfo({
             radius="none"
             // className="btn CTA"
             fullWidth
+            color="red"
             onClick={() => {
               currentUserData && validatedProduct()
                 ? addToCard(

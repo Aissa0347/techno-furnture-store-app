@@ -71,6 +71,18 @@ export function MultiSelectColors({ data, colors, setColors }) {
     setColors((prev) => ({ ...prev, value: [] }));
   }, [data]);
 
+  useEffect(() => {
+    colors?.value?.forEach((color) =>
+      setMenuItems((prev) =>
+        prev.filter(
+          (menuItem) =>
+            menuItem.colorRef !== color.colorRef &&
+            menuItem.colorName !== color.colorName
+        )
+      )
+    );
+  }, [colors?.value]);
+
   return (
     <div className="multi-select" ref={outsideMultiSelect}>
       <label className="multi-select-label">Avaible colors of product</label>

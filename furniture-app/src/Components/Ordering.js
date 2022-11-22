@@ -263,21 +263,22 @@ function ShoppingCart({ goNext, subTotal, totalHT }) {
       <ul className="shopping_cart_total unique_card">
         <li className="facture_price ">
           <h5>total H.T</h5>
-          <h4>{totalHT} DA</h4>
+          <h5>{totalHT},00 DA</h5>
         </li>
         <li className="facture_price ">
           <h5>Subtotal</h5>
-          <h4>{subTotal} DA</h4>
+          <h5>{subTotal},00 DA</h5>
         </li>
         <li className="facture_price total">
           <h5 className="cart-total">TOTAL</h5>
-          <h5>{subTotal} DZD</h5>
+          <h4>{subTotal},00 DA</h4>
         </li>
       </ul>
       <Button
         variant="filled"
         className="shopping_cart_CTA"
         radius="none"
+        color="red"
         size="lg"
         disabled={cardProducts.length < 1}
         onClick={() => {
@@ -296,8 +297,10 @@ function Ordering() {
   const { subTotal, totalHT } = useContext(GlobalContext);
 
   const [active, setActive] = useState(0);
-  const nextStep = () =>
+  const nextStep = () => {
     setActive((current) => (current < 2 ? current + 1 : current));
+    window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+  };
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
@@ -349,15 +352,6 @@ function Ordering() {
           <Success />
         </Stepper.Completed>
       </Stepper>
-      <Group>
-        <Button variant="outline" onClick={() => prevStep()}>
-          Back
-        </Button>
-        <Button variant="filled" onClick={() => nextStep()}>
-          Next Step
-        </Button>
-      </Group>
-      {/* <ShoppingBag /> */}
     </div>
   );
 }

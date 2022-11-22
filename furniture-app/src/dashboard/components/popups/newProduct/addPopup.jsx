@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import { TextInput, Button, Stack, ColorPicker } from "@mantine/core";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../../../firebase/firebaseConfig";
+import { capitalizeSentence } from "../../../../App";
 
 //* -------------------------- Popup Add Stuff Componenet -------------------------- */
 
@@ -158,7 +159,7 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
             updateDoc(colorsRef, {
               colors: [
                 {
-                  colorName: valueInput.current.value,
+                  colorName: capitalizeSentence(valueInput.current.value),
                   colorRef: colorRef,
                 },
                 ...submitAndState.data,
@@ -171,13 +172,18 @@ export function AddColorsPopup({ setSubmitAndState, submitAndState }) {
                 data: (() => {
                   prev.data.forEach((val) => {
                     console.log(val);
-                    if (val.colorName === valueInput.current.value)
+                    if (
+                      val.colorName ===
+                      capitalizeSentence(valueInput.current.value)
+                    )
                       isDuplicate = true;
                   });
                   return isDuplicate === false
                     ? [
                         {
-                          colorName: valueInput.current.value,
+                          colorName: capitalizeSentence(
+                            valueInput.current.value
+                          ),
                           colorRef,
                         },
                         ...prev.data,

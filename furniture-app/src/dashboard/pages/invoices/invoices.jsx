@@ -9,7 +9,7 @@ import { db } from "../../../firebase/firebaseConfig";
 import { useState } from "react";
 import ListFilter from "../../components/filtering/listFilter";
 import { DashboardContext } from "../../Dashboard";
-import { Button, Group, Tabs } from "@mantine/core";
+import { Button, Group, MantineProvider, Tabs } from "@mantine/core";
 import { BiRefresh } from "react-icons/bi";
 
 //* --------------------------- Head Cells and Rows -------------------------- */
@@ -182,42 +182,76 @@ function Invoices() {
 
   return (
     <section className="dash-products in-dash-container">
-      <Group position="apart" mb={16}>
-        <h1 className="dash-title">Products</h1>
-        <Button
-          variant="filled"
-          radius={"none"}
-          size={"sm"}
-          rightIcon={<BiRefresh size={24} />}
-          onClick={() => setRefresh(true)}
-        >
-          Refresh
-        </Button>
-      </Group>
-      <Tabs
-        defaultValue={"all"}
-        value={generalStatus}
-        onTabChange={setGeneralStatus}
-        radius={"none"}
-        color={"red"}
+      <MantineProvider
+        theme={{
+          colors: {
+            blue: [
+              "#d7feff",
+              "#aaf3ff",
+              "#7aebff",
+              "#48e1ff",
+              "#1ad9ff",
+              "#00bfe6",
+              "#0095b4",
+              "#006a82",
+              "#004150",
+              "#00171f",
+            ],
+            red: [
+              "#FFDBDC",
+              "#FFDBDC",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+            ],
+          },
+        }}
       >
-        <Tabs.List grow>
-          <Tabs.Tab value="all">All</Tabs.Tab>
-          <Tabs.Tab value="pending">PENDING</Tabs.Tab>
-          <Tabs.Tab value="completed">COMPLETED</Tabs.Tab>
-          <Tabs.Tab value="ongoing">ONGOING</Tabs.Tab>
-          <Tabs.Tab value="returned">RETURNED</Tabs.Tab>
-          <Tabs.Tab value="cancelled">CANCELLED</Tabs.Tab>
-        </Tabs.List>
-      </Tabs>
-      <ListFilter
-        primaryValues={primaryInvoices}
-        setFilteredValues={setFilteredInvoices}
-        chipsFilter={chipsFilter}
-        col="Orders"
-        date={"orderDate"}
-        // RightButton={AddProductsBtn}
-      />
+        <Group position="apart" mb={16}>
+          <h1 className="dash-title">Products</h1>
+          <Button
+            variant="filled"
+            radius={"none"}
+            size={"sm"}
+            rightIcon={<BiRefresh size={24} />}
+            onClick={() => setRefresh(true)}
+          >
+            Refresh
+          </Button>
+        </Group>
+        <Tabs
+          defaultValue={"all"}
+          value={generalStatus}
+          onTabChange={setGeneralStatus}
+          radius={"none"}
+          color={"red"}
+        >
+          <Tabs.List grow>
+            <Tabs.Tab value="all">All</Tabs.Tab>
+            <Tabs.Tab value="pending">PENDING</Tabs.Tab>
+            <Tabs.Tab value="completed">COMPLETED</Tabs.Tab>
+            <Tabs.Tab value="ongoing">ONGOING</Tabs.Tab>
+            <Tabs.Tab value="returned">RETURNED</Tabs.Tab>
+            <Tabs.Tab value="cancelled">CANCELLED</Tabs.Tab>
+          </Tabs.List>
+        </Tabs>
+        <ListFilter
+          primaryValues={primaryInvoices}
+          setFilteredValues={setFilteredInvoices}
+          chipsFilter={chipsFilter}
+          col="Orders"
+          date={"orderDate"}
+          // RightButton={AddProductsBtn}
+        />
+      </MantineProvider>
       <InovoicesTable headCells={headCells} rows={rows} />
     </section>
   );

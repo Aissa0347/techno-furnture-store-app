@@ -110,7 +110,7 @@
       }
     }
     &_description {
-      padding: 0.5rem 0.5rem;
+      padding: 0.5rem 2px;
     }
     &_colors {
       display: block;
@@ -241,10 +241,11 @@
 .swiper-button-next::after,
 .swiper-button-prev::after {
   font-size: 1rem !important;
-  color: $whiteColor !important;
-  background-color: $thirdColor;
-  border: 1px solid $thirdColor;
-  padding: 1rem 1.2rem;
+  font-weight: 900;
+  color: $thirdColor !important;
+  background-color: transparent;
+  border: 2px solid $thirdColor;
+  padding: 0.8rem 1rem;
   border-radius: 50%;
 }
 

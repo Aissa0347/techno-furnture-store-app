@@ -37,17 +37,33 @@ function EditInvoice({
   setOrderedProducts,
 }) {
   let [filteredProductsList, setFilteredProductsList] = useState([]);
-  let [totalCost, setTotalCost] = useState(data.totalCost);
+  let [totalCost, setTotalCost] = useState({
+    totalCost: data.totalCost,
+    totalCostHT: data.totalCostHT,
+    totalTaxAmount: data?.totalTaxAmount,
+  });
 
   console.log("check is deep : ", totalCost);
 
   useEffect(() => {
     console.log("check is shallow : ", orderedProducts);
+    let totalCostHT = orderedProducts.reduce(
+      (acc, current) => acc + ~~current?.productTotalHT,
+      0
+    );
+    let totalTaxAmount = orderedProducts.reduce(
+      (acc, current) => acc + ~~current?.taxAmount,
+      0
+    );
     let cost = orderedProducts.reduce(
       (acc, current) => acc + ~~current?.productTotal,
       0
     );
-    setTotalCost(cost);
+    setTotalCost({
+      totalCost: cost,
+      totalCostHT: totalCostHT,
+      totalTaxAmount: totalTaxAmount,
+    });
   }, [orderedProducts]);
 
   // useEffect(() => {
@@ -83,9 +99,19 @@ function EditInvoice({
           />
         ))}
       </div>
-      <div className="invoice-products-cost">
-        <h5>Total</h5>
-        <p>{totalCost} DZD</p>
+      <div className="invoice-products-cost-wrapper">
+        <div className="invoice-products-cost ">
+          <h5>Total H.T</h5>
+          <p>{totalCost.totalCostHT} DA</p>
+        </div>
+        <div className="invoice-products-cost">
+          <h5>TAX Amount</h5>
+          <p>{totalCost.totalTaxAmount} DA</p>
+        </div>
+        <div className="invoice-products-cost primary">
+          <h5>TOTAL TTC</h5>
+          <p>{totalCost.totalCost} DA</p>
+        </div>
       </div>
     </div>
   );
@@ -108,8 +134,12 @@ function DashUniqueCard({
   useEffect(() => {
     if (quantityValue > 0) {
       orderProduct.quantity = quantityValue;
+      orderProduct.productTotalHT =
+        (~~orderProduct?.promotionPriceHT || ~~orderProduct?.currentPriceHT) *
+        quantityValue;
+      orderProduct.taxAmount = Product.priceHT?.taxAmount * quantityValue;
       orderProduct.productTotal =
-        (~~orderProduct?.promotionPrice || ~~Product?.currentPrice) *
+        (~~orderProduct?.promotionPrice || ~~orderProduct?.currentPrice) *
         quantityValue;
       setOrderedProducts([...orderedProducts]);
     } else if (quantityValue < 1) {

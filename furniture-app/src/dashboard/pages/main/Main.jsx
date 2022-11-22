@@ -5,7 +5,7 @@ import { visit, sale, order, user } from "../../components/icons";
 import { useContext, useState } from "react";
 import { useEffect } from "react";
 import { DashboardContext } from "../../Dashboard";
-import { Button, Group, Select } from "@mantine/core";
+import { Button, Group, MantineProvider, Select } from "@mantine/core";
 import { BiRefresh } from "react-icons/bi";
 import React from "react";
 import {
@@ -180,20 +180,54 @@ function Main() {
 
   return (
     <section className="main in-dash-container">
-      <Group position="apart">
-        <h1 className="dash-title">Dashboard</h1>
-        <Button
-          variant="filled"
-          radius={"none"}
-          size={"sm"}
-          rightIcon={<BiRefresh size={24} />}
-          onClick={() => setRefresh(true)}
-        >
-          Refresh
-        </Button>
-      </Group>
-      <DurationSelect timeSelect={timeSelect} setTimeSelect={setTimeSelect} />
-      <Widgets />
+      <MantineProvider
+        theme={{
+          colors: {
+            blue: [
+              "#d7feff",
+              "#aaf3ff",
+              "#7aebff",
+              "#48e1ff",
+              "#1ad9ff",
+              "#00bfe6",
+              "#0095b4",
+              "#006a82",
+              "#004150",
+              "#00171f",
+            ],
+            red: [
+              "#FFDBDC",
+              "#FFDBDC",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+              "#FF0000",
+            ],
+          },
+        }}
+      >
+        <Group position="apart">
+          <h1 className="dash-title">Dashboard</h1>
+          <Button
+            variant="filled"
+            radius={"none"}
+            size={"sm"}
+            rightIcon={<BiRefresh size={24} />}
+            onClick={() => setRefresh(true)}
+          >
+            Refresh
+          </Button>
+        </Group>
+        <DurationSelect timeSelect={timeSelect} setTimeSelect={setTimeSelect} />
+        <Widgets />
+      </MantineProvider>
       <Statics />
     </section>
   );

@@ -330,15 +330,22 @@ function EnhancedTable({
                           }}
                         />
                       </TableCell> */}
-                      <TableCell>
+                      <TableCell
+                        style={{
+                          maxWidth: "500px",
+                          minWidth: "350px",
+                          whiteSpace: "normal",
+                        }}
+                      >
                         <span className="customer-avatar">
                           <img loading="lazy" src={row?.productImg} alt="" />
                           {row?.name}
                         </span>
                       </TableCell>
                       <TableCell align="left">{row?.category}</TableCell>
-                      <TableCell align="left">{row?.productQuantity}</TableCell>
+                      <TableCell align="left">{row?.priceHT}</TableCell>
                       <TableCell align="left">{row?.price}</TableCell>
+                      <TableCell align="left">{row?.pricePromotion}</TableCell>
                       <TableCell align="left">
                         <SelectStatus row={row} />
                       </TableCell>
