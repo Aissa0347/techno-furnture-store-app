@@ -110,7 +110,7 @@ function UploadImages({
               setFiles([]);
             }}
           >
-            Remove All
+            Supprimer tout
           </Button>
           {!isUpdate ? (
             <Button
@@ -122,7 +122,7 @@ function UploadImages({
                 submitImages(files);
               }}
             >
-              Upload
+              Télécharger
             </Button>
           ) : (
             <Button
@@ -132,7 +132,7 @@ function UploadImages({
               size="sm"
               onClick={() => submitImages(files, "update")}
             >
-              update
+              Valider
             </Button>
           )}
         </div>
@@ -146,7 +146,7 @@ function UploadImages({
             onClick={editImages}
             color="green"
           >
-            edit
+            Modifier
           </Button>
         </div>
       )}

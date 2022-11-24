@@ -123,14 +123,14 @@ function FavoriteProducts({
       opened={showFavoriteProducts}
       onClose={() => setShowFavoriteProducts(false)}
       id="favorite_products"
-      className="favorite-drawer"
+      className="favorite-drawer favorite-drawer-body"
     >
       {favoriteProducts.length < 1 ? (
         <div className="svg-interactions">
           <img loading="lazy" src={FAVORITE_SVG} alt="FAVORITE SVG" />
         </div>
       ) : (
-        <SimpleGrid cols={1}>
+        <SimpleGrid className="favorite-drawer-wrapper" cols={1}>
           {favoriteProducts.map((Product) => {
             return (
               <FavUniqueCard
@@ -145,18 +145,6 @@ function FavoriteProducts({
     </Drawer>
   );
 }
-
-//* ---------------------------- Helper Functions ---------------------------- */
-
-// function stickyBar(element) {
-//   // console.log(window.pageYOffset);
-
-//   if (window.pageYOffset >= 500) {
-//     element.classList.add("onTop");
-//   } else if (window.pageXOffset < 550) {
-//     element.classList.remove("onTop");
-//   }
-// }
 
 //* ---------------------------- Navbar Component ---------------------------- */
 
@@ -252,19 +240,19 @@ function Navbar({ favoriteProducts, cardProducts }) {
                 <ul>
                   <li className="link N-1">
                     {" "}
-                    <Link to="/">Home </Link>
+                    <Link to="/">ACCUEIL </Link>
                   </li>
                   <li className="link N-2">
-                    <Link to="/catalog">All&nbsp;Products </Link>
+                    <Link to="/catalog">TOUS LES PRODUITS </Link>
                   </li>
                   <li className="link N-3">
                     {" "}
-                    <Link to="/ordering">Basket</Link>
+                    <Link to="/ordering">PANIER</Link>
                   </li>
                   {!isUser && (
                     <li className="link N-3">
                       {" "}
-                      <Link to="/dashboard">Dashboard</Link>
+                      <Link to="/dashboard">CONTROL PANEL</Link>
                     </li>
                   )}
                 </ul>
@@ -313,7 +301,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
                         radius="none"
                         color="blue"
                       >
-                        Sign in
+                        Connexion
                       </Button>
                     </Link>
                   )}

@@ -94,19 +94,19 @@ function ListFilter({
       <div className="filters newProducts">
         <TextInput
           id="customer-search"
-          placeholder="Search Customers..."
+          placeholder="Rechercher..."
           className=" dash-search-filter"
           size="lg"
           radius="none"
           error={
             error ? (
               <Alert
-                title="Bummer"
+                // title="Bummer"
                 color={"red"}
                 style={{ marginTop: "5px " }}
-                icon={<BiError size={16} />}
+                // icon={<BiError size={16} />}
               >
-                We are sorry no result
+                Désolé pas de résultat
               </Alert>
             ) : null
           }

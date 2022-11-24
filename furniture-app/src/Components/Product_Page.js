@@ -40,8 +40,8 @@ export function ProductDetailShow(props) {
   let locations;
 
   locations = [
-    { label: "Home", path: "/" },
-    { label: "Catalog", path: "/catalog" },
+    { label: "ACCUEIL", path: "/" },
+    { label: "TOUS LES PRODUITS", path: "/catalog" },
     { label: currentProduct?.name },
   ];
 
@@ -70,7 +70,7 @@ export function ProductDetailShow(props) {
             defaultValue="customization"
           >
             <Accordion.Item value="customization">
-              <Accordion.Control>Details</Accordion.Control>
+              <Accordion.Control>Détails</Accordion.Control>
               <Accordion.Panel>{currentProduct?.description}</Accordion.Panel>
             </Accordion.Item>
           </Accordion>
@@ -145,13 +145,13 @@ function ProductInfo({
           </h3>
         </li>
         <li className="product_maker info">
-          <h5>Made by:</h5>
+          <h5>Faite par :</h5>
           {/*  <img loading="lazy" src={mark} alt="" /> */}
           <p>{markName}</p>
         </li>
         {dimensions?.width || dimensions?.height || dimensions?.depth ? (
           <li className="product_dimensions info">
-            <h5>Dimensions:</h5>
+            <h5>Dimensions :</h5>
             <table>
               <thead>
                 <tr>
@@ -182,7 +182,7 @@ function ProductInfo({
         </li>
         {colors?.length ? (
           <li className="product_colors">
-            <h5>Colors:</h5>
+            <h5>Couleurs :</h5>
             <SelectProductColor
               setError={setError}
               colors={colors}
@@ -193,7 +193,7 @@ function ProductInfo({
           </li>
         ) : null}
         <li className="product_quantity">
-          <label htmlFor="quantity">Qty:</label>
+          <label htmlFor="quantity">Qté :</label>
           <Group spacing={5}>
             <ActionIcon
               radius={"none"}
@@ -271,7 +271,7 @@ function ProductInfo({
                   : setOpenAuthDrawer(true);
               }}
             >
-              ADD TO CART
+              AJOUTER AU PANIER
             </Button>
             <ActionIcon
               variant="outline"
@@ -322,7 +322,7 @@ function ProductInfo({
                 : setOpenAuthDrawer(true);
             }}
           >
-            BUY NOW
+            ACHETER MAINTENANT
           </Button>
         </Stack>
       </ul>

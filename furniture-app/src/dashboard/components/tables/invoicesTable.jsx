@@ -290,7 +290,13 @@ function EnhancedTable({ rows, headCells }) {
         rightSectionWidth={0}
         size={"sm"}
         radius={"none"}
-        data={["pending", "ongoing", "returned", "completed", "cancelled"]}
+        data={[
+          { value: "pending", label: "En attente" },
+          { value: "ongoing", label: "En cours" },
+          { value: "returned", label: "Retour" },
+          { value: "completed", label: "Complété" },
+          { value: "cancelled", label: "Annulée" },
+        ]}
         value={currentStatus}
         onChange={(selectedValue) => updateStatus(row, selectedValue)}
         className={"status " + currentStatus}
@@ -447,10 +453,10 @@ function EnhancedTable({ rows, headCells }) {
       >
         {showInvoice.state ? (
           <Modal
-            size="xl"
+            size="min(1200px,90%)"
             radius="none"
             overflow="outside"
-            title={<h3>Invoice detail</h3>}
+            title={<h3>Détails de la facture</h3>}
             withCloseButton={false}
             onClose={() =>
               setShowInvoice((prev) => ({ ...prev, state: false }))

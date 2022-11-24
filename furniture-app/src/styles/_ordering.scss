@@ -311,6 +311,14 @@
   }
 }
 
+.favorite-drawer-body {
+  padding-bottom: 5rem;
+}
+.favorite-drawer-wrapper {
+  max-height: 100%;
+  overflow-y: auto;
+}
+
 .favorite,
 .bag {
   position: relative;
@@ -358,9 +366,6 @@
 
 @media only screen and (max-width: 967px) {
   .slice {
-    .title {
-      //
-    }
     .btns {
       margin-top: 1rem;
     }
@@ -395,6 +400,9 @@
     height: 90vh;
   }
 
+  .facture_price .total h4 {
+    font-size: 16px;
+  }
   .svg-interactions {
     height: 65%;
     // max-height: 200px;

@@ -17,13 +17,18 @@ import { db } from "../../../firebase/firebaseConfig";
 import { useEffect, useState } from "react";
 import { showNotification } from "@mantine/notifications";
 import AvatarProfile from "../../../Components/smallComponents/avatarProfile/avatarProfile";
+import { useClickOutside } from "@mantine/hooks";
 
 const logo = require("../../../Website-Assets/logo.png");
 const adminImg = require("../../../Website-Assets/Admin.png");
 
-export function toggleSideBar() {
+export function toggleSideBar(isDelete = "toggle") {
   const sidebar = document.getElementById("sidebar");
-  sidebar.classList.toggle("active");
+  if (isDelete === "remove") {
+    sidebar.classList.remove("active");
+  } else {
+    sidebar.classList.toggle("active");
+  }
 }
 
 function Navbar() {
@@ -117,15 +122,15 @@ function Notification() {
     if (count > 0)
       showNotification({
         autoClose: 3000,
-        title: "You have new orders",
+        title: "Vous avez de nouvelles commandes",
         message: (
           <div>
             {" "}
-            Please Check{" "}
-            <Link to={"invoices"} color="blue">
-              Invoices
+            veuillez vérifier la section{" "}
+            <Link to={"dashboard/invoices"} color="blue">
+              {" "}
+              des commandes{" "}
             </Link>{" "}
-            Section
           </div>
         ),
         color: "blue",

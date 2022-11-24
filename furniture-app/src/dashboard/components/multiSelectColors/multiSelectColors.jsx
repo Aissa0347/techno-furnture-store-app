@@ -85,7 +85,9 @@ export function MultiSelectColors({ data, colors, setColors }) {
 
   return (
     <div className="multi-select" ref={outsideMultiSelect}>
-      <label className="multi-select-label">Avaible colors of product</label>
+      <label className="multi-select-label">
+        Couleurs de produit disponibles
+      </label>
       <div
         className="multi-select-input"
         ref={multiSelectBox}
@@ -118,7 +120,7 @@ export function MultiSelectColors({ data, colors, setColors }) {
               if (event.currentTarget.value !== "+ ADD NEW COLOR")
                 setInputValue(event.currentTarget.value);
             }}
-            placeholder={colors.value.length ? "" : "Pick Colors"}
+            placeholder={colors.value.length ? "" : "Choisir des Couleurs"}
           />
         </div>
         <span>

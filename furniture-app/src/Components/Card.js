@@ -58,7 +58,7 @@ export function Actions({ currentProduct }) {
           style={{ flex: 1, width: "100%" }}
         >
           <Button radius={"none"} px={0} size={"md"} color={"red"} fullWidth>
-            View more
+            Voir Plus
             <BiShowAlt style={{ marginLeft: "5px" }} size={24} />
           </Button>
         </Link>

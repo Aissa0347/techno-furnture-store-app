@@ -1,16 +1,9 @@
 import CustomersTable from "../../components/tables/customerTable";
-import { customersList, defaultUser } from "../../../Website-Assets";
 
-import { search, visit } from "../../components/icons";
-import React, { useContext, useMemo, useRef, useState } from "react";
-import { db } from "../../../firebase/firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useContext, useState } from "react";
 import { useEffect } from "react";
-import { useCallback } from "react";
 import { Button, Group, MantineProvider } from "@mantine/core";
-import { BiRefresh, BiRightArrowAlt } from "react-icons/bi";
-import { Key } from "@mui/icons-material";
-import { capitalizeSentence } from "../../../App";
+import { BiRefresh } from "react-icons/bi";
 import ListFilter from "../../components/filtering/listFilter";
 import { DashboardContext } from "../../Dashboard";
 
@@ -21,31 +14,31 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: false,
-    label: "Full Name",
+    label: "Nom complet",
   },
   {
     id: "phoneNumber",
     numeric: true,
     disablePadding: false,
-    label: "Phone Number",
+    label: "téléphone",
   },
   {
     id: "joinDate",
     numeric: true,
     disablePadding: false,
-    label: "Join Date",
+    label: "Date d'inscription",
   },
   {
-    id: "numOfOrders",
+    id: "numberOfOrders",
     numeric: true,
     disablePadding: false,
-    label: "Orders",
+    label: "N des commandes",
   },
   {
     id: "amountSpent",
     numeric: true,
     disablePadding: false,
-    label: "SPENT",
+    label: "dépensé",
   },
   {
     label: "Actions",
@@ -177,7 +170,7 @@ function Customer() {
         }}
       >
         <Group position="apart">
-          <h1 className="dash-title">Customers</h1>
+          <h1 className="dash-title">Clients</h1>
           <Button
             variant="filled"
             radius={"none"}
@@ -185,7 +178,7 @@ function Customer() {
             rightIcon={<BiRefresh size={24} />}
             onClick={() => setRefresh((prev) => !prev)}
           >
-            Refresh
+            Actualiser
           </Button>
         </Group>
         <ListFilter

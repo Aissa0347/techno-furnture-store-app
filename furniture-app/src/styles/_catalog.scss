@@ -105,16 +105,9 @@ label {
   }
 }
 
-.products-catalog.btns {
-  width: 100%;
-  margin-top: 0%;
-  .btn.CTA-3 {
-    display: block;
-    margin-right: 0%;
-    margin: 2rem auto;
-  }
+.products-catalog {
+  margin: auto;
 }
-
 .products-catalog-wrapper {
   display: grid;
   gap: 1rem;

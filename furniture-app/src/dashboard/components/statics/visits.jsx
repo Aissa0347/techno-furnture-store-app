@@ -19,14 +19,14 @@ function Visits() {
     .map((day) => {
       let createdAtMoment = moment.unix(day.date?.seconds);
       let theDay = moment(createdAtMoment).format("DD MMM");
-      return { day: theDay, visits: day.visits, customers: day.newCustomers };
+      return { day: theDay, Visites: day.visits, Commandes: day.orders };
     });
 
   console.log("visits data : ", data);
 
   return (
     <div className="visits-chart chart-height">
-      <h2>Visits</h2>
+      <h2>Les visites</h2>
       <div className="chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -43,13 +43,13 @@ function Visits() {
             <Tooltip />
             <Line
               type="monotone"
-              dataKey="visits"
+              dataKey="Visites"
               stroke="red"
               fill="#f1f1f1"
             />
             <Line
               type="monotone"
-              dataKey="customers"
+              dataKey="Commandes"
               stroke="blue"
               fill="#f1f1f1"
             />

@@ -48,7 +48,7 @@ export function Category() {
   return (
     <>
       <div className=" section">
-        <h2>Ecplore By Category</h2>
+        <h2>Explorer par catégorie</h2>
         <Swiper
           modules={[Pagination]}
           spaceBetween={30}
@@ -158,7 +158,7 @@ export function SuggestedProducts() {
   return (
     <>
       <div className="suggested_products section">
-        <h2>You May Also Like</h2>
+        <h2>Peut vous intéresser</h2>
         <Swiper
           slidesPerView={1}
           spaceBetween={20}

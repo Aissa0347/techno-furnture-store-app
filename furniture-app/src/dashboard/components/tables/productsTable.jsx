@@ -23,9 +23,20 @@ import { visuallyHidden } from "@mui/utils";
 
 //  Import Icons
 import { edit } from "../icons";
-import { Select } from "@mantine/core";
-import { db } from "../../../firebase/firebaseConfig";
-import { updateDoc, doc } from "firebase/firestore";
+import { Button, Menu, Select } from "@mantine/core";
+import { db, storage } from "../../../firebase/firebaseConfig";
+import {
+  updateDoc,
+  doc,
+  getDocs,
+  query,
+  collection,
+  where,
+  deleteDoc,
+  documentId,
+} from "firebase/firestore";
+import { BiDotsVertical } from "react-icons/bi";
+import { deleteObject } from "firebase/storage";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -247,6 +258,26 @@ function EnhancedTable({
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  //* ----------------------------- Delete Product ----------------------------- */
+
+  function deleteProduct(currentProduct) {
+    getDocs(
+      query(
+        collection(db, "ProductsList"),
+        where(documentId(), "==", currentProduct.id)
+      )
+    ).then((res) => {
+      console.log("reference : ", currentProduct.id, res);
+      deleteDoc(res.docs[0].ref).then(
+        console.log(currentProduct.name, " is removed")
+      );
+    });
+
+    // currentProduct.img.forEach((image) =>
+    //   deleteObject(storage, image.path).catch(console.log("This is error"))
+    // );
+  }
+
   //* ------------------------- Change Products Status ------------------------- */
 
   function SelectStatus({ row }) {
@@ -273,8 +304,8 @@ function EnhancedTable({
         size={"sm"}
         radius={"none"}
         data={[
-          { value: "outStock", label: "OUT STOCK" },
-          { value: "inStock", label: "IN STOCK" },
+          { value: "outStock", label: "EN RUPTURE" },
+          { value: "inStock", label: "EN STOCK" },
         ]}
         value={currentStatus}
         onChange={(selectedValue) => updateStatus(row, selectedValue)}
@@ -374,6 +405,29 @@ function EnhancedTable({
                             {edit}
                           </span>
                         </div>
+                      </TableCell>
+                      <TableCell align="left">
+                        <Menu shadow="sm" radius="none" width={200}>
+                          <Menu.Target>
+                            <div className="dash-actions">
+                              <span className="action">
+                                <BiDotsVertical size={16} />
+                              </span>
+                            </div>
+                          </Menu.Target>
+
+                          <Menu.Dropdown>
+                            <Menu.Label color="red">
+                              opération dangereuse
+                            </Menu.Label>
+                            <Menu.Item
+                              color="red"
+                              onClick={() => deleteProduct(row.currentProduct)}
+                            >
+                              supprimer le produit
+                            </Menu.Item>
+                          </Menu.Dropdown>
+                        </Menu>
                       </TableCell>
                     </TableRow>
                   );

@@ -8,14 +8,7 @@ import { DashboardContext } from "../../Dashboard";
 import { Button, Group, MantineProvider, Select } from "@mantine/core";
 import { BiRefresh } from "react-icons/bi";
 import React from "react";
-import {
-  doc,
-  endAt,
-  getDoc,
-  startAt,
-  setAnalyticsData,
-  query,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebaseConfig";
 import moment from "moment";
 
@@ -27,9 +20,9 @@ export function DurationSelect({ timeSelect, setTimeSelect }) {
     <div className="dash-duration">
       <Select
         data={[
-          { label: "Last 7 Days", value: 7 },
-          { label: "This Month", value: 31 },
-          { label: "Last Month", value: 62 },
+          { label: "7 derniers jours", value: 7 },
+          { label: "Ce mois", value: 31 },
+          { label: "Le mois passé", value: 62 },
         ]}
         onChange={setTimeSelect}
         value={timeSelect}
@@ -86,7 +79,7 @@ function Widgets() {
     <section className="widgets">
       <div className="widget-wrapper">
         <div className="widget">
-          <h3> Total Visits</h3>
+          <h3>VISITES TOTALES</h3>
           <div className="widget-status">
             <h4>
               <span className="icon">{visit}</span>{" "}
@@ -95,16 +88,16 @@ function Widgets() {
           </div>
         </div>
         <div className="widget">
-          <h3> Total Sales</h3>
+          <h3>TOTAL DES VENTES</h3>
           <div className="widget-status">
             <h4>
               <span className="icon">{sale}</span>{" "}
-              <span className="status-number">{overallStatics.sales} DZD</span>
+              <span className="status-number">{overallStatics.sales} DA</span>
             </h4>
           </div>
         </div>
         <div className="widget">
-          <h3> Total Orders</h3>
+          <h3>TOTAL DES COMMANDES</h3>
           <div className="widget-status">
             <h4>
               <span className="icon">{order}</span>{" "}
@@ -113,7 +106,7 @@ function Widgets() {
           </div>
         </div>
         <div className="widget">
-          <h3> Total Users</h3>
+          <h3>TOTAL DES UTILISATEURS</h3>
           <div className="widget-status">
             <h4>
               <span className="icon">{user}</span>{" "}
@@ -164,7 +157,7 @@ function Main() {
           setAnalyticsData(
             arrayOfValues
               .sort((prev, next) => prev.date.seconds - next.date.seconds)
-              .slice(0, 6)
+              .slice(-7)
           );
         } else {
           setAnalyticsData(arrayOfValues);
@@ -214,7 +207,7 @@ function Main() {
         }}
       >
         <Group position="apart">
-          <h1 className="dash-title">Dashboard</h1>
+          <h1 className="dash-title">Panneau de contrôle</h1>
           <Button
             variant="filled"
             radius={"none"}
@@ -222,7 +215,7 @@ function Main() {
             rightIcon={<BiRefresh size={24} />}
             onClick={() => setRefresh(true)}
           >
-            Refresh
+            Actualiser
           </Button>
         </Group>
         <DurationSelect timeSelect={timeSelect} setTimeSelect={setTimeSelect} />

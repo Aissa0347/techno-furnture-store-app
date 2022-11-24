@@ -9,7 +9,7 @@ import ScrollToTop from "./Components/scrollToTop";
 
 ReactDOM.render(
   <BrowserRouter>
-    <NotificationsProvider>
+    <NotificationsProvider style={{ top: "80px" }} position="top-right">
       <ScrollToTop />
       <App></App>
     </NotificationsProvider>

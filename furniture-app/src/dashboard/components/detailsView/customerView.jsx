@@ -20,7 +20,7 @@ function CustomerView({ data, id }) {
   return (
     <div className="invoice-view customer-view">
       <div className="invoice-overview">
-        <h4 className="sm-title">overview</h4>
+        <h4 className="sm-title">Aperçu</h4>
         {isInvoicesOverview.state ? (
           <section className="invoice-overview-wrapper">
             <CustomerInvoices
@@ -57,7 +57,7 @@ function CustomerView({ data, id }) {
       </div>
 
       <div className="invoice-user-info">
-        <h4 className="sm-title">Detail of user</h4>
+        <h4 className="sm-title">Informations client</h4>
         <div className=" user-info">
           <img
             loading="lazy"
@@ -66,13 +66,13 @@ function CustomerView({ data, id }) {
           />
           <h5>{data?.firstName + " " + data?.lastName}</h5>
           <p>{data?.email}</p>
-          <p>{data?.phoneNumber}</p>
+          <p>+213 {data?.phoneNumber}</p>
           <p>
-            <span>Total spent: </span>
-            {data?.amountSpent} DZD
+            <span>Total dépensé : </span>
+            {data?.amountSpent} DA
           </p>
           <p>
-            <span>Number of orders : </span>
+            <span>Nombre de commandes : </span>
             {data?.numberOfOrders}
           </p>
         </div>

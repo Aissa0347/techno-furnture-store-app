@@ -69,10 +69,10 @@ function Statics() {
         <Orders />
         <div className="last-invoices">
           <Group position="apart">
-            <h2>Last Invoices</h2>
+            <h2>Les dernières commandes</h2>
             <Link to="invoices">
               <Button size="sm" radius={"none"} variant="light">
-                View all
+                Afficher tout
               </Button>
             </Link>
           </Group>

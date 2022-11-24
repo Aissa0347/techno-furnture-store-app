@@ -21,7 +21,7 @@ function Sales() {
 
   return (
     <div className="sales-chart chart-height">
-      <h2>Sales</h2>
+      <h2>Les ventes</h2>
       <div className="chart-wrapper">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
@@ -32,17 +32,9 @@ function Sales() {
               bottom: 0,
             }}
           >
-            {/* <CartesianGrid strokeDasharray="3 3" opacity={0.5} /> */}
             <XAxis dataKey="Day" />
-            {/* <YAxis fontSize={14} width={45} tickBar={false} /> */}
             <Tooltip />
-            <Bar
-              type="monotone"
-              dataKey="Sales"
-              maxBarSize={35}
-              fill="blue"
-              // background={"#f1f1f1"}
-            />
+            <Bar type="monotone" dataKey="Sales" maxBarSize={35} fill="blue" />
           </BarChart>
         </ResponsiveContainer>
       </div>

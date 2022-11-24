@@ -49,9 +49,7 @@ function CustomLegend(props) {
 
 function Orders() {
   const { analyticsData } = useContext(DashboardContext);
-  const [isSmall, setIsSmall] = useState(
-    window.innerWidth > 967 ? false : true
-  );
+
   const [data, setData] = useState([]);
 
   function getOrdersStatics() {
@@ -77,11 +75,11 @@ function Orders() {
     );
 
     setData((prev) => [
-      { label: "pending", value: ~~pending },
-      { label: "completed", value: ~~completed },
-      { label: "returned", value: ~~returned },
-      { label: "ongoing", value: ~~ongoing },
-      { label: "cancelled", value: ~~cancelled },
+      { label: "en attendant", value: ~~pending },
+      { label: "complété", value: ~~completed },
+      { label: "retour", value: ~~returned },
+      { label: "en cours", value: ~~ongoing },
+      { label: "annulée", value: ~~cancelled },
     ]);
     console.log("values are here : ", analyticsData);
   }
@@ -90,28 +88,9 @@ function Orders() {
     getOrdersStatics();
   }, [analyticsData]);
 
-  window.onresize = () => {
-    setIsSmall(window.innerWidth > 967 ? false : true);
-    console.log("we resized");
-  };
-
-  console.log(isSmall);
-  useEffect(() => {
-    try {
-      const pieChart = document.querySelector(".pie-serface svg");
-      pieChart.setAttribute("viewBox", 0);
-    } catch {
-      setTimeout(() => {
-        const pieChart = document.querySelector(".pie-serface svg");
-        pieChart.setAttribute("viewBox", 0);
-      }, 100);
-    }
-    console.log("inside use effects");
-  }, [isSmall]);
-
   return (
-    <div className="order-chart chart-height">
-      <h2>Order Overview</h2>
+    <div className="order-chart">
+      <h2>Aperçu des commandes</h2>
       <div className="chart-wrapper">
         <ResponsiveContainer width={"99%"} height={"100%"}>
           <PieChart className={"pie-serface"}>
@@ -119,10 +98,10 @@ function Orders() {
               data={data}
               dataKey="value"
               nameKey="label"
-              cx={isSmall ? "30%" : "50%"}
-              cy={isSmall ? "100%" : "50%"}
-              outerRadius={isSmall ? 120 : 100}
-              innerRadius={isSmall ? 80 : 60}
+              cx={"50%"}
+              cy={"50%"}
+              outerRadius={140}
+              innerRadius={80}
             >
               {data.map((entry, index) => {
                 return <Cell key={`cell-${index}`} fill={colors[index]} />;

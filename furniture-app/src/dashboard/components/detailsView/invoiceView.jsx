@@ -105,7 +105,7 @@ function EditInvoice({
           <p>{totalCost.totalCostHT} DA</p>
         </div>
         <div className="invoice-products-cost">
-          <h5>TAX Amount</h5>
+          <h5>Montant de la taxe</h5>
           <p>{totalCost.totalTaxAmount} DA</p>
         </div>
         <div className="invoice-products-cost primary">
@@ -181,7 +181,7 @@ function DashUniqueCard({
       </div>
       <label htmlFor="Qty-input" className="quantity-controls">
         {" "}
-        Qty:&nbsp;
+        Qté:&nbsp;
         <Group spacing={5}>
           <ActionIcon
             variant="default"
@@ -306,7 +306,7 @@ export function InvoiceView({ data, id }) {
   return (
     <div className="invoice-view">
       <div className="invoice-overview">
-        <h4 className="sm-title">overview</h4>
+        <h4 className="sm-title">Aperçu</h4>
         <section className="invoice-overview-wrapper">
           {showPDF ? (
             <PDFViewer
@@ -351,7 +351,7 @@ export function InvoiceView({ data, id }) {
                 document={<MainPDF data={orderedProducts} />}
                 style={{ color: "#228BE6" }}
               >
-                Download me
+                Télécharger
               </PDFDownloadLink>
             </Button>
           ) : (
@@ -367,7 +367,7 @@ export function InvoiceView({ data, id }) {
                   setCancel((prev) => !prev);
                 }}
               >
-                Cancel
+                Annuler
               </Button>
 
               <Button
@@ -377,7 +377,7 @@ export function InvoiceView({ data, id }) {
                 size="sm"
                 onClick={() => updateOrder()}
               >
-                Update
+                Valider
               </Button>
             </div>
           )}
@@ -385,7 +385,7 @@ export function InvoiceView({ data, id }) {
       </div>
 
       <div className="invoice-user-info">
-        <h4 className="sm-title">Detail of user</h4>
+        <h4 className="sm-title">Informations client</h4>
         <div className="user-info">
           <img
             loading="lazy"
@@ -395,15 +395,6 @@ export function InvoiceView({ data, id }) {
           <h5>{data?.fullName}</h5>
           <p>{data?.address}</p>
           <p>{data?.phoneNumber}</p>
-          <ActionIcon
-            variant="outline"
-            color={"blue"}
-            style={{ marginTop: ".5rem" }}
-            size={"md"}
-            radius="none"
-          >
-            <BiShowAlt />
-          </ActionIcon>
         </div>
       </div>
     </div>

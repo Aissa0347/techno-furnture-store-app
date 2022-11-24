@@ -93,17 +93,19 @@ body {
   }
 }
 .nav-links {
+  display: flex;
+  align-items: center;
   ul {
     display: flex;
     justify-content: space-between;
     min-width: 20vw;
     a {
       padding: 1rem;
-      // border-radius: 4px;
       cursor: pointer;
       transition: 0.1s ease;
       min-width: fit-content;
-      // //
+      font-size: 15px;
+      white-space: nowrap;
     }
     a:hover {
       background-color: $secondColor;
@@ -250,9 +252,11 @@ body {
   align-items: center;
   padding: 1rem 6vw;
   img {
-    max-height: 4vh;
+    max-width: 125px;
+    max-height: 60px;
     margin: 1rem;
-    max-width: 15vw;
+    // max-width: 90px;
+    filter: grayscale(0.9);
   }
 }
 
@@ -336,41 +340,29 @@ body {
 //* ------------------------------ Product Main ------------------------------ */
 
 .ProductsM {
-  .control {
+  span {
+    font-weight: 500;
+    cursor: pointer;
+  }
+  span.active {
+    font-weight: 500;
+  }
+  .slash {
+    margin-left: 1rem;
+  }
+  .direction {
+    cursor: pointer;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 3rem;
-    .type {
-      display: flex;
-      // height: 50px;
-      padding: 0.5rem 1rem;
-      background-color: $whiteColor;
-      column-gap: 1rem;
-      // border: $border;
-    }
-
-    span {
-      // //
-      font-weight: 300;
-      cursor: pointer;
-    }
-    span.active {
-      font-weight: 500;
-    }
-    .slash {
-      margin-left: 1rem;
-    }
-    .direction {
-      cursor: pointer;
-      display: flex;
-    }
   }
-  h2 {
-    margin-bottom: 2rem;
-  }
-  .CTA-3 {
-    margin-right: 0rem !important;
+}
+// h2 {
+//   margin-bottom: 2rem;
+// }
+.CTA-3 {
+  box-shadow: 0px 0px 15px 0px #80808028;
+  transition: 0.5s ease;
+  &:hover {
+    box-shadow: none;
   }
 }
 
@@ -907,13 +899,7 @@ body {
     margin-top: 1rem;
     .btn {
       padding: 0.8rem 1rem !important;
-      // //
     }
-  }
-
-  .actions {
-    // min-width: max(55%, 100px);
-    // //
   }
 
   .footer {

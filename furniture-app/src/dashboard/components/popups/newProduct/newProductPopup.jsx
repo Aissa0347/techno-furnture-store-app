@@ -303,12 +303,12 @@ export default function NewProductPopup({
   return (
     <MantineProvider>
       <div className="popup popup_new-product">
-        <h2>Add New Product</h2>
+        <h2>DÉTAILS DU PRODUIT</h2>
         <form className="info_form new-product-form" ref={newProductFormRef}>
           <div className="input half">
             <TextInput
               placeholder="Product Name"
-              label="Product Name"
+              label="Nom du produit"
               radius="none"
               size="md"
               name="productName"
@@ -325,8 +325,8 @@ export default function NewProductPopup({
           </div>
           <div className="input half">
             <Select
-              label="Category"
-              placeholder="Chose category"
+              label="Catégorie"
+              placeholder="Choisir une catégorie"
               searchable
               clearable
               name="category"
@@ -341,10 +341,14 @@ export default function NewProductPopup({
                 setSelectCategory((prev) => {
                   return { ...prev, value: event };
                 });
-                addNewCategory(event, "+ ADD NEW CATEGORY", setSelectCategory);
+                addNewCategory(
+                  event,
+                  "+ AJOUTER NOUVELLE CATEGORIE",
+                  setSelectCategory
+                );
               }}
-              nothingFound="No options"
-              data={[...selectCategory.data, "+ ADD NEW CATEGORY"]}
+              nothingFound="Aucune option"
+              data={[...selectCategory.data, "+ AJOUTER NOUVELLE CATEGORIE"]}
               defaultValue={primaryValues?.category}
               value={selectCategory.value}
               withAsterisk
@@ -353,7 +357,7 @@ export default function NewProductPopup({
           <div className="input half">
             <TextInput
               placeholder="Brand"
-              label="Brand"
+              label="Marque"
               radius="none"
               size="md"
               name="brand"
@@ -361,7 +365,7 @@ export default function NewProductPopup({
               onChange={() => setFailedValidation(false)}
               error={
                 failedValidation && !brandRef.current?.value
-                  ? "Please enter a valid Name"
+                  ? "Veuillez entrer un nom valide"
                   : null
               }
               defaultValue={primaryValues?.markName}
@@ -371,12 +375,12 @@ export default function NewProductPopup({
           <div className="input half">
             <Select
               placeholder="Status"
-              label="Status"
+              label="Statut"
               radius="none"
               size="md"
               data={[
-                { value: "inStock", label: "IN STOCK" },
-                { value: "outStock", label: "OUT OF STOCK" },
+                { value: "inStock", label: "EN STOCK" },
+                { value: "outStock", label: "RUPTURE DE STOCK" },
               ]}
               defaultValue={primaryValues?.productStatus || "inStock"}
               name="status"
@@ -385,8 +389,8 @@ export default function NewProductPopup({
           </div>
           <div className="input half">
             <NumberInput
-              placeholder="Price in DA"
-              label="Price TTC"
+              placeholder="Prix en DA"
+              label="Prix TTC"
               min={0}
               name="price"
               ref={priceRef}
@@ -397,7 +401,7 @@ export default function NewProductPopup({
               }}
               error={
                 failedValidation && !priceRef.current?.value
-                  ? "Please enter a valid Name"
+                  ? "Veuillez entrer un prix valide"
                   : null
               }
               defaultValue={primaryValues?.price}
@@ -407,8 +411,8 @@ export default function NewProductPopup({
           <div className="input half">
             <Group noWrap>
               <NumberInput
-                placeholder="Price in DA"
-                label="Price generated HT"
+                placeholder="Prix en DA"
+                label="Prix généré HT"
                 min={0}
                 readOnly
                 value={priceHT}
@@ -417,8 +421,8 @@ export default function NewProductPopup({
                 defaultValue={primaryValues?.priceHT}
               />
               <Select
-                placeholder="TVA percentage"
-                label="TVA %"
+                placeholder="Pourcentage TVA"
+                label="TVA"
                 data={[
                   { label: "19%", value: 19 },
                   { label: "9%", value: 9 },
@@ -452,8 +456,8 @@ export default function NewProductPopup({
           </div> */}
           <div className="input half">
             <NumberInput
-              placeholder="Price in DA"
-              label="Promotion Price"
+              placeholder="Prix en DA"
+              label="Prix promotionnel"
               min={0}
               name="pricePromotion"
               value={pricePromotion}
@@ -471,21 +475,21 @@ export default function NewProductPopup({
           </div>
           <div className="input half new-product-dimension">
             <NumberInput
-              label="Width"
+              label="Largeur"
               placeholder="(cm)"
               min={0}
               name="width"
               defaultValue={primaryValues?.dimensions?.width}
             />{" "}
             <NumberInput
-              label="Height"
+              label="Hauteur"
               placeholder="(cm)"
               min={0}
               name="height"
               defaultValue={primaryValues?.dimensions?.height}
             />{" "}
             <NumberInput
-              label="Depth"
+              label="Profondeur"
               placeholder="(cm)"
               min={0}
               name="depth"
@@ -494,7 +498,7 @@ export default function NewProductPopup({
           </div>
           <div className=" text-editor">
             <label htmlFor="description" className="popup-label">
-              description
+              La description
             </label>
             <TextEditor
               descriptionTextContent={descriptionTextContent}
@@ -503,7 +507,7 @@ export default function NewProductPopup({
           </div>
           <hr className="popup-line" />
           <div className="image-uploader">
-            <h3>Add Product Images</h3>
+            <h3>Ajouter des images du produit</h3>
             {/* <input
               type="file"
               name="productImg"
@@ -514,7 +518,7 @@ export default function NewProductPopup({
             {failedValidation &&
             !(primaryImages?.length || newImageList?.length) ? (
               <Text color={"red"} size="md">
-                Please Pick Some Images
+                Veuillez choisir quelques images
               </Text>
             ) : null}
             <ImageDropzone
@@ -543,7 +547,7 @@ export default function NewProductPopup({
                   setClose(false);
                 }}
               >
-                Cancel
+                Annuler
               </Button>
 
               <Button
@@ -568,7 +572,7 @@ export default function NewProductPopup({
                     });
                 }}
               >
-                Update
+                Valider les modifications
               </Button>
             </div>
           ) : (
@@ -585,7 +589,7 @@ export default function NewProductPopup({
                   setClose(false);
                 }}
               >
-                Cancel
+                Annuler
               </Button>
 
               <Button
@@ -602,10 +606,12 @@ export default function NewProductPopup({
                             setClose(false);
                           }
                         )
-                      : console.log("please wait till uploading finished");
+                      : console.log(
+                          "veuillez attendre la fin du téléchargement"
+                        );
                 }}
               >
-                Submit
+                Envoyer
               </Button>
             </div>
           )}

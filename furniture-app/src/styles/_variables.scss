@@ -126,38 +126,12 @@ a {
 @mixin btns {
   margin-top: 3rem;
   .btn {
-    // border-radius: 4px;
     font-size: 1rem;
     color: $secondColor;
-    border: solid 2px $thirdColor;
     padding: 1rem 3rem;
     margin-right: 1rem;
     cursor: pointer;
     transition: 0.2s ease;
-  }
-  .CTA {
-    background-color: $thirdColor;
-  }
-  .CTA-2 {
-    background-color: transparent;
-  }
-  .CTA-3 {
-    background-color: $whiteColor;
-    color: $primaryColor;
-    border-color: $whiteColor;
-    box-shadow: 0px 2px 10px rgb(0 0 0 /9%);
-  }
-  .CTA-3:hover {
-    box-shadow: none;
-    // background-color: lighten($color: #3d3d3d, $amount: 80);
-  }
-  .CTA:hover {
-    background-color: $hoverBtn;
-    border: 2px solid $hoverBtn;
-  }
-  .CTA-2:hover {
-    border: 2px solid $hoverBtn;
-    // box-shadow: 0 0 15px lighten($color: $primaryColor, $amount: 7);
   }
 }
 

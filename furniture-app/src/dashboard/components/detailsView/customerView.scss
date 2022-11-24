@@ -15,7 +15,8 @@
     padding-right: 1px;
   }
   .invoice-product-info {
-    // min-width: 100%;
+    min-width: fit-content;
+    max-width: 100%;
     height: 100px !important;
   }
   .inline-product-info {

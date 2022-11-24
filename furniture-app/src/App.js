@@ -261,7 +261,9 @@ function App() {
   const getData = useCallback(async () => {
     console.log("i get the data now");
     const ProductRef = collection(db, "ProductsList");
-    let dataPromise = await getDocs(ProductRef);
+    let dataPromise = await getDocs(
+      query(ProductRef, where("productStatus", "==", "inStock"))
+    );
     let fullData = dataPromise.docs.map(
       (doc) => ({
         ...doc.data(),
@@ -344,18 +346,8 @@ function App() {
           });
 
           showNotification({
-            autoClose: 3000,
-            title: "Item Added To Favorite Successfully",
-            message: (
-              <div>
-                {" "}
-                You can go to{" "}
-                <Link to="/ordering" style={{ color: "blue" }}>
-                  chekout
-                </Link>{" "}
-                to finish process
-              </div>
-            ),
+            autoClose: 2000,
+            title: "Ajouté aux favoris avec succès",
             color: "red",
             icon: <BiHeartCircle size={32} />,
             className: "my-notification-class",
@@ -366,13 +358,13 @@ function App() {
         })
         .catch((error) =>
           showNotification({
-            autoClose: 3000,
-            title: "Error, Item Doesn't Added To Favorite",
+            autoClose: 2000,
+            title: "Erreur, le produit n'est pas ajouté aux favoris",
             message: (
               <div>
                 {" "}
-                Please Check You Internet Connexion Or Refresh The Page Then Try
-                Again
+                Veuillez vérifier votre connexion Internet ou actualiser la
+                page, puis réessayer
               </div>
             ),
             color: "red",
@@ -429,16 +421,17 @@ function App() {
         })
           .then((res) => {
             showNotification({
-              autoClose: 3000,
-              title: "Added To Card Successfully",
+              autoClose: 2000,
+              title: "Ajouté au panier avec succès",
               message: (
                 <div>
                   {" "}
-                  You can go to{" "}
+                  Vous pouvez passer à
                   <Link to="/ordering" style={{ color: "blue" }}>
-                    chekout
+                    {" "}
+                    la caisse{" "}
                   </Link>{" "}
-                  to finish process
+                  pour terminer le processus
                 </div>
               ),
               color: "green",
@@ -452,13 +445,12 @@ function App() {
           })
           .catch((error) =>
             showNotification({
-              autoClose: 3000,
-              title: "Error, Quantity Doesn't Updated",
+              autoClose: 2000,
+              title: "Erreur, la quantité n'est pas mise à jour",
               message: (
                 <div>
-                  {" "}
-                  Please Check You Internet Connexion Or Refresh The Page Then
-                  Try Again
+                  Veuillez vérifier votre connexion Internet ou actualiser la
+                  page, puis réessayer
                 </div>
               ),
               color: "red",
@@ -480,16 +472,17 @@ function App() {
       updateDoc(userRef, { productsInCart: updatedCard })
         .then((res) => {
           showNotification({
-            autoClose: 3000,
-            title: "Quantity Updated Successfully",
+            autoClose: 2000,
+            title: "Quantité mise à jour avec succès",
             message: (
               <div>
                 {" "}
-                You can go to{" "}
+                Vous pouvez passer à
                 <Link to="/ordering" style={{ color: "blue" }}>
-                  chekout
+                  {" "}
+                  la caisse{" "}
                 </Link>{" "}
-                to finish process
+                pour terminer le processus
               </div>
             ),
             color: "green",
@@ -503,13 +496,12 @@ function App() {
         })
         .catch((error) =>
           showNotification({
-            autoClose: 3000,
-            title: "Error, Product Doesn't Added To Your Card",
+            autoClose: 2000,
+            title: "Erreur, le produit n'est pas ajouté à votre panier",
             message: (
               <div>
-                {" "}
-                Please Check You Internet Connexion Or Refresh The Page Then Try
-                Again
+                Veuillez vérifier votre connexion Internet ou actualiser la
+                page, puis réessayer
               </div>
             ),
             color: "red",
@@ -551,18 +543,8 @@ function App() {
       .then((res) => setCardProducts(newFav))
       .then((res) =>
         showNotification({
-          autoClose: 3000,
-          title: "Item Removed From Cart",
-          message: (
-            <div>
-              {" "}
-              You can go to{" "}
-              <Link to="/ordering" style={{ color: "blue" }}>
-                chekout
-              </Link>{" "}
-              to finish process
-            </div>
-          ),
+          autoClose: 2000,
+          title: "Produit supprimé du panier",
           color: "red",
           icon: <BiXCircle size={32} />,
           className: "my-notification-class",
@@ -586,18 +568,8 @@ function App() {
       .then((res) => setFavoriteProducts(newFav))
       .then((res) =>
         showNotification({
-          autoClose: 3000,
-          title: "Item Removed From Favorite",
-          message: (
-            <div>
-              {" "}
-              You can go to{" "}
-              <Link to="/ordering" style={{ color: "blue" }}>
-                chekout
-              </Link>{" "}
-              to finish process
-            </div>
-          ),
+          autoClose: 2000,
+          title: "Produit supprimé des favoris",
           color: "red",
           icon: <BiXCircle size={32} />,
           className: "my-notification-class",
@@ -608,13 +580,12 @@ function App() {
       )
       .catch((error) =>
         showNotification({
-          autoClose: 3000,
-          title: "Error, Item Doesn't Removed From Favorite",
+          autoClose: 2000,
+          title: "Erreur, le produit n'a pas été supprimé du favoris",
           message: (
             <div>
-              {" "}
-              Please Check You Internet Connexion Or Refresh The Page Then Try
-              Again
+              Veuillez vérifier votre connexion Internet ou actualiser la page,
+              puis réessayer
             </div>
           ),
           color: "red",
@@ -701,11 +672,8 @@ function App() {
             .catch((error) =>
               updateNotification({
                 id: "sending-order",
-                autoClose: 4000,
-                title: "Item Removed From Cart",
-                message: (
-                  <div>Please Check Your Internet Connexion Then Try Again</div>
-                ),
+                autoClose: 2000,
+                title: "Produit supprimé du panier",
                 color: "red",
                 icon: <BiXCircle size={32} />,
                 className: "my-notification-class",

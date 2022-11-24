@@ -312,23 +312,10 @@ function EnhancedTable({ rows }) {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[15, 25, 50]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-        <FormControlLabel
-          control={<Switch checked={dense} onChange={handleChangeDense} />}
-          label="Dense padding"
-        />
       </Box>
 
       <Modal
-        size="xl"
+        size="min(1200px,90%)"
         radius="none"
         title={<h3>Invoice detail</h3>}
         withCloseButton={false}

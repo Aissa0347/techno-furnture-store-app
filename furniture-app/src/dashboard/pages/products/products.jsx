@@ -2,30 +2,13 @@
 import ProductsTable from "../../components/tables/productsTable";
 import NewProductPopup from "../../components/popups/newProduct/newProductPopup";
 import { ProductDetailShow } from "../../../Components/Product_Page";
-import {
-  MantineProvider,
-  CloseButton,
-  Group,
-  Button,
-  Tabs,
-  Modal,
-} from "@mantine/core";
-import {
-  onSnapshot,
-  collection,
-  query,
-  orderBy,
-  limit,
-  getDocs,
-} from "firebase/firestore";
-import { colProductList } from "../../components/popups/newProduct/newProductPopup.jsx";
+import { MantineProvider, Group, Button, Tabs, Modal } from "@mantine/core";
 
 // Import Data
-import { customersList, defaultProduct } from "../../../Website-Assets";
+import { defaultProduct } from "../../../Website-Assets";
 
-import { add, filter, search, visit, sale } from "../../components/icons";
+import { add, sale } from "../../components/icons";
 import React, { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../../App";
 import ListFilter from "../../components/filtering/listFilter";
 import { DashboardContext } from "../../Dashboard";
 import { db } from "../../../firebase/firebaseConfig";
@@ -38,7 +21,7 @@ function Widgets({ allProducts, stock, outStock }) {
     <section className="widgets">
       <div className="widget-wrapper">
         <div className="widget">
-          <h3>NUMBER OF PRODUCTS</h3>
+          <h3>NOMBRE DE PRODUITS</h3>
           <div className="widget-status">
             <h4>
               <span className="icon">{sale}</span>{" "}
@@ -48,7 +31,7 @@ function Widgets({ allProducts, stock, outStock }) {
           <div className="widget-rank"></div>
         </div>
         <div className="widget">
-          <h3>PRODUCTS IN STOCK</h3>
+          <h3>PRODUITS EN STOCK</h3>
           <div className="widget-status">
             <h4>
               <span className="icon">{sale}</span>{" "}
@@ -58,7 +41,7 @@ function Widgets({ allProducts, stock, outStock }) {
           <div className="widget-rank"></div>
         </div>
         <div className="widget">
-          <h3>PRODUCTS OUT OF STOCK</h3>
+          <h3>PRODUITS HORS STOCK</h3>
           <div className="widget-status">
             <h4>
               <span className="icon">{sale}</span>{" "}
@@ -79,38 +62,38 @@ const headCells = [
     id: "name",
     numeric: false,
     disablePadding: false,
-    label: "Name",
+    label: "Nom",
   },
   {
     id: "category",
     numeric: true,
     disablePadding: false,
-    label: "Category",
+    label: "Catégorie",
   },
 
   {
     id: "priceHT",
     numeric: true,
     disablePadding: false,
-    label: "Price H.T",
+    label: "Prix H.T",
   },
   {
     id: "price",
     numeric: true,
     disablePadding: false,
-    label: "Price TTC",
+    label: "Prix TTC",
   },
   {
     id: "pricePromotion",
     numeric: true,
     disablePadding: false,
-    label: "Promotion Price",
+    label: "Prix de promotion",
   },
   {
     id: "productStatus",
     numeric: true,
     disablePadding: false,
-    label: "Status",
+    label: "Statut",
   },
   {
     label: "Actions",
@@ -224,7 +207,7 @@ function Products() {
       }
       onClick={() => setNewProductPopup(true)}
     >
-      Add Products
+      Ajouter Produit
     </Button>
   );
 
@@ -267,13 +250,13 @@ function Products() {
           <Group position="apart">
             <h1 className="dash-title">Products</h1>
             <Button
-              variant="filled"
+              variant="outline"
               radius={"none"}
               size={"sm"}
               rightIcon={<BiRefresh size={24} />}
               onClick={() => setRefresh(true)}
             >
-              Refresh
+              Actualiser
             </Button>
           </Group>
           <Widgets
@@ -301,9 +284,9 @@ function Products() {
             color={"red"}
           >
             <Tabs.List grow>
-              <Tabs.Tab value="all">All</Tabs.Tab>
-              <Tabs.Tab value="inStock">IN STOCK</Tabs.Tab>
-              <Tabs.Tab value="outStock">OUT STOCK</Tabs.Tab>
+              <Tabs.Tab value="all">Tout</Tabs.Tab>
+              <Tabs.Tab value="inStock">EN STOCK</Tabs.Tab>
+              <Tabs.Tab value="outStock">EN RUPTURE</Tabs.Tab>
             </Tabs.List>
           </Tabs>
           <ListFilter
@@ -373,7 +356,7 @@ function Products() {
           <Modal
             transition="slide-down"
             transitionDuration={300}
-            size="xl"
+            size="min(1200px,90%)"
             radius="none"
             title={<h3>Product detail</h3>}
             withCloseButton={true}

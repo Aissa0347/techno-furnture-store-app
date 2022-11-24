@@ -41,7 +41,10 @@ import { useClickOutside } from "@mantine/hooks";
 //* -------------------------------- Mini Hero ------------------------------- */
 
 export function MiniHero() {
-  const locations = [{ label: "Home", path: "/" }, { label: "Catalog" }];
+  const locations = [
+    { label: "ACCUEIL", path: "/" },
+    { label: "TOUS LES PRODUITS" },
+  ];
 
   return (
     <div className="mHero">
@@ -164,7 +167,7 @@ function ProductsCatalogList({
   //   var setToDefaultTimeOut = setTimeout(setFiltersToDefault, 2000);
   // }
   return (
-    <div className="products-catalog btns">
+    <div className="products-catalog ">
       {pageData.length > 0 ? (
         <Text size="sm" my={5} pl={5} color="gray">
           {productsList.length} Produit found
@@ -200,14 +203,18 @@ function ProductsCatalogList({
         <div className="svg-interactions btns">
           <img loading="lazy" src={NO_RESULT} />
           <h3>NO RESULT</h3>
-          <button
-            className="btn CTA-3"
+          <Button
+            variant="white"
+            radius="none"
+            size="lg"
+            my={8}
+            className="CTA-3"
             onClick={() => {
               setFiltersToDefault();
             }}
           >
-            Show All
-          </button>
+            Afficher tout{" "}
+          </Button>
         </div>
       )}
     </div>
@@ -554,7 +561,7 @@ function Catalog() {
         filterTextToDefault={filterTextToDefault}
       />
       <div className="container">
-        <div className="wrapper">
+        <div className="wrapper ">
           <FilterBar
             setFilters={setFilters}
             filters={filters}

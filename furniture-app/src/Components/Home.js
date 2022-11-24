@@ -121,8 +121,8 @@ export function Hero() {
           <div className={classes.inner}>
             <div className={classes.content}>
               <Title className={classes.title}>
-                Find Your Best{" "}
-                <Text
+                Amenez votre bureau à un tout autre niveau
+                {/* <Text
                   component="span"
                   inherit
                   color="blue"
@@ -130,24 +130,25 @@ export function Hero() {
                   // gradient={{ from: "red", to: "orange" }}
                 >
                   Furniture.{" "}
-                </Text>{" "}
+                </Text>{" "} */}
               </Title>
 
               <Text className={classes.description} mt={30}>
-                We are the best in the world, just find your best chair and buy
-                it in easy way
+                Nous assurons la productivité de nos clients en offrant une
+                vaste gamme de produits de haute qualité
               </Text>
               <Link to="/catalog">
                 <Button
                   // variant="gradient"
                   // gradient={{ from: "blue", to: "red" }}
                   color="blue"
+                  uppercase
                   size="xl"
                   radius={"none"}
                   className={classes.control}
                   mt={40}
                 >
-                  Explore our collection
+                  Découvrez notre collection
                 </Button>
               </Link>
             </div>
@@ -206,7 +207,7 @@ function ProductsM() {
 
   return (
     <div className="ProductsM section ">
-      <h2>Our Products</h2>
+      <h2>Nos Produits</h2>
       {/* <Control /> */}
 
       <div className="custom-simple-grid">
@@ -216,13 +217,18 @@ function ProductsM() {
       </div>
 
       <div className="btns">
-        <Link
-          to="/catalog"
-          onClick={() => {
-            window.screenTop();
-          }}
-        >
-          <button className="btn CTA-3">All Products</button>
+        <Link to="catalog">
+          <Button
+            variant="white"
+            className="CTA-3"
+            size="lg"
+            radius="none"
+            onClick={() => {
+              window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
+            }}
+          >
+            TOUS LES PRODUITS
+          </Button>
         </Link>
       </div>
     </div>
@@ -236,10 +242,14 @@ export function NewsLetter() {
     <div className="newsletter container section">
       <div className="newsletter-input">
         <h3>
-          Wait a minute... <br />
-          Subscribe our NewsLetter !
+          Attendez une minute...
+          <br />
+          Abonnez-vous à notre NewsLetter !
         </h3>
-        <p>You will never miss a special discounts and new updates</p>
+        <p>
+          Vous ne manquerez jamais de remises spéciales et de nouvelles mises à
+          jour
+        </p>
       </div>
       <div className="newsletter-email">
         <TextInput
@@ -248,10 +258,10 @@ export function NewsLetter() {
           type="email"
           id="news-email"
           className="newsletter-email-input"
-          placeholder="Enter Your Email"
+          placeholder="Entrer votre Email"
         />
         <Button radius="none" size="lg" variant="filled">
-          SUBSCRIBE
+          ABONNER
         </Button>
       </div>
       {/* <div className="newsletter-img">

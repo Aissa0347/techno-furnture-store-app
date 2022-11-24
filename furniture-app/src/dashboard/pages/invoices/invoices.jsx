@@ -19,55 +19,55 @@ export const headCells = [
     id: "name",
     numeric: false,
     disablePadding: false,
-    label: "Name",
+    label: "Nom",
   },
   {
     id: "orderId",
     numeric: true,
     disablePadding: false,
-    label: "Order Id",
+    label: "Id de commande",
   },
   {
     id: "orderAddress",
     numeric: false,
     disablePadding: false,
-    label: "Address",
+    label: "Addresse",
   },
   {
     id: "phoneNumber",
     numeric: false,
     disablePadding: false,
-    label: "Phone Number",
+    label: "Téléphone",
   },
   {
     id: "inDate",
     numeric: true,
     disablePadding: false,
-    label: "In Date",
+    label: "La date",
   },
   {
     id: "orderQuantity",
     numeric: true,
     disablePadding: false,
-    label: "QTY",
+    label: "Qté",
   },
   {
     id: "orderCostHT",
     numeric: true,
     disablePadding: false,
-    label: "Cost H.T",
+    label: "Coût H.T",
   },
   {
     id: "orderCost",
     numeric: true,
     disablePadding: false,
-    label: "Cost TTC",
+    label: "Coût TTC",
   },
   {
     id: "orderStatus",
     numeric: true,
     disablePadding: false,
-    label: "Status",
+    label: "Statut",
   },
 
   { label: "Actions", isNotSorted: true },
@@ -216,7 +216,7 @@ function Invoices() {
         }}
       >
         <Group position="apart" mb={16}>
-          <h1 className="dash-title">Products</h1>
+          <h1 className="dash-title">Les commandes</h1>
           <Button
             variant="filled"
             radius={"none"}
@@ -235,12 +235,12 @@ function Invoices() {
           color={"red"}
         >
           <Tabs.List grow>
-            <Tabs.Tab value="all">All</Tabs.Tab>
-            <Tabs.Tab value="pending">PENDING</Tabs.Tab>
-            <Tabs.Tab value="completed">COMPLETED</Tabs.Tab>
-            <Tabs.Tab value="ongoing">ONGOING</Tabs.Tab>
-            <Tabs.Tab value="returned">RETURNED</Tabs.Tab>
-            <Tabs.Tab value="cancelled">CANCELLED</Tabs.Tab>
+            <Tabs.Tab value="all">TOUT</Tabs.Tab>
+            <Tabs.Tab value="pending">EN ATTENT</Tabs.Tab>
+            <Tabs.Tab value="completed">COMPLÉTÉ</Tabs.Tab>
+            <Tabs.Tab value="ongoing">EN COURS</Tabs.Tab>
+            <Tabs.Tab value="returned">RETOUR</Tabs.Tab>
+            <Tabs.Tab value="cancelled">ANNULÉ</Tabs.Tab>
           </Tabs.List>
         </Tabs>
         <ListFilter

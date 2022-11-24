@@ -310,7 +310,9 @@ function EnhancedTable({ rows, headCells }) {
                           </span>
                         </TableCell>
                         <TableCell align="left">
-                          {row.phoneNumber || "Not Avaible"}
+                          {row.phoneNumber
+                            ? "+213 " + row.phoneNumber
+                            : "Pas disponible"}
                         </TableCell>
                         <TableCell align="left">{createdAt}</TableCell>
                         <TableCell align="left">{row.numberOfOrders}</TableCell>
@@ -364,9 +366,9 @@ function EnhancedTable({ rows, headCells }) {
       </Box>
 
       <Modal
-        size="lg"
+        size="min(1200px,90%)"
         radius="none"
-        title={<h3>Invoice detail</h3>}
+        title={<h3>Profil du client</h3>}
         withCloseButton={false}
         onClose={() => setShowCustomer((prev) => ({ ...prev, state: false }))}
         opened={showCustomer.state}

@@ -477,15 +477,15 @@ export const InvoicesList = [
 export const FeautreP = [
   {
     img: require("../Website-Assets/shipping.png"),
-    text: "Fast Shipping",
+    text: "Expédition Rapide",
   },
   {
     img: require("../Website-Assets/security.png"),
-    text: "Secure Payment",
+    text: "Paiement Sécurisé",
   },
   {
     img: require("../Website-Assets/quality.png"),
-    text: "High Quality",
+    text: "Haute Qualité",
   },
 ];
 

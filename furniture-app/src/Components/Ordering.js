@@ -71,7 +71,7 @@ function ShippingInfo({ goNext, goBack }) {
 
   return (
     <section className="shipping_info  ">
-      <h3 className="title">Shipping Information</h3>
+      <h3 className="title">ADRESSE DE LIVRAISON</h3>
       <form
         onSubmit={orderForm.onSubmit((formValues) => {
           formValues.firstName = capitalizeSentence(
@@ -115,29 +115,29 @@ function ShippingInfo({ goNext, goBack }) {
         <div className=" info_form">
           <TextInput
             required
-            label="First Name"
+            label="Nom"
             type={"text"}
             size={"md"}
             className=" input half"
-            placeholder="Enter your First Name"
+            placeholder="Entrez votre nom"
             disabled={currentUserData?.firstName && true}
             withAsterisk
             {...orderForm.getInputProps("firstName")}
           />
           <TextInput
             required
-            label="Last Name"
+            label="Prénom"
             type={"text"}
             size={"md"}
             className=" input half "
             disabled={currentUserData?.lastName && true}
-            placeholder="Enter your Last Name"
+            placeholder="Entrez votre prénom"
             withAsterisk
             {...orderForm.getInputProps("lastName")}
           />
           <TextInput
             required
-            label="Country"
+            label="Pays"
             type={"text"}
             size={"md"}
             className=" input "
@@ -150,27 +150,27 @@ function ShippingInfo({ goNext, goBack }) {
             type={"text"}
             size={"md"}
             className=" input "
-            placeholder="Enter your current willaya"
+            placeholder="Entrez votre actuel willaya"
             withAsterisk
             {...orderForm.getInputProps("willaya")}
           />
           <TextInput
             required
-            label="Address"
+            label="Adresse"
             type={"text"}
             size={"md"}
             className=" input "
-            placeholder="Enter your exact address"
+            placeholder="Entrez votre adresse exacte"
             withAsterisk
             {...orderForm.getInputProps("address")}
           />
           <TextInput
             required
-            label="Phone Number"
+            label="Numéro de téléphone"
             type={"number"}
             size={"md"}
             className=" input "
-            placeholder="Enter your exact address"
+            placeholder="Entrez votre numéro de téléphone"
             withAsterisk
             {...orderForm.getInputProps("phoneNumber")}
           />
@@ -180,10 +180,11 @@ function ShippingInfo({ goNext, goBack }) {
             size="lg"
             radius="none"
             uppercase
+            color="blue"
             type="submit"
             className="btn CTA"
           >
-            Order Now
+            Commandez maintenant
           </Button>
         </div>
       </form>
@@ -195,7 +196,7 @@ function ShippingInfo({ goNext, goBack }) {
           color="red"
           onClick={goBack}
         >
-          Back
+          Retour
         </Button>
       </Group>
     </section>
@@ -242,7 +243,7 @@ function ShoppingCart({ goNext, subTotal, totalHT }) {
   console.log("is shopping cart trigger again");
   return (
     <section className="shopping_cart">
-      <h3 className="title">Shopping Cart</h3>
+      <h3 className="title">PANIER</h3>
       {cardProducts.length < 1 ? (
         <div className="svg-interactions">
           <img loading="lazy" src={EMPTY_CART} alt="EMPTY CART" />
@@ -285,7 +286,7 @@ function ShoppingCart({ goNext, subTotal, totalHT }) {
           updateCard(cardProducts, goNext);
         }}
       >
-        UPDATE
+        VALIDER
       </Button>
     </section>
   );
@@ -308,10 +309,10 @@ function Ordering() {
     return (
       <Paper shadow="md" className="order_success">
         <img src={ORDER_SUCCESS} alt="Success" loading="lazy" />
-        <h3>WE ARE SO EXCITED TO WORK WITH YOU</h3>
+        <h3>Notre équipe est ravie de travailler avec vous</h3>
         <Link to="/">
-          <Button size="lg" radius="none">
-            GO BACK TO HOME
+          <Button size="lg" uppercase radius="none">
+            Retour à l'accueil
           </Button>
         </Link>
       </Paper>
@@ -321,7 +322,7 @@ function Ordering() {
     <div className="order_page page container">
       <nav className="destination">
         <Link to={"/catalog"} className="destination-link">
-          ← &nbsp;continue shopping
+          ← &nbsp;Continuer vos achats
         </Link>
       </nav>
       <Stepper
