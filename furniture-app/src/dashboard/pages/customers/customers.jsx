@@ -130,7 +130,7 @@ function Customer() {
 
   useEffect(() => {
     if (primaryCustomers.length < 1 || refresh)
-      getData("Users", setPrimaryCustomers, "createdAt");
+      getData("Users", setPrimaryCustomers, "lastOrderAt");
     setRefresh(false);
   }, [refresh]);
 

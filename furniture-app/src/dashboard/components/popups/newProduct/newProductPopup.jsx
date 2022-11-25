@@ -8,6 +8,7 @@ import {
   Group,
   Text,
   Divider,
+  Textarea,
 } from "@mantine/core";
 import { AddCategoriesPopup, AddColorsPopup } from "./addPopup";
 // Import React Lib
@@ -19,6 +20,7 @@ import {
   updateDoc,
   doc,
   getDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { db, storage } from "../../../../firebase/firebaseConfig";
 import {
@@ -62,7 +64,7 @@ export default function NewProductPopup({
   const [isImagesUploaded, setIsImagesUploaded] = useState(
     typeOfForm == "edit" ? true : false
   );
-  const [TAX, setTAX] = useState();
+  const [TAX, setTAX] = useState(19);
   const [priceHT, setPriceHT] = useState(0);
   const [price, setPrice] = useState(0);
   const [pricePromotion, setPricePromotion] = useState(0);
@@ -94,6 +96,8 @@ export default function NewProductPopup({
       newProductForm.category?.value &&
       newProductForm.price?.value &&
       newProductForm.brand?.value &&
+      priceHT &&
+      TAX &&
       (newImageList[0] || primaryImages[0])
     ) {
       setFailedValidation(false);
@@ -128,11 +132,9 @@ export default function NewProductPopup({
     let priceHT = calcTaxPrice(price);
     console.log("here is the TAX :", priceHT);
     setPriceHT(priceHT);
-  }, [TAX]);
+  }, [TAX, price, pricePromotion]);
 
   //* --------------------------- Upload new Product --------------------------- */
-  // console.log(files.name);
-  let imgListRef = [];
 
   function submitImages(files, operation = "upload") {
     if (files.length < 1) {
@@ -228,8 +230,9 @@ export default function NewProductPopup({
       numberOfProduct: Number(1),
       totalProductPrice: Number(0),
       totalProductPriceHT: Number(0),
+      publishedAt: serverTimestamp(),
       description: descriptionTextContent,
-      details: "",
+      overview: newProductForm?.overview.value || "",
       id: typeOfForm === "edit" ? primaryValues?.id : uuidv4(),
     };
   }
@@ -270,6 +273,7 @@ export default function NewProductPopup({
   function toPrimaryValues() {
     setDefaultValues(primaryValues);
     setPrice(primaryValues?.price);
+    setPriceHT(primaryValues?.priceHT?.price);
     setPricePromotion(primaryValues?.pricePromotion);
     setTAX(primaryValues?.tax);
     setSelectCategory((prev) => ({
@@ -292,11 +296,11 @@ export default function NewProductPopup({
       .catch((error) => console.log("pls throw error", error));
   }, []);
 
-  const filterNotUploaded = (filterWith = newImageList) => {
-    return primaryImages.filter((primaryImg) =>
-      filterWith.map((newImg) => primaryImg.url !== newImg.url)
-    );
-  };
+  // const filterNotUploaded = (filterWith = newImageList) => {
+  //   return primaryImages.filter((primaryImg) =>
+  //     filterWith.map((newImg) => primaryImg.url !== newImg.url)
+  //   );
+  // };
 
   console.log("colors : ", primaryValues?.colors);
 
@@ -416,7 +420,15 @@ export default function NewProductPopup({
                 min={0}
                 readOnly
                 value={priceHT}
-                onChange={setPriceHT}
+                onChange={(e) => {
+                  setPriceHT(e);
+                  setFailedValidation(false);
+                }}
+                error={
+                  failedValidation && !priceHT
+                    ? "Veuillez entrer un prix valide"
+                    : null
+                }
                 name="priceHT"
                 defaultValue={primaryValues?.priceHT}
               />
@@ -429,7 +441,15 @@ export default function NewProductPopup({
                   { label: "0%", value: 0 },
                 ]}
                 value={TAX}
-                onChange={setTAX}
+                onChange={(e) => {
+                  setTAX(e);
+                  setFailedValidation(false);
+                }}
+                error={
+                  failedValidation && !TAX
+                    ? "Veuillez choisir une valeur"
+                    : null
+                }
                 name="TAX"
                 defaultValue={primaryValues?.TAX}
               />
@@ -496,6 +516,15 @@ export default function NewProductPopup({
               defaultValue={primaryValues?.dimensions?.depth}
             />
           </div>
+          <Textarea
+            label="Courte description"
+            radius="none"
+            size="md"
+            placeholder="écrire une petite description du produit..."
+            defaultValue={primaryValues?.overview}
+            name="overview"
+            className="text-editor"
+          />
           <div className=" text-editor">
             <label htmlFor="description" className="popup-label">
               La description
@@ -508,13 +537,6 @@ export default function NewProductPopup({
           <hr className="popup-line" />
           <div className="image-uploader">
             <h3>Ajouter des images du produit</h3>
-            {/* <input
-              type="file"
-              name="productImg"
-              id="productImg"
-              multiple
-              onChange={(e) => submitImages([...e.target.files])}
-            /> */}
             {failedValidation &&
             !(primaryImages?.length || newImageList?.length) ? (
               <Text color={"red"} size="md">

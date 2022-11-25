@@ -40,6 +40,7 @@ import { defaultUser } from "../Website-Assets";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { BiCheckCircle } from "react-icons/bi";
+import { setStaticValue } from "../App";
 //* -------------------------------------------------------------------------- */
 //*                               Auth Component                               */
 //* -------------------------------------------------------------------------- */
@@ -142,10 +143,9 @@ function Auth(props) {
                   avatarImg: userAvatarImg,
                   email: userEmail,
                   createdAt: serverTimestamp(),
-                });
+                }).then((res) => setStaticValue("newCustomers", 1));
               });
           })
-
           .catch((error) =>
             setIsError("Invalid email or password, Please try again")
           );

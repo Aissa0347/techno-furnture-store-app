@@ -334,7 +334,7 @@ function Navbar({ favoriteProducts, cardProducts }) {
         </div>
         <Outlet />
         <div className="call-float">
-          <Anchor href="https://wa.me/795914857" target="_blank">
+          <Anchor href="https://wa.me/213550951515" target="_blank">
             <ActionIcon
               variant="filled"
               size={50}

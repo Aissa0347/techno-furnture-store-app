@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import {
   RiFacebookFill,
   RiInstagramFill,
-  RiLinkedinFill,
+  RiWhatsappLine,
 } from "react-icons/ri";
 import { Paper, TextInput } from "@mantine/core";
 import {
@@ -341,6 +341,9 @@ export function Footer() {
         </div>
         <Group spacing={0} className={classes.links} position="right" noWrap>
           <ActionIcon
+            component="a"
+            href="https://web.facebook.com/Techno.Cheraga"
+            target="_blank"
             size="lg"
             radius="none"
             variant="outline"
@@ -349,6 +352,9 @@ export function Footer() {
             <RiFacebookFill size={24} stroke={1.5} />
           </ActionIcon>
           <ActionIcon
+            component="a"
+            href="https://www.instagram.com/techno_cheraga/"
+            target="_blank"
             size="lg"
             radius="none"
             variant="outline"
@@ -357,12 +363,15 @@ export function Footer() {
             <RiInstagramFill size={24} stroke={1.5} />
           </ActionIcon>
           <ActionIcon
+            component="a"
+            href="https://wa.me/213550951515"
+            target="_blank"
             size="lg"
             radius="none"
             variant="outline"
             className={classes.link}
           >
-            <RiLinkedinFill size={24} stroke={1.5} />
+            <RiWhatsappLine size={24} stroke={1.5} />
           </ActionIcon>
         </Group>
       </Container>
